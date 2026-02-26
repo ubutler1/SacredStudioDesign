@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Sacred Canvas Studio &amp; Design</title>
+
+  <!-- Performance: preconnect + async font loading (optional; remove if you aren’t using Google Fonts) -->
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet"> -->
+
+  <!-- Vendor CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Skip link for accessibility -->
+  <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
+
+  <!-- Navigation -->
+  <header id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light" aria-label="Primary navigation">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html" aria-label="Sacred Canvas Studio &amp; Design home">
+          <img src="assets/sacred_logo_navbar.jpg"
+               alt="Sacred Canvas Studio &amp; Design logo"
+               width="200"
+               height="100"
+               loading="eager"
+               decoding="async">
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="commissions.html">Commissions</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section id="info" aria-labelledby="hero-title">
+      <div class="info-box">
+        <h1 id="hero-title" class="info-box-title">Sacred Canvas Studio &amp; Design</h1>
+
+        <!-- Fix: subinfo-box was applied to h3; keep as a class on the heading itself -->
+        <h2 class="subinfo-box">
+          Original works and commissions — where form, spirit, and process converge.
+        </h2>
+
+        <p class="info-content">
+          At Sacred Canvas Studio &amp; Design, we believe that art is more than decoration;
+          it is a medium for storytelling, emotional connection, and personal expression.
+          Founded by Uriel Alexander, our studio is committed to crafting pieces that resonate
+          on a deeper level, inviting viewers to engage with the work in a meaningful way.
+        </p>
+      </div>
+
+      <!-- Bento Grid -->
+      <div class="bento-grid" aria-label="Featured artwork previews">
+        <div class="col-left">
+          <div class="box">
+            <div class="inner-box">
+              <img src="assets/Stock Image 1.jpg" alt="Featured artwork preview 1" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="inner-box">
+              <img src="assets/She Lives in Color.jpg" alt="She Lives in Color" loading="lazy" decoding="async">
+            </div>
+            <div class="inner-box">
+              <img src="assets/Zentange CityScape.jpg" alt="Zentangle Cityscape" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="inner-box">
+              <img src="assets/Organized Chaos.jpg" alt="Organized Chaos" loading="lazy" decoding="async">
+            </div>
+            <div class="inner-box">
+              <img src="assets/He Lives in Color.jpg" alt="He Lives in Color" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="box">
+            <img src="assets/Self Portrait.jpg" alt="Self Portrait" loading="lazy" decoding="async">
+          </div>
+          <div class="box">
+            <img src="assets/Stock Image 3.jpg" alt="Featured artwork preview 2" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section id="newsletter" aria-labelledby="newsletter-title">
+      <!-- Fix: use a real form; remove anchor-wrapped button -->
+      <form class="info-form" action="#" method="post">
+        <h2 id="newsletter-title" class="info-form-title">Stay Connected to the Studio</h2>
+
+        <label class="visually-hidden" for="newsletter-email">Email address</label>
+        <input id="newsletter-email"
+               name="email"
+               type="email"
+               placeholder="Enter your email"
+               class="email-input"
+               autocomplete="email"
+               required>
+
+        <button class="btn-info" type="submit">Join the Newsletter</button>
+      </form>
+    </section>
+
+    <!-- Who We Are -->
+    <section id="who" aria-labelledby="who-title">
+      <div class="who-info">
+        <h2 id="who-title" class="who-title">
+          The Sacred, The Studio <br> &amp; <br> The Design
+        </h2>
+
+        <!-- Fix: don’t reuse who-title for h3; use a distinct class if needed -->
+        <h3 class="who-subtitle">
+          A creative studio dedicated to original art and commissioned works that embody intention,
+          depth, and material exploration.
+        </h3>
+
+        <p class="who-content">
+          At Sacred Studio Design, we believe that art is more than decoration;
+          it is a medium for storytelling, emotional connection, and personal expression.
+          Founded by Uriel Alexander, our studio is committed to crafting pieces that resonate
+          on a deeper level, inviting viewers to engage with the work in a meaningful way.
+        </p>
+      </div>
+
+      <!-- Fix: removed stray closing div and improved alt text -->
+      <div class="col-md-6">
+        <img src="assets/Black Boy Magic.jpg"
+             alt="Black Boy Magic artwork"
+             loading="lazy"
+             decoding="async">
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" aria-labelledby="services-title">
+      <div class="container-fluid text-center">
+        <h2 id="services-title" class="title">Our Services</h2>
+
+        <!-- Fix: avoid repeating `.services` on each column; keep one wrapper -->
+        <div class="services">
+          <article class="card">
+            <img src="assets/Abstract Series 1a.jpg"
+                 class="card-img-top"
+                 alt="Original works preview"
+                 loading="lazy"
+                 decoding="async">
+            <div class="card-body">
+              <h3 class="card-title">Original Works</h3>
+              <p class="card-text">
+                Thoughtfully developed pieces through layered process and material exploration,
+                designed to be lived with and cherished.
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="assets/Stock Image 4.jpg"
+                 class="card-img-top"
+                 alt="Commission work preview"
+                 loading="lazy"
+                 decoding="async">
+            <div class="card-body">
+              <h3 class="card-title">Commissions</h3>
+              <p class="card-text">
+                Custom pieces created to embody your intention and vision, with personalized
+                collaboration throughout the creative process.
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="assets/Abstract Series 3.jpg"
+                 class="card-img-top"
+                 alt="Consultation service preview"
+                 loading="lazy"
+                 decoding="async">
+            <div class="card-body">
+              <h3 class="card-title">Consultations</h3>
+              <p class="card-text">
+                Personalized guidance on art selection and commission projects to find pieces
+                that resonate with your space and spirit.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  <!-- Testimonials -->
+<section id="testimonials" aria-labelledby="testimonials-title">
+  <h2 id="testimonials-title" class="title">What Collectors &amp; Clients Say</h2>
+
+  <p class="testimonials-subtitle">
+    Words from people who’ve collected originals, commissioned custom work, or booked a studio consultation.
+  </p>
+
+  <div class="testimonials-grid" role="list">
+    <!-- Testimonial 1 -->
+    <article class="testimonial" role="listitem" aria-label="Testimonial from a commission client">
+      <p class="quote">
+        “The commission process felt grounded from the start. Uriel translated the feeling I described into color and
+        texture, and the final piece has real presence in the room—quiet but powerful.”
+      </p>
+
+      <div class="testimonial-footer">
+        <img src="assets/Guiding Hands.jpg" alt="Artwork detail associated with this testimonial" loading="lazy" decoding="async">
+        <div class="client">
+          <p class="client-name">Commission Client</p>
+          <p class="client-meta">36×48 · Mixed media commission</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Testimonial 2 -->
+    <article class="testimonial" role="listitem" aria-label="Testimonial from an original collector">
+      <p class="quote">
+        “I bought an original after seeing it in person—photos didn’t capture the layering. The surface has depth and
+        movement, and it changes with the light. It feels like it belongs here.”
+      </p>
+
+      <div class="testimonial-footer">
+        <img src="assets/He Lives in Color.jpg" alt="Artwork detail associated with this testimonial" loading="lazy" decoding="async">
+        <div class="client">
+          <p class="client-name">Original Collector</p>
+          <p class="client-meta">Original work · Acrylic &amp; ink</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Testimonial 3 -->
+    <article class="testimonial" role="listitem" aria-label="Testimonial from a consultation client">
+      <p class="quote">
+        “The consultation helped me get clear on what I actually wanted—scale, palette, and placement. I left with a plan,
+        and now my space feels intentional instead of unfinished.”
+      </p>
+
+      <div class="testimonial-footer">
+        <img src="assets/Self Portrait.jpg" alt="Artwork detail associated with this testimonial" loading="lazy" decoding="async">
+        <div class="client">
+          <p class="client-name">Consultation Client</p>
+          <p class="client-meta">Art selection &amp; placement guidance</p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="testimonials-cta">
+    <div>
+      <h3 class="cta-title">Ready to create something personal?</h3>
+      <p class="cta-text">
+        Share your idea, size, and timeline—I'll respond with next steps and availability.
+      </p>
+    </div>
+    <a class="cta-button" href="contact.html">Start a Request</a>
+  </div>
+</section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-section">
+      <div class="footer-top">
+        <div class="index-footer-container">
+          <div class="row">
+            <div class="col">
+              <div class="col-heading">Contact Us</div>
+              <ul class="col-line">
+                <li><a href="tel:+17705169000">+1 (770) 516-9000</a></li>
+                <li><a href="mailto:Regal_Schnauzers@gmail.com">Regal_Schnauzers@gmail.com</a></li>
+                <li>3837 Brockett Trail, Clarkston, GA 30021</li>
+              </ul>
+            </div>
+
+            <div class="col">
+              <div class="col-heading">Quick Links</div>
+              <ul class="col-line">
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="commissions.html">Commissions</a></li>
+                <li><a href="about.html">About Us</a></li>
+              </ul>
+            </div>
+
+            <div class="col">
+              <div class="bottom-header-logo">
+                <!-- Fix: h2 should not wrap an image; use a figure/anchor if needed -->
+                <img src="assets/sacred_logo_footer (1).jpg"
+                     alt="Sacred Canvas Studio &amp; Design footer logo"
+                     loading="lazy"
+                     decoding="async">
+
+                <div class="social-icon" aria-label="Social links">
+                  <a href="#" title="Facebook" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+                  <a href="#" title="YouTube" aria-label="YouTube"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+                  <a href="#" title="Instagram" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                  <a href="#" title="TikTok" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom text-center">
+          <hr>
+          <p>2024 All rights reserved | Made by Elohim WebCoding &amp; Design</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (bundle includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+</body>
+</html>
