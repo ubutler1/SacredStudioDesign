@@ -394,7 +394,7 @@ h1, h2, h3, .info-box-title, .page-title{
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
-  margin-left: 150px;
+  margin-left: 0;
 }
 /* -------------------------
    INDEX: Services (#services)
@@ -1020,4 +1020,36 @@ h1, h2, h3, .info-box-title, .page-title{
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Local navigation and layout: usable without a third-party stylesheet. */
+[hidden]{ display: none !important; }
+.site-nav{max-width:var(--max);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.navbar-brand{flex-direction:column;align-items:flex-start;gap:0;text-decoration:none;}
+.brand-name{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;}
+.brand-subtitle{font-size:.8rem;color:var(--muted-text);}
+.site-links{display:flex;gap:8px;flex-wrap:wrap;list-style:none;margin:0;padding:0;}
+.site-links a{display:block;padding:12px;text-decoration:none;border-radius:12px;}
+.site-links a:hover,.site-links a[aria-current]{background:rgba(197,145,47,.16);}
+.hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:24px;}
+.eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#765019;}
+.footer-content{max-width:var(--max);margin:auto;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.footer-content a{padding:12px 0;}
+.visually-hidden-focusable:not(:focus){position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
+.field input,.field select,.field textarea{width:100%;min-width:0;color:var(--text);font-family:inherit;}
+.field textarea{resize:vertical;}
+.artwork-photo{width:100%;height:320px;object-fit:contain;background:var(--bg);}
+.image-notice{padding:40px 20px;}
+button{font-family:inherit;min-height:44px;cursor:pointer;}
+button:disabled{cursor:default;opacity:.6;}
+:focus-visible{outline:3px solid #765019;outline-offset:4px;}
+#main{min-height:60vh;}
+#main:focus{outline:none;}
+p{overflow-wrap:break-word;}
+@media(max-width:600px){
+  .site-nav{gap:16px;}
+  .site-links{width:100%;gap:0;justify-content:space-between;}
+  .site-links a{padding:12px 7px;font-size:.9rem;}
+  .brand-subtitle{font-size:.75rem;}
+  .gallery-grid{grid-template-columns:1fr;}
 }

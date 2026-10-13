@@ -1,256 +1,75 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gallery | Sacred Canvas Studio &amp; Design</title>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Artwork by Urie Alexander">
+<title>Gallery | Sacred Canvas Studio &amp; Design</title>
+<link rel="stylesheet" href="style.css">
+<script src="site-data.js" defer>
+</script>
+<script src="site.js" defer>
+</script>
 </head>
-
 <body>
-  <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
-
-  <header id="nav-bar">
-    <nav class="navbar navbar-expand-lg navbar-light" aria-label="Primary navigation">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html" aria-label="Home">
-          <img src="assets/sacred_logo_navbar.jpg" alt="Sacred Canvas Studio &amp; Design logo" width="200" height="100" loading="eager" decoding="async">
-        </a>
-
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-          <i class="bi bi-list" aria-hidden="true"></i>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="gallery.html">Gallery</a></li>
-            <li class="nav-item"><a class="nav-link" href="commissions.html">Commissions</a></li>
-            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <main id="main">
-    <section class="page-hero" aria-labelledby="page-title">
-      <div class="page-hero-inner">
-        <h1 id="page-title" class="page-title">Gallery</h1>
-        <p class="page-subtitle">
-          A curated selection of originals and series work—layered, intentional, and process-driven.
-        </p>
-
-        <div class="filter-row" role="group" aria-label="Gallery filters">
-          <button class="chip is-active" type="button">All</button>
-          <button class="chip" type="button">Abstract</button>
-          <button class="chip" type="button">Portrait</button>
-          <button class="chip" type="button">Mixed Media</button>
-          <button class="chip" type="button">Available</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="page-section" aria-label="Artwork grid">
-      <div class="gallery-grid">
-        <!-- Card -->
-        <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: She Lives in Color">
-            <img src="assets/She Lives in Color.jpg" alt="She Lives in Color artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">She Lives in Color</h2>
-            <p class="art-details">Acrylic &amp; ink · 24×36 · 2026</p>
-            <div class="art-tags">
-              <span class="tag">Abstract</span>
-              <span class="tag">Available</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Organized Chaos">
-            <img src="assets/Organized Chaos.jpg" alt="Organized Chaos artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Organized Chaos</h2>
-            <p class="art-details">Mixed media · 18×24 · 2025</p>
-            <div class="art-tags">
-              <span class="tag">Mixed Media</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Self Portrait.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Self Portrait</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
- <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/He Started In Color.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">He Started In Color</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/He Lives in Color.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">He lives in Color</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Guiding Hands.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Guiding Hands</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Abstract Series 1.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Self Portrait</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Zentange CityScape.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Self Portrait</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Stock Image 1.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Self Portrait</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-         <article class="art-card">
-          <a class="art-link" href="#" aria-label="View artwork: Self Portrait">
-            <img src="assets/Stock Image 2.jpg" alt="Self Portrait artwork" loading="lazy" decoding="async">
-          </a>
-          <div class="art-meta">
-            <h2 class="art-title">Self Portrait</h2>
-            <p class="art-details">Oil · 16×20 · 2024</p>
-            <div class="art-tags">
-              <span class="tag">Portrait</span>
-            </div>
-          </div>
-        </article>
-        <!-- Duplicate/replace as needed -->
-      </div>
-    </section>
-
-    <section class="page-section" aria-label="Call to action">
-      <div class="cta-panel">
-        <div>
-          <h2 class="cta-title">Want a piece created for your space?</h2>
-          <p class="cta-text">Commission slots are limited. Tell me what you’re envisioning and we’ll map the direction together.</p>
-        </div>
-        <a class="cta-button" href="commissions.html">Explore Commissions</a>
-      </div>
-    </section>
-  </main>
-
-  <footer id="footer">
-    <div class="footer-section">
-      <div class="footer-top">
-        <div class="index-footer-container">
-          <div class="row">
-            <div class="col">
-              <div class="col-heading">Contact Us</div>
-              <ul class="col-line">
-                <li><a href="tel:+17705169000">+1 (770) 516-9000</a></li>
-                <li><a href="mailto:Regal_Schnauzers@gmail.com">Regal_Schnauzers@gmail.com</a></li>
-                <li>3837 Brockett Trail, Clarkston, GA 30021</li>
-              </ul>
-            </div>
-
-            <div class="col">
-              <div class="col-heading">Quick Links</div>
-              <ul class="col-line">
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="commissions.html">Commissions</a></li>
-                <li><a href="about.html">About Us</a></li>
-              </ul>
-            </div>
-
-            <div class="col">
-              <div class="bottom-header-logo">
-                <img src="assets/sacred_logo_footer (1).jpg" alt="Sacred Canvas Studio &amp; Design footer logo" loading="lazy" decoding="async">
-                <div class="social-icon" aria-label="Social links">
-                  <a href="#" title="Facebook" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
-                  <a href="#" title="YouTube" aria-label="YouTube"><i class="bi bi-youtube" aria-hidden="true"></i></a>
-                  <a href="#" title="Instagram" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-                  <a href="#" title="TikTok" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="footer-bottom text-center">
-          <hr>
-          <p>2024 All rights reserved | Made by Elohim WebCoding &amp; Design</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-          crossorigin="anonymous"></script>
+<a class="visually-hidden-focusable" href="#main">Skip to main content</a>
+<header id="nav-bar">
+<nav class="site-nav" aria-label="Primary navigation">
+<a class="navbar-brand" href="index.html">
+<span class="brand-name">Urie Alexander</span>
+<span class="brand-subtitle">Sacred Canvas Studio &amp; Design</span>
+</a>
+<ul class="site-links">
+<li>
+<a class="nav-link active" aria-current="page" href="gallery.html">Gallery</a>
+</li>
+<li>
+<a class="nav-link"  href="commissions.html">Commissions</a>
+</li>
+<li>
+<a class="nav-link"  href="about.html">About</a>
+</li>
+<li>
+<a class="nav-link"  href="contact.html">Contact</a>
+</li>
+</ul>
+</nav>
+</header>
+<main id="main" tabindex="-1">
+<section class="page-hero">
+<div class="page-hero-inner">
+<h1 class="page-title">Gallery</h1>
+<p class="page-subtitle">Artwork by Urie Alexander, a Bronx-based visual artist.</p>
+<div class="filter-row" role="group" aria-label="Gallery categories" hidden>
+<button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+<button class="chip" type="button" data-filter="abstract" aria-pressed="false">Abstract</button>
+<button class="chip" type="button" data-filter="portrait" aria-pressed="false">Portrait</button>
+<button class="chip" type="button" data-filter="mixed-media" aria-pressed="false">Mixed media</button>
+</div>
+</div>
+</section>
+<section class="page-section" aria-label="Artwork collection">
+<p id="gallery-status" role="status" aria-live="polite">Artwork photographs are being prepared. Please check back for the collection.</p>
+<div class="gallery-grid" id="artwork-grid">
+</div>
+<noscript>
+<p>Enable JavaScript to browse the artwork collection and filter by category.</p>
+</noscript>
+</section>
+</main>
+<footer id="footer">
+<div class="footer-section">
+<div class="footer-content">
+<div>
+<strong>Urie Alexander</strong>
+<p>Visual artist · Bronx, New York</p>
+</div>
+<a href="contact.html">Contact &amp; inquiries</a>
+</div>
+<div class="footer-bottom">
+<p>Sacred Canvas Studio &amp; Design</p>
+</div>
+</div>
+</footer>
 </body>
 </html>
