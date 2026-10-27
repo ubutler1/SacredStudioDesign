@@ -18,9 +18,11 @@ const server = http.createServer((req,res) => {
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  for(const width of [320,390,768,1440]){
   await page.setViewportSize({width,height:900});
-  for(const name of ['index','gallery','about','commissions','contact']){
+  for(const name of ['index','gallery','shop','about','commissions','contact']){
    await page.goto(`${base}/${name}.html`);
    assert.equal(await page.locator('h1').count(),1);
+   assert.equal(await page.locator('a[href="shop.html"]').count()>0,true);
+   assert.match(await page.locator('header .brand-name').textContent(),/Uriel Alexander/);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name} overflows at ${width}`);
    assert.equal(await page.locator('a[href="#"],img,form[action="#"]').count(),0);
    assert.equal(await page.locator('a[aria-current="page"]').count(),name==='index'?0:1);
@@ -28,6 +30,18 @@ const server = http.createServer((req,res) => {
    assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Skip to main content');
   }
  }
+
+ // Shop: no fabricated products or live purchases until merchant URLs are configured.
+ await page.goto(`${base}/shop.html`);
+ assert.equal(await page.locator('.shop-product').count(),0);
+ assert.match(await page.locator('#shop-status').textContent(),/no active print or download listings/i);
+ await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Approved sample',image:'assets/approved.jpg',alt:'Test work',categories:['abstract'],shop:{physicalPrintUrl:'https://print.example.com/edition',digitalDownloadUrl:'javascript:alert(1)'}},{title:'Not for sale',image:'assets/photo.jpg',alt:'Gallery only',categories:['abstract']}]};`}));
+ await page.reload();
+ assert.equal(await page.locator('.shop-product').count(),1);
+ assert.equal(await page.locator('a.shop-action').count(),1);
+ assert.equal(await page.locator('a.shop-action').first().getAttribute('href'),'https://print.example.com/edition');
+ assert.equal(await page.locator('a.shop-action').first().getAttribute('rel'),'noopener noreferrer');
+ await page.unroute('**/site-data.js');
  await page.goto(`${base}/gallery.html`);
  assert.equal(await page.locator('.filter-row').isVisible(),false);
  // Synthetic data tests behavior only. It is never included in delivered site content.
@@ -53,5 +67,5 @@ const server = http.createServer((req,res) => {
  assert.match(fs.readFileSync(await download.path(),'utf8'),/A test inquiry/);
  assert.match(await page.locator('#form-status').textContent(),/not been sent/);
  assert.deepEqual(errors,[]);
- await browser.close();server.close();console.log('PASS: 20 page/viewport checks, keyboard skip links, gallery filtering/empty states/image failures, validation, commission preselection, draft download, no browser errors.');
+ await browser.close();server.close();console.log('PASS: 24 page/viewport checks, branding and shop navigation, safe checkout links, empty shop, keyboard skip links, gallery filtering/empty states/image failures, validation, commission preselection, draft download, no browser errors.');
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
