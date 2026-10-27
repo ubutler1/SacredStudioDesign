@@ -66,7 +66,10 @@ if (form) {
     const link = document.createElement('a');
     link.href = `mailto:${email}`;
     link.textContent = email;
-    document.querySelector('#contact-details').replaceChildren(link);
+    const contactBox = document.querySelector('#contact-details');
+    if (contactBox) {
+      contactBox.append(document.createElement('br'), link);
+    }
     document.querySelector('#delivery-note').textContent = 'Download your inquiry draft, then send it to the studio email shown here. This site does not send or store messages.';
   }
   form.addEventListener('submit', event => {
@@ -74,11 +77,11 @@ if (form) {
     if (!form.reportValidity()) return;
     const fields = new FormData(form);
     const topic = form.elements.topic.selectedOptions[0].textContent;
-    const draft = `Inquiry for Urie Alexander\n${email ? `To: ${email}\n` : ''}From: ${fields.get('name')} <${fields.get('email')}>\nTopic: ${topic}\n\n${fields.get('message')}\n`;
+    const draft = `Inquiry for Uriel Alexander\n${email ? `To: ${email}\n` : ''}From: ${fields.get('name')} <${fields.get('email')}>\nTopic: ${topic}\n\n${fields.get('message')}\n`;
     const url = URL.createObjectURL(new Blob([draft], { type: 'text/plain;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'urie-alexander-inquiry.txt';
+    link.download = 'uriel-alexander-inquiry.txt';
     document.body.append(link);
     link.click();
     link.remove();
