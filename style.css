@@ -1053,3 +1053,88 @@ p{overflow-wrap:break-word;}
   .brand-subtitle{font-size:.75rem;}
   .gallery-grid{grid-template-columns:1fr;}
 }
+
+/* ==========================
+   Uriel Alexander Art Studio — fine-art shop
+   Reuses the existing palette, rounded cards and typographic hierarchy.
+   ========================== */
+.shop-launch-note{
+  margin:18px 0 0;
+  border-left:3px solid var(--accent);
+  padding:12px 16px;
+  background:rgba(197,145,47,.10);
+  border-radius:0 12px 12px 0;
+  color:var(--text);
+  max-width:70ch;
+}
+.shop-format-grid,.shop-grid{
+  display:grid;
+  gap:18px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.shop-format-card,.shop-product,.shop-preview-block,.shop-information{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+}
+.shop-format-card{
+  padding:clamp(18px,2.3vw,28px);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+}
+.shop-format-card h3{
+  font-size:clamp(1.35rem,2vw,1.7rem);
+  margin:0;
+  line-height:1.2;
+}
+.shop-format-card p{margin:0}
+.shop-format-card .secondary-link{margin-top:auto}
+.shop-format-number{
+  color:#755019;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:.78rem;
+  font-weight:700;
+}
+.shop-small-print{color:var(--muted-text);font-size:.92rem;line-height:1.5}
+.shop-collection-heading{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.shop-collection-heading .section-title{margin-bottom:4px}
+.shop-status{color:var(--muted-text);margin:12px 0 24px}
+.shop-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.shop-product{overflow:hidden}
+.shop-product-media{min-height:270px;display:grid;place-items:center;background:rgba(197,145,47,.06)}
+.shop-product-image{width:100%;height:300px;object-fit:contain}
+.shop-image-unavailable{
+  text-align:center;
+  padding:30px;
+  color:var(--muted-text);
+  font-weight:600;
+}
+.shop-product-info{padding:22px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.shop-product-title{font-size:1.35rem;margin:0}
+.shop-product-actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:100%}
+.shop-action{width:100%;text-align:center}
+.shop-preview-block,.shop-information{padding:clamp(20px,4vw,34px)}
+.shop-preview-block{display:grid;justify-items:start;gap:12px}
+.shop-preview-block p{margin:0;max-width:65ch}
+.shop-information p{max-width:80ch}
+.shop-information p:last-child{margin-bottom:0}
+.footer-social-link{color:rgba(255,255,255,.92);text-underline-offset:3px}
+@media(max-width:850px){
+  .shop-format-grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .shop-collection-heading{align-items:flex-start}
+  .shop-format-card{padding:20px}
+  .shop-product-image{height:245px}
+  .shop-preview-block .cta-button{width:100%}
+}
