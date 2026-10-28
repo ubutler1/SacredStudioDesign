@@ -1,5 +1,5 @@
 /* =========================================================
-   Sacred Canvas Studio & Design — Unified Modern 2026 CSS
+   Uriel Alexander Art Studio — Unified Modern 2026 CSS
    Works for: index.html + gallery + commissions + about + contact
    ========================================================= */
 
@@ -1137,4 +1137,87 @@ p{overflow-wrap:break-word;}
   .shop-format-card{padding:20px}
   .shop-product-image{height:245px}
   .shop-preview-block .cta-button{width:100%}
+}
+
+/* Editorial artwork-first homepage and selected works */
+.hero-feature{
+  margin:0;
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.78);
+  box-shadow:var(--shadow-md);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.hero-feature-image{
+  display:block;
+  width:100%;
+  max-height:560px;
+  object-fit:contain;
+  background:#f5f0ec;
+}
+.hero-feature-caption{
+  display:flex;
+  flex-direction:column;
+  padding:18px 22px 20px;
+  gap:2px;
+}
+.hero-feature-caption .eyebrow{margin:0 0 5px}
+.hero-feature-caption strong{font-family:Georgia,serif;font-size:1.4rem}
+.hero-feature-caption>span:last-child{color:var(--muted-text);font-size:.88rem}
+.home-selected-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+.home-artwork-link{
+  display:flex;
+  flex-direction:column;
+  background:rgba(255,255,255,.72);
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
+  text-decoration:none;
+  transition:transform var(--t), box-shadow var(--t);
+}
+.home-artwork-link:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.home-artwork-link img{
+  width:100%;
+  height:315px;
+  object-fit:contain;
+  background:#f4f0eb;
+}
+.home-artwork-name{
+  font-family:Georgia,serif;
+  font-size:1.16rem;
+  font-weight:700;
+  padding:16px 18px 0;
+}
+.home-artwork-note{
+  color:var(--muted-text);
+  padding:0 18px 17px;
+  font-size:.86rem;
+}
+.home-artwork-link:not(:has(.home-artwork-note)) .home-artwork-name{padding-bottom:17px}
+.home-image-unavailable{
+  display:grid;
+  place-items:center;
+  text-align:center;
+  min-height:260px;
+  padding:24px;
+  color:var(--muted-text);
+  background:rgba(197,145,47,.07);
+}
+.hero-feature>.home-image-unavailable{min-height:350px}
+@media(max-width:850px){
+  .home-selected-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-feature-image{max-height:520px}
+}
+@media(max-width:560px){
+  .home-selected-grid{grid-template-columns:1fr}
+  .home-artwork-link img{height:380px}
+  .hero-feature-image{max-height:490px}
 }
