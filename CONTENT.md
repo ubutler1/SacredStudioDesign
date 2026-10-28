@@ -76,3 +76,20 @@ No deployment or publishing configuration was added. This is a review branch; ma
 Browser checks passed for all five pages at 320, 390, 768, and 1440 pixels: no horizontal overflow, correct page navigation, and keyboard skip links. Additional checks covered category filtering with synthetic test-only data, empty categories, missing photograph fallback, required form validation, commission topic selection, text draft download, and absence of browser script errors. No real artwork or submission service was available to test.
 
 To rerun, install Playwright locally (`npm install --no-save --package-lock=false playwright`) and its Chromium browser (`npx playwright install chromium`), then run `node tests/site.cjs`. Alternatively set `BROWSER_EXECUTABLE` to an installed Chromium-compatible browser. The test server listens only on localhost. Test fixtures do not modify site data or send messages.
+
+## Artist-selected portfolio photographs (Oct 28, 2026)
+
+The artist provided eight photographs for the website. Their preview file paths are staged in `site-data.js` and referred to from the homepage, gallery, and (eventually) Print Shop. **The binary images must still be added to the `assets/` folder on this feature branch before merging.** Missing-image fallbacks prevent broken icons, but they are not a substitute for uploading the images.
+
+Artist-provided names: **She Lives in Color**, **Guiding Hands**, **He Started in Color**, **He Lives in Color**, and **Self Portrait**.
+
+Working descriptions requiring title confirmation: **Bronx Dispensary Streetscape**, **City Figure**, and **Portrait with Hands**.
+
+No date, medium, original dimensions, selling status, or price has been assumed for any artwork. The gallery filters are subject-based (figurative and urban) rather than falsely asserting medium.
+
+Image files prepared (WebP, web-display resolution only):
+`assets/she-lives-in-color.webp`, `assets/guiding-hands.webp`, `assets/he-started-in-color.webp`, `assets/he-lives-in-color.webp`, `assets/self-portrait.webp`, `assets/bronx-dispensary-streetscape.webp`, `assets/city-figure.webp`, `assets/portrait-with-hands.webp`.
+
+The photographer originals must be retained for potential print fulfillment, and 300-PPI large-format print quality cannot be assumed from the uploaded screenshots/photos. No images are registered as purchasable items on the Shop page.
+
+**Launch gate:** confirm the actual images render on desktop/mobile in the Netlify PR preview; wait for artist's November 1, 2026, authorization before merging or making the site public.
