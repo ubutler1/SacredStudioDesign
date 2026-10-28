@@ -1,18 +1,18 @@
 'use strict';
 
 const data = window.studioData || { email: '', artworks: [] };
-const categories = ['abstract', 'portrait', 'mixed-media'];
+const categories = ['figurative', 'urban'];
 const filterWorks = (works, category) => works.filter(work => category === 'all' || work.categories.includes(category));
 const grid = document.querySelector('#artwork-grid');
 if (grid) {
-  const works = data.artworks;
+  const works = Array.isArray(data.artworks) ? data.artworks : [];
   const filters = document.querySelector('.filter-row');
   const status = document.querySelector('#gallery-status');
   filters.hidden = works.length === 0;
   const render = category => {
     const shown = filterWorks(works, category);
     grid.replaceChildren();
-    if (works.length) status.textContent = shown.length ? `${shown.length} artwork${shown.length === 1 ? '' : 's'} shown.` : 'No artwork in this category yet. Choose another category.';
+    status.textContent = shown.length ? `${shown.length} artwork${shown.length === 1 ? '' : 's'} shown.` : (works.length ? 'No artwork in this category yet. Choose another category.' : 'Artwork photographs are being prepared.');
     for (const work of shown) {
       const card = document.createElement('article');
       card.className = 'art-card';
@@ -36,7 +36,9 @@ if (grid) {
       const details = document.createElement('p');
       details.className = 'art-details';
       details.textContent = [work.medium, work.dimensions, work.year].filter(Boolean).join(' · ');
-      meta.append(title, details);
+      if (work.workingTitle) details.textContent = 'Working title — subject to confirmation';
+      if (details.textContent) meta.append(title, details);
+      else meta.append(title);
       card.append(image, meta);
       grid.append(card);
     }
@@ -88,4 +90,14 @@ if (form) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     status.textContent = 'Draft download started. Your inquiry has not been sent.';
   });
+}
+
+// Prevent an unsightly broken-image icon before web photographs are uploaded.
+for (const image of document.querySelectorAll('.artwork-managed-image')) {
+  image.addEventListener('error', () => {
+    const notice = document.createElement('span');
+    notice.className = 'home-image-unavailable';
+    notice.textContent = 'Artwork image being prepared';
+    image.replaceWith(notice);
+  }, { once: true });
 }
