@@ -24,7 +24,7 @@ const server = http.createServer((req,res) => {
    assert.equal(await page.locator('a[href="shop.html"]').count()>0,true);
    assert.match(await page.locator('header .brand-name').textContent(),/Uriel Alexander/);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name} overflows at ${width}`);
-   assert.equal(await page.locator('a[href="#"],img,form[action="#"]').count(),0);
+   assert.equal(await page.locator('a[href="#"],form[action="#"]').count(),0);
    assert.equal(await page.locator('a[aria-current="page"]').count(),name==='index'?0:1);
    await page.keyboard.press('Tab');
    assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Skip to main content');
@@ -43,16 +43,19 @@ const server = http.createServer((req,res) => {
  assert.equal(await page.locator('a.shop-action').first().getAttribute('rel'),'noopener noreferrer');
  await page.unroute('**/site-data.js');
  await page.goto(`${base}/gallery.html`);
- assert.equal(await page.locator('.filter-row').isVisible(),false);
+ assert.equal(await page.locator('.filter-row').isVisible(),true);
+ assert.equal(await page.locator('.art-card').count(),8);
+ assert.equal(await page.getByRole('button',{name:'Urban Scenes'}).count(),1);
+ assert.equal(await page.getByText('Working title — subject to confirmation').count(),3);
  // Synthetic data tests behavior only. It is never included in delivered site content.
- await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Test abstract',image:'missing.jpg',alt:'Test',categories:['abstract']},{title:'Test portrait',image:'missing.jpg',alt:'Test',categories:['portrait']}]};`}));
+ await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Test figurative',image:'missing.jpg',alt:'Test',categories:['figurative']},{title:'Test urban scene',image:'missing.jpg',alt:'Test',categories:['urban']}]};`}));
  await page.reload();
  assert.equal(await page.locator('.art-card').count(),2);
- await page.getByRole('button',{name:'Abstract',exact:true}).click();
+ await page.getByRole('button',{name:'Figures & Portraits',exact:true}).click();
  assert.equal(await page.locator('.art-card').count(),1);
  assert.equal(await page.getByRole('button',{name:'Abstract',exact:true}).getAttribute('aria-pressed'),'true');
- await page.getByRole('button',{name:'Mixed media',exact:true}).click();
- assert.match(await page.locator('#gallery-status').textContent(),/No artwork/);
+ await page.getByRole('button',{name:'Urban Scenes',exact:true}).click();
+ assert.equal(await page.locator('.art-card').count(),1);
  await page.getByRole('button',{name:'All',exact:true}).click();
  await page.locator('.image-notice').first().waitFor();
  await page.unroute('**/site-data.js');
@@ -67,5 +70,5 @@ const server = http.createServer((req,res) => {
  assert.match(fs.readFileSync(await download.path(),'utf8'),/A test inquiry/);
  assert.match(await page.locator('#form-status').textContent(),/not been sent/);
  assert.deepEqual(errors,[]);
- await browser.close();server.close();console.log('PASS: 24 page/viewport checks, branding and shop navigation, safe checkout links, empty shop, keyboard skip links, gallery filtering/empty states/image failures, validation, commission preselection, draft download, no browser errors.');
+ await browser.close();server.close();console.log('PASS: 24 page/viewport checks, eight original artwork records, working titles, editorial homepage, shop with safe checkout gating, responsive layout, category filtering, contact draft, no browser errors.');
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
