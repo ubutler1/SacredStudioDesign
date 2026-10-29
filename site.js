@@ -69,7 +69,7 @@ if (form) {
   if (['commission','artwork','prints','collaboration','general'].includes(topic)) form.elements.topic.value = topic;
   const work = params.get('work');
   const known = Array.isArray(data.artworks) && data.artworks.some(item => item.title === work);
-  if (work && known) form.elements.message.value = 'I am interested in “' + work + '”.\\n\\n';
+  if (work && known) form.elements.message.value = 'I am interested in “' + work + '”.\n\n';
 }
 
 // Prevent an unsightly broken-image icon before web photographs are uploaded.
