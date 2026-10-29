@@ -56,40 +56,15 @@ if (grid) {
   render('all');
 }
 
+// Netlify processes HTML forms. Do not intercept the POST or pretend a message was sent.
 const form = document.querySelector('#inquiry-form');
 if (form) {
-  const button = document.querySelector('#draft-button');
-  const status = document.querySelector('#form-status');
-  button.disabled = false;
-  const requestedTopic = new URLSearchParams(location.search).get('topic');
-  if (['commission', 'artwork', 'collaboration', 'general'].includes(requestedTopic)) form.elements.topic.value = requestedTopic;
-  const email = typeof data.email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ? data.email : '';
-  if (email) {
-    const link = document.createElement('a');
-    link.href = `mailto:${email}`;
-    link.textContent = email;
-    const contactBox = document.querySelector('#contact-details');
-    if (contactBox) {
-      contactBox.append(document.createElement('br'), link);
-    }
-    document.querySelector('#delivery-note').textContent = 'Download your inquiry draft, then send it to the studio email shown here. This site does not send or store messages.';
-  }
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-    const fields = new FormData(form);
-    const topic = form.elements.topic.selectedOptions[0].textContent;
-    const draft = `Inquiry for Uriel Alexander\n${email ? `To: ${email}\n` : ''}From: ${fields.get('name')} <${fields.get('email')}>\nTopic: ${topic}\n\n${fields.get('message')}\n`;
-    const url = URL.createObjectURL(new Blob([draft], { type: 'text/plain;charset=utf-8' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'uriel-alexander-inquiry.txt';
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    status.textContent = 'Draft download started. Your inquiry has not been sent.';
-  });
+  const params = new URLSearchParams(location.search);
+  const topic = params.get('topic');
+  if (['commission','artwork','prints','collaboration','general'].includes(topic)) form.elements.topic.value = topic;
+  const work = params.get('work');
+  const known = Array.isArray(data.artworks) && data.artworks.some(item => item.title === work);
+  if (work && known) form.elements.message.value = 'I am interested in “' + work + '”.\\n\\n';
 }
 
 // Prevent an unsightly broken-image icon before web photographs are uploaded.
