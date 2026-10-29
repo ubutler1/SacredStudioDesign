@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Artwork, commissions, and collaborations">
+<meta name="description" content="Contact Uriel Alexander Art Studio about original paintings, commissions, exhibitions and fine-art prints.">
 <title>Contact | Uriel Alexander Art Studio</title>
 <link rel="stylesheet" href="style.css">
 <script src="site-data.js" defer>
@@ -37,57 +37,16 @@
 </nav>
 </header>
 <main id="main" tabindex="-1">
-<section class="page-hero">
-<div class="page-hero-inner">
-<h1 class="page-title">Contact</h1>
-<p class="page-subtitle">Artwork, commissions, and collaborations with Uriel Alexander.</p>
-</div>
-</section>
-<section class="page-section">
-<div class="two-col">
-<form class="contact-card" id="inquiry-form" aria-describedby="delivery-note">
-<h2>Prepare an inquiry</h2>
-<p id="delivery-note">You can contact the studio now through Instagram. This form only downloads a text draft of your inquiry; it does not send or store your message.</p>
-<div class="field">
-<label for="name">Name</label>
-<input id="name" name="name" autocomplete="name" maxlength="150" required>
-</div>
-<div class="field">
-<label for="email">Email</label>
-<input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
-</div>
-<div class="field">
-<label for="topic">Topic</label>
-<select id="topic" name="topic" required>
-<option value="">Select a topic</option>
-<option value="commission">Commission inquiry</option>
-<option value="artwork">Artwork inquiry</option>
-<option value="collaboration">Collaboration</option>
-<option value="general">General inquiry</option>
-</select>
-</div>
-<div class="field">
-<label for="message">Message</label>
-<textarea id="message" name="message" rows="6" maxlength="10000" required>
-</textarea>
-</div>
-<button class="cta-button" type="submit" id="draft-button" disabled>Download inquiry draft</button>
-<p id="form-status" role="status" aria-live="polite">
-</p>
-<noscript>
-<p>Draft downloads require JavaScript. Keep your inquiry in your preferred notes app until contact details are available.</p>
-</noscript>
-</form>
-<aside class="panel">
-<h2>Studio</h2>
-<p>Uriel Alexander<br>Bronx, New York</p>
-<p id="contact-details"><a href="https://www.instagram.com/urielalexanderstudio/" target="_blank" rel="noopener noreferrer">Message @urielalexanderstudio on Instagram</a></p>
-<p>For commissions, originals, exhibitions, collaborations, or general conversations, an Instagram message is currently the direct contact route. A studio email and online submission form will be added when configured.</p>
-<a class="secondary-link" href="commissions.html">Preparing a commission inquiry</a>
-</aside>
-</div>
-</section>
-</main>
+<section class="launch-page-intro"><p class="eyebrow">THE STUDIO / LET'S TALK</p><h1>Let's make <em>contact.</em></h1><p>Original paintings, commissions, exhibitions, collaborations, and the conversations that lead somewhere unexpected.</p></section>
+<section class="page-section launch-contact-layout"><form class="contact-card launch-contact-form" id="inquiry-form" name="studio-inquiry" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="bot-field">
+<h2>Write to the studio</h2><p>Your message will be submitted through the website. Please include the painting title if you're asking about a specific work.</p>
+<input type="hidden" name="form-name" value="studio-inquiry"><p hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+<div class="launch-field-row"><div class="field"><label for="name">Name *</label><input id="name" name="name" autocomplete="name" maxlength="150" required></div><div class="field"><label for="email">Email *</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required></div></div>
+<div class="field"><label for="topic">What are you writing about? *</label><select id="topic" name="topic" required><option value="">Choose one</option><option value="artwork">An original painting</option><option value="commission">A commission</option><option value="prints">Fine-art prints / editions</option><option value="collaboration">A collaboration or exhibition</option><option value="general">Something else / general conversation</option></select></div>
+<div class="field"><label for="message">Your message *</label><textarea id="message" name="message" rows="7" maxlength="10000" placeholder="Tell me what caught your eye or what you're imagining…" required></textarea></div>
+<p class="form-small-print">Your name, email, and message are used to respond to your inquiry. Please don't include payment details or sensitive personal information.</p><button class="cta-button" type="submit">Send your inquiry ↗</button></form>
+<aside class="launch-contact-aside"><p class="eyebrow">URIEL ALEXANDER ART STUDIO</p><h2>Good art starts with a connection.</h2><p>Interested in a painting for your space, a one-of-a-kind commission, or an exhibition? The first step is a conversation.</p><p><strong>Based in</strong><br>The Bronx, New York</p><p><strong>On Instagram</strong><br><a href="https://www.instagram.com/urielalexanderstudio/" target="_blank" rel="noopener noreferrer">@urielalexanderstudio ↗</a></p><img src="assets/guiding-hands.webp" alt="Guiding Hands painting by Uriel Alexander" loading="lazy"></aside>
+</section></main>
 <footer id="footer">
 <div class="footer-section">
 <div class="footer-content">
