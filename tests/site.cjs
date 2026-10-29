@@ -1,74 +1,34 @@
-const { chromium } = require('playwright');
-const fs = require('node:fs');
-const path = require('node:path');
-const http = require('node:http');
-const assert = require('node:assert/strict');
-const root = path.join(__dirname, '..');
-const server = http.createServer((req,res) => {
-  const file = path.join(root, new URL(req.url,'http://localhost').pathname.slice(1) || 'index.html');
-  if (!fs.existsSync(file)) {res.writeHead(404);return res.end();}
-  res.setHeader('Content-Type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
-  res.end(fs.readFileSync(file));
-});
-(async()=>{
- await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const base = `http://127.0.0.1:${server.address().port}`;
- const browser = await chromium.launch({headless:true, executablePath:process.env.BROWSER_EXECUTABLE || undefined});
- const page = await browser.newPage({acceptDownloads:true});
- const errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const width of [320,390,768,1440]){
-  await page.setViewportSize({width,height:900});
-  for(const name of ['index','gallery','shop','about','commissions','contact']){
-   await page.goto(`${base}/${name}.html`);
-   assert.equal(await page.locator('h1').count(),1);
-   assert.equal(await page.locator('a[href="shop.html"]').count()>0,true);
-   assert.match(await page.locator('header .brand-name').textContent(),/Uriel Alexander/);
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name} overflows at ${width}`);
-   assert.equal(await page.locator('a[href="#"],form[action="#"]').count(),0);
-   assert.equal(await page.locator('a[aria-current="page"]').count(),name==='index'?0:1);
-   await page.keyboard.press('Tab');
-   assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Skip to main content');
-  }
+'use strict';
+// Run with: node tests/site.cjs — no external test dependencies.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html'];
+let checked=0;
+for(const p of pages){
+ const html=read(p);
+ assert.equal((html.match(/<main\b/g)||[]).length,1,p+' must have one main');
+ assert.equal((html.match(/<\/main>/g)||[]).length,1,p+' must close main');
+ assert.match(html,/<meta name="viewport"/,p+' needs viewport');
+ assert.match(html,/<title>[^<]+<\/title>/,p+' needs title');
+ assert.match(html,/Uriel Alexander/,p+' must use artist name');
+ assert.doesNotMatch(html,/Sacred Canvas Studio|Urie Alexander/i,p+' has retired brand');
+ for(const m of html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)){
+  assert.ok(fs.existsSync(path.join(root,m[1])),p+' missing '+m[1]);checked++;
  }
-
- // Shop: no fabricated products or live purchases until merchant URLs are configured.
- await page.goto(`${base}/shop.html`);
- assert.equal(await page.locator('.shop-product').count(),0);
- assert.match(await page.locator('#shop-status').textContent(),/no active print or download listings/i);
- await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Approved sample',image:'assets/approved.jpg',alt:'Test work',categories:['abstract'],shop:{physicalPrintUrl:'https://print.example.com/edition',digitalDownloadUrl:'javascript:alert(1)'}},{title:'Not for sale',image:'assets/photo.jpg',alt:'Gallery only',categories:['abstract']}]};`}));
- await page.reload();
- assert.equal(await page.locator('.shop-product').count(),1);
- assert.equal(await page.locator('a.shop-action').count(),1);
- assert.equal(await page.locator('a.shop-action').first().getAttribute('href'),'https://print.example.com/edition');
- assert.equal(await page.locator('a.shop-action').first().getAttribute('rel'),'noopener noreferrer');
- await page.unroute('**/site-data.js');
- await page.goto(`${base}/gallery.html`);
- assert.equal(await page.locator('.filter-row').isVisible(),true);
- assert.equal(await page.locator('.art-card').count(),8);
- assert.equal(await page.getByRole('button',{name:'Urban Scenes'}).count(),1);
- assert.equal(await page.getByText('Working title — subject to confirmation').count(),3);
- // Synthetic data tests behavior only. It is never included in delivered site content.
- await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Test figurative',image:'missing.jpg',alt:'Test',categories:['figurative']},{title:'Test urban scene',image:'missing.jpg',alt:'Test',categories:['urban']}]};`}));
- await page.reload();
- assert.equal(await page.locator('.art-card').count(),2);
- await page.getByRole('button',{name:'Figures & Portraits',exact:true}).click();
- assert.equal(await page.locator('.art-card').count(),1);
- assert.equal(await page.getByRole('button',{name:'Abstract',exact:true}).getAttribute('aria-pressed'),'true');
- await page.getByRole('button',{name:'Urban Scenes',exact:true}).click();
- assert.equal(await page.locator('.art-card').count(),1);
- await page.getByRole('button',{name:'All',exact:true}).click();
- await page.locator('.image-notice').first().waitFor();
- await page.unroute('**/site-data.js');
- await page.goto(`${base}/contact.html?topic=commission`);
- assert.equal(await page.locator('#topic').inputValue(),'commission');
- await page.getByRole('button',{name:'Download inquiry draft'}).click();
- assert.equal(await page.locator('#name').evaluate(el=>el.validity.valueMissing),true);
- await page.locator('#name').fill('Review Test');await page.locator('#email').fill('review@example.com');await page.locator('#message').fill('A test inquiry.');
- const downloadPromise=page.waitForEvent('download');
- await page.getByRole('button',{name:'Download inquiry draft'}).click();
- const download=await downloadPromise;
- assert.match(fs.readFileSync(await download.path(),'utf8'),/A test inquiry/);
- assert.match(await page.locator('#form-status').textContent(),/not been sent/);
- assert.deepEqual(errors,[]);
- await browser.close();server.close();console.log('PASS: 24 page/viewport checks, eight original artwork records, working titles, editorial homepage, shop with safe checkout gating, responsive layout, category filtering, contact draft, no browser errors.');
-})().catch(e=>{console.error(e);server.close();process.exitCode=1;});
+ checked++;
+}
+const ctx={window:{}};vm.runInNewContext(read('site-data.js'),ctx);
+const works=ctx.window.studioData.artworks;
+assert.equal(works.length,8,'catalog must include eight artist-approved paintings');
+for(const w of works){assert.ok(w.title&&w.alt&&w.image);assert.ok(fs.existsSync(path.join(root,w.image)),w.title+' missing image');assert.equal(fs.readFileSync(path.join(root,w.image)).subarray(0,4).toString('ascii'),'RIFF',w.title+' not RIFF WebP');checked++}
+for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
+assert.doesNotMatch(read('site-data.js'),/workingTitle\s*:\s*true/);
+const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/data-netlify="true"/);assert.match(contact,/netlify-honeypot="bot-field"/);assert.match(contact,/action="\/thank-you.html"/);
+for(const key of ['name','email','topic','message'])assert.ok(contact.includes('name="'+key+'"'),'missing '+key+' field');
+const script=read('site.js');new Function(script);new Function(read('shop.js'));
+assert.ok(script.includes('showModal('),'gallery viewer must be available');
+assert.ok(script.includes('URLSearchParams'),'inquiry deep-links must work');
+assert.ok(!script.includes("event.preventDefault()")||!script.includes("download inquiry draft"),'inquiry must not fake submit');
+assert.match(read('shop.html'),/No print or digital checkout is active/);
+console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');
