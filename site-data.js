@@ -31,7 +31,7 @@ window.studioData = {
   },
   {
     "title": "Skyline State of Mind",
-    "image": "assets/city-figure.webp",
+    "image": "assets/city-figure-provisional.webp",
     "alt": "Painted figure looking upward on a street surrounded by buildings and a distant tower.",
     "categories": [
       "figurative",
@@ -40,7 +40,7 @@ window.studioData = {
   },
   {
     "title": "Next Door to Everything",
-    "image": "assets/bronx-dispensary-streetscape.webp",
+    "image": "assets/bronx-dispensary-provisional.webp",
     "alt": "Bronx street painting showing a cannabis dispensary beside a poultry storefront, cars and overhead wires in pink and blue.",
     "categories": [
       "urban"
@@ -48,7 +48,7 @@ window.studioData = {
   },
   {
     "title": "Say Less in Color",
-    "image": "assets/portrait-with-hands.webp",
+    "image": "assets/braided-figure-provisional.webp",
     "alt": "Painted portrait with braided hair and hands framing the face amid pink, yellow and black marks.",
     "categories": [
       "figurative"
