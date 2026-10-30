@@ -11,13 +11,26 @@ if(grid){
  const img = document.getElementById('dialog-image');
  const dialogTitle=document.getElementById('dialog-title');
  const dialogLink=document.getElementById('dialog-inquire');
- const inquiry = title => 'contact.html?topic=artwork&work='+encodeURIComponent(title);
+ const dialogDetails=document.getElementById('dialog-details');
+ const dialogAvailability=document.getElementById('dialog-availability');
+ const dialogCondition=document.getElementById('dialog-condition');
+ const dialogDescription=document.getElementById('dialog-description');
+ const label = work => [work.year,work.medium,work.dimensions].filter(Boolean).join(' · ');
+ const availability = work => typeof work.originalAvailable==='boolean' ?
+  (work.originalAvailable ? 'Original available' : 'Original unavailable') : '';
+ const inquiry = work => 'contact.html?topic='+(work.originalAvailable===false?'general':'artwork')+'&work='+encodeURIComponent(work.title);
+ const inquiryLabel = work => work.originalAvailable===false ? 'Contact the studio ↗' : 'Inquire about this work ↗';
  function selectImage(index){
   if(!shown.length) return;
   currentIndex=(index+shown.length)%shown.length;
   const work=shown[currentIndex];
   img.src=work.image;img.alt=work.alt||work.title+' by Uriel Alexander';
-  dialogTitle.textContent=work.title;dialogLink.href=inquiry(work.title);
+  dialogTitle.textContent=work.title;dialogLink.href=inquiry(work);dialogLink.textContent=inquiryLabel(work);
+  dialogDetails.textContent=label(work);
+  dialogAvailability.textContent=[availability(work),work.framing].filter(Boolean).join(' · ');
+  dialogCondition.textContent=[work.completion,work.finish].filter(Boolean).join(' · ');
+  dialogCondition.hidden=!dialogCondition.textContent;
+  dialogDescription.textContent=work.description||'';dialogDescription.hidden=!work.description;
  }
  function openImage(index,trigger){
   if(!dialog || typeof dialog.showModal!=='function')return;
@@ -44,10 +57,11 @@ if(grid){
    const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork ↗';open.append(photo,zoom);
    open.addEventListener('click',()=>openImage(index,open));
    const meta=document.createElement('div');meta.className='art-meta';
-   const text=document.createElement('div'),title=document.createElement('h2'),detail=document.createElement('p'),link=document.createElement('a');
+   const text=document.createElement('div'),title=document.createElement('h2'),detail=document.createElement('p'),original=document.createElement('p'),link=document.createElement('a');
    title.className='art-title';title.textContent=work.title;detail.className='art-details';
-   detail.textContent=[work.medium,work.dimensions,work.year].filter(Boolean).join(' · ')||'Original artwork · Uriel Alexander';
-   text.append(title,detail);link.href=inquiry(work.title);link.className='launch-art-inquire';link.textContent='Inquire ↗';meta.append(text,link);card.append(open,meta);grid.append(card);
+   detail.textContent=label(work)||'Original artwork · Uriel Alexander';
+   original.className='art-details launch-art-availability';original.textContent=availability(work);original.hidden=!original.textContent;
+   text.append(title,detail,original);link.href=inquiry(work);link.className='launch-art-inquire';link.textContent=inquiryLabel(work);meta.append(text,link);card.append(open,meta);grid.append(card);
   });
  }
  filters.addEventListener('click',e=>{

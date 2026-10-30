@@ -23,6 +23,19 @@ const works=ctx.window.studioData.artworks;
 assert.equal(works.length,9,'catalog must include nine artist-approved paintings');
 for(const w of works){assert.ok(w.title&&w.alt&&w.image);assert.ok(fs.existsSync(path.join(root,w.image)),w.title+' missing image');assert.equal(fs.readFileSync(path.join(root,w.image)).subarray(0,4).toString('ascii'),'RIFF',w.title+' not RIFF WebP');checked++}
 for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color','Black Boy Magic'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
+// Artist-approved catalog facts must not become invented product offers.
+assert.equal(works.filter(w=>w.originalAvailable===true).length,5,'five originals are available');
+assert.equal(works.filter(w=>w.originalAvailable===false).length,4,'four originals are unavailable');
+for(const work of works){
+ assert.ok(Number.isInteger(work.year)&&work.year>=2025&&work.year<=2026,work.title+' needs its verified year');
+ assert.ok(work.medium&&work.description,work.title+' needs approved catalog copy');
+ assert.match(work.dimensions,/^\d+ × \d+ in$/,work.title+' needs width × height in inches');
+ assert.equal(work.framing,'Unframed',work.title+' must retain confirmed framing');
+ assert.equal(typeof work.originalAvailable,'boolean',work.title+' needs explicit original availability');
+ assert.ok(!work.shop,work.title+' must not acquire an unapproved product listing');
+}
+assert.equal(works.find(w=>w.title==='Next Door to Everything').dimensions,'36 × 24 in','landscape dimensions must retain width-first order');
+assert.equal(works.find(w=>w.title==='Skyline State of Mind').completion,'Finished for now','retain the artist completion qualification');
 assert.doesNotMatch(read('site-data.js'),/workingTitle\s*:\s*true/);
 const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/data-netlify="true"/);assert.match(contact,/netlify-honeypot="bot-field"/);assert.match(contact,/action="\/thank-you.html"/);
 for(const key of ['name','email','topic','message'])assert.ok(contact.includes('name="'+key+'"'),'missing '+key+' field');
@@ -40,7 +53,7 @@ assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwor
 assert.match(galleryCss,/\.launch-art-card \.art-meta\s*\{[^}]*min-height:\s*105px/s,'captions must align');
 assert.match(read('gallery.html'),/Select any painting to view its complete composition/,'the viewer must make the full artwork accessible');
 assert.match(script,/View full artwork/,'thumbnail action should disclose the full painting');
-assert.match(galleryCss,/\.launch-dialog-image img\{width:100%;height:100%;object-fit:contain\}/,'original images in viewer must never be cropped');
+assert.match(galleryCss,/\.launch-dialog-image img\{[^}]*object-fit:contain/,'original images in viewer must never be cropped');
 
 
 // Cross-page artwork display QA: preview links open the uncropped gallery viewer.

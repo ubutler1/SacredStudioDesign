@@ -1296,9 +1296,13 @@ body{background:var(--paper);color:var(--ink)}
 .launch-dialog-head,.launch-dialog-caption{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .launch-dialog-head{padding:0 5px 12px}.launch-dialog-head .eyebrow{margin:0}
 .launch-dialog-close,.launch-dialog-paging button{background:transparent;border:1px solid #baa99b;padding:10px 14px;color:var(--ink);cursor:pointer}
-.launch-dialog-image{height:min(66vh,730px);min-height:180px;display:grid;place-items:center;background:#e9e2da}
-.launch-dialog-image img{width:100%;height:100%;object-fit:contain}
-.launch-dialog-caption{padding:15px 5px 0}.launch-dialog-caption h2{font-family:Georgia,serif;font-size:1.8rem;font-weight:500;margin:0 0 7px}
+.launch-dialog-image{height:min(66vh,730px);min-height:180px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);place-items:center;background:#e9e2da}
+.launch-dialog-image img{width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain}
+.launch-dialog-caption{padding:15px 5px 0;align-items:flex-start}
+.launch-dialog-caption>div:first-child{min-width:0;flex:1}
+.launch-dialog-caption .art-details{margin:0 0 7px;font-size:.86rem;color:#655b52}
+.launch-dialog-paging{flex-shrink:0}
+.launch-art-description{margin:16px 5px 4px;max-width:75ch;font-size:.96rem;line-height:1.65;color:#655b52}.launch-dialog-caption h2{font-family:Georgia,serif;font-size:1.8rem;font-weight:500;margin:0 0 7px}
 .launch-dialog-caption a{text-decoration:none;border-bottom:1px solid #aa896b;font-size:.86rem}
 .launch-dialog-paging{display:flex;gap:7px}.launch-dialog-paging button{font-size:1.13rem;min-width:47px}
 .launch-contact-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(26px,5vw,70px)}
@@ -1425,7 +1429,7 @@ body{background:var(--paper);color:var(--ink)}
 }
 .launch-art-card .art-meta {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: 12px;
   min-height: 105px;
@@ -1442,8 +1446,12 @@ body{background:var(--paper);color:var(--ink)}
 .launch-art-card .art-details {
   line-height: 1.45;
 }
+.launch-art-card .launch-art-availability {
+  margin-top: 7px;
+}
 .launch-art-card .launch-art-inquire {
   align-self: start;
+  justify-self: start;
   margin-top: 2px;
 }
 @media (max-width: 840px) {

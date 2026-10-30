@@ -15,7 +15,7 @@
 3. Configure **Forms > Submission notifications > Add notification** to a working email you control. Send a second test, confirm receipt, check spam if necessary, and reply to the test.
 4. Review the new text, imagery, photo cropping and behavior on desktop and mobile; test dialog Close, Escape, Left/Right keys, filters, and work-specific inquiry links.
 5. Check keyboard focus, contrast and responsive behavior. `node tests/site.cjs` runs basic static assertions without additional installs.
-6. Confirm artwork metadata and selling decisions: medium, dimensions, year, availability, pricing. The current site does NOT claim an artwork is available for purchase.
+6. Catalog year, medium/support, width × height, framing, original availability and descriptions were confirmed and approved on October 30. Five originals are available by inquiry and four are unavailable. Prices and future product terms remain undecided; checkout is inactive.
 7. Connect `urielalexanderstudio.com` from Netlify **Domain management**; use the exact DNS records provided by Netlify in GoDaddy. Check both www/root address and HTTPS.
 8. After the artist approves the final version, merge PR #2 to `main`, inspect the **production** deploy, re-test Forms in production, verify domain/SSL, then make Netlify public on the chosen date.
 9. Keep personal/commercial print-ready image masters out of public GitHub. The current GitHub repository is public even while Netlify is private.
@@ -50,3 +50,10 @@
 - Kept the approved hero headline and all nine artwork names unchanged.
 - Preserved the existing structure, image placements, gallery behavior, Netlify form and truthful inactive checkout state.
 - Final artist approval of editorial copy remains required before publishing.
+
+## October 30: Approved nine-work catalog and viewer correction
+- Applied the artist-approved labels, availability wording and nine descriptions to the gallery. Full records and descriptions appear in the artwork viewer; card previews remain square and use the same nine image assets and titles.
+- Available originals offer artwork inquiries. Unavailable originals offer general studio contact with the title prefilled, without claims of sale history, ownership or reproduction availability.
+- Constrained the viewer image within its grid area to prevent intrinsic image height from overflowing and overlapping the caption. The complete image uses contain presentation.
+- Extended catalog checks to protect individual availability, width-first landscape dimensions, Skyline State of Mind's finished-for-now qualification and the absence of product listings.
+- This content approval authorizes the review branch only. It does not authorize merging, publishing, DNS/hosting changes, prices or checkout. Record current static and deployed-browser validation in the PR before release.
