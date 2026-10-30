@@ -28,3 +28,12 @@
 - Maintain an independent inbox and Netlify notification to avoid missed client inquiries.
 
 **No domain DNS, Netlify visibility, payment, or GitHub main branch changes were made by this code update.**
+
+## October 29 preflight — pre-publication code checks
+- Every static artwork <img> now includes verified intrinsic dimensions, while existing CSS presentation and crop treatment remain unchanged.
+- Gallery, About and Commissions metadata descriptions were expanded without creating unverifiable sale or exhibition claims.
+- Shop fulfillment wording no longer presumes an unconfirmed print-and-ship provider.
+- Tests now cover internal HTML navigation, artwork deep links and native image dimensions. These static checks do **not** establish that a browser test was completed.
+- The custom domain, both root and www, HTTPS/SSL, Netlify notification receipt and production Forms must be verified from their respective dashboards and a real browser before public launch.
+- Do not merge PR #2, publish the site, switch DNS or activate checkout without the artist's explicit authorization.
+- Review public repository attachments: PDFs, ZIPs, and contact sheets may expose images beyond the intended lightweight website previews. Removing them from a Git branch does not by itself erase Git history.

@@ -60,4 +60,33 @@ assert.match(galleryCss,/\.launch-contact-aside \.launch-contact-art img\s*\{[^}
 assert.match(galleryCss,/\.launch-hero \.launch-hero-art > img\s*\{[^}]*object-fit:\s*contain/s,'homepage hero must show complete painting');
 assert.match(galleryCss,/\.launch-about-grid \.launch-about-feature-link img\s*\{[^}]*object-fit:\s*contain/s,'about featured portrait must stay uncropped');
 
+
+// Additional prelaunch checks: local page links, artwork deep links and image dimensions.
+const validPages = new Set(pages), catalogTitles = new Set(works.map(w => w.title));
+let checkedLinks = 0, checkedImageDimensions = 0;
+for (const p of pages) {
+  const html = read(p);
+  for (const [, u] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    if (/^(?:https?:|#|mailto:|tel:)/i.test(u)) continue;
+    const [pathname, query] = u.split('?');
+    const localPath = pathname.split('#')[0];
+    if (localPath.endsWith('.html')) {
+      assert.ok(validPages.has(localPath), p + ' links to missing page ' + localPath);
+      checkedLinks++;
+    }
+    if (query && query.includes('work=')) {
+      const url = new URL('https://studio.example/' + u);
+      assert.ok(catalogTitles.has(url.searchParams.get('work')), p + ' has unrecognized artwork deep link ' + u);
+    }
+  }
+  for (const [img] of html.matchAll(/<img\b[^>]*>/g)) {
+    if (!img.includes('src="assets/')) continue;
+    assert.match(img, /\bwidth="\d+"/, p + ' artwork img must have intrinsic width');
+    assert.match(img, /\bheight="\d+"/, p + ' artwork img must have intrinsic height');
+    checkedImageDimensions++;
+  }
+}
+assert.ok(checkedImageDimensions >= 12, 'static artwork imagery must be sized');
+assert.ok(checkedLinks >= 20, 'main page navigation must remain linked');
+
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');
