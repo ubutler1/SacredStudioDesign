@@ -1,5 +1,8 @@
 # Studio voice and missing website content — October 29, 2026
 
+## October 30: Studio logo approval
+The artist approved the supplied gold palette-and-brush logo with the Uriel Alexander / ART STUDIO wordmark for website and studio branding. The original transparent PNG is used in the header across all seven pages. A palette-only SVG display wrapper of that same PNG supplies the browser icon and footer accent; it is not a vector redraw. See `BRANDING.md` for master files and usage rules. The solid logo is retained unchanged as a white-background master. Supplied packaging, card, mug and shirt mockups are branding references, not active shop listings. Preserve the approved page design, headline, artworks and inquiry behavior. Public release and checkout remain separate approvals.
+
 ## What to protect
 Artist: **Uriel Alexander**; studio: **Uriel Alexander Art Studio**; Instagram **@urielalexanderstudio**; business email **urielalexanderstudio@gmail.com**. The current working branch is `feature/print-and-digital-shop-2026` (draft PR #2). **Do not merge, publish, or change DNS without explicit artist authorization.**
 
