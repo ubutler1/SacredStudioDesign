@@ -37,3 +37,10 @@
 - The custom domain, both root and www, HTTPS/SSL, Netlify notification receipt and production Forms must be verified from their respective dashboards and a real browser before public launch.
 - Do not merge PR #2, publish the site, switch DNS or activate checkout without the artist's explicit authorization.
 - Review public repository attachments: PDFs, ZIPs, and contact sheets may expose images beyond the intended lightweight website previews. Removing them from a Git branch does not by itself erase Git history.
+
+## October 29 — natural-language refinement
+- Revised visible language on Home, About, Gallery, Shop, Commissions, Contact and thank-you pages, keeping the artist-approved layout, hero headline, artwork and full-image viewer unchanged.
+- The artist does not want AI-sounding language or public identity labels to dominate his story. Keep language grounded and specific; do not add sexuality/heritage statements without additional copy approval.
+- Added confirmed studio email to the Contact page; print checkout remains inactive and truthful.
+- See `CONTENT.md` for a concrete collector/production/launch information gap list.
+- The review branch remains separate from production.

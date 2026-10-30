@@ -2,7 +2,7 @@
 // Images must be uploaded into assets/ to render. Keep print-resolution masters private.
 // Year, medium, dimensions and sale status remain unverified and are intentionally omitted.
 window.studioData = {
-  email: '',
+  email: 'urielalexanderstudio@gmail.com',
   instagram: 'https://www.instagram.com/urielalexanderstudio/',
   artworks: [
   {
