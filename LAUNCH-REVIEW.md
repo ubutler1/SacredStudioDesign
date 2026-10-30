@@ -55,5 +55,6 @@
 - Applied the artist-approved labels, availability wording and nine descriptions to the gallery. Full records and descriptions appear in the artwork viewer; card previews remain square and use the same nine image assets and titles.
 - Available originals offer artwork inquiries. Unavailable originals offer general studio contact with the title prefilled, without claims of sale history, ownership or reproduction availability.
 - Constrained the viewer image within its grid area to prevent intrinsic image height from overflowing and overlapping the caption. The complete image uses contain presentation.
+- Added explicit Tab/Shift+Tab wrapping between the viewer controls after deployed QA found the native focus cycle could leave the viewer.
 - Extended catalog checks to protect individual availability, width-first landscape dimensions, Skyline State of Mind's finished-for-now qualification and the absence of product listings.
 - This content approval authorizes the review branch only. It does not authorize merging, publishing, DNS/hosting changes, prices or checkout. Record current static and deployed-browser validation in the PR before release.

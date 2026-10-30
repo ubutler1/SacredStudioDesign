@@ -42,6 +42,12 @@ if(grid){
  dialog?.addEventListener('close',()=>{if(lastFocus?.isConnected)lastFocus.focus();lastFocus=null});
  dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
  dialog?.addEventListener('keydown',e=>{
+  if(e.key==='Tab'){
+   const first=document.getElementById('dialog-close'),last=document.getElementById('dialog-next');
+   const active=document.activeElement;
+   if(e.shiftKey&&(active===first||active===dialog)){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&(active===last||active===dialog)){e.preventDefault();first.focus()}
+  }
   if(e.key==='ArrowRight'){e.preventDefault();selectImage(currentIndex+1)}
   if(e.key==='ArrowLeft'){e.preventDefault();selectImage(currentIndex-1)}
  });
