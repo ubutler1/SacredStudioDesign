@@ -1343,50 +1343,57 @@ body{background:var(--paper);color:var(--ink)}
 
 
 /* ---------------------------------------------------------
-   Studio gallery / unified exhibition mat
-   Every thumbnail gets the same proportion and inset.
-   ALWAYS show the complete painting: no cropping or stretch.
+   Artist gallery — equal-size editorial artwork thumbnails
+   The nine original files are NOT modified or stretched.
+   Cropping is used ONLY in the square grid previews.
+   Artwork lightbox continues to show the full composition.
    --------------------------------------------------------- */
 .gallery-grid.launch-gallery-grid {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
-  gap: clamp(34px, 4vw, 54px) clamp(16px, 2vw, 28px);
+  gap: clamp(30px, 4vw, 48px) clamp(14px, 2vw, 26px);
 }
 .art-card.launch-art-card {
   display: flex;
   flex-direction: column;
   min-width: 0;
   height: 100%;
-  background: transparent;
   border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.art-card.launch-art-card:hover {
+  transform: none;
   box-shadow: none;
 }
 .launch-art-card .launch-art-image-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  display: block;
   width: 100%;
   height: auto;
   min-height: 0;
-  aspect-ratio: 3 / 4;
-  padding: clamp(15px, 1.8vw, 26px);
-  border: 1px solid #d4c8bb;
-  border-radius: 0;
-  background: #eee9e2;
-  box-shadow: inset 0 0 0 8px #faf8f4;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: none;
+  background: #e7dfd5;
   overflow: hidden;
   cursor: zoom-in;
-  transition: border-color 180ms ease, background-color 180ms ease;
 }
 .launch-art-card .launch-art-image-button img.artwork-photo {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
   object-position: center center;
   background: transparent;
   transform: none !important;
@@ -1398,8 +1405,23 @@ body{background:var(--paper);color:var(--ink)}
 }
 .launch-art-card .launch-art-image-button:hover,
 .launch-art-card .launch-art-image-button:focus-visible {
-  border-color: #83675d;
-  background: #e9e2d9;
+  box-shadow: 0 0 0 2px #8c6a57;
+}
+.launch-art-card .launch-art-zoom {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 9px 12px;
+  background: rgba(255, 254, 250, .95);
+  color: #27211f;
+  font-size: .72rem;
+  font-weight: 650;
+}
+.launch-gallery-section .gallery-display-note {
+  margin: -9px 0 24px;
+  font-size: .81rem;
+  line-height: 1.5;
+  color: #655b52;
 }
 .launch-art-card .art-meta {
   display: grid;
@@ -1408,7 +1430,7 @@ body{background:var(--paper);color:var(--ink)}
   gap: 12px;
   min-height: 105px;
   flex: 1 0 auto;
-  padding: 18px 0 16px;
+  padding: 17px 0 16px;
   border-bottom: 1px solid #d4c8bb;
 }
 .launch-art-card .art-title {
@@ -1432,12 +1454,6 @@ body{background:var(--paper);color:var(--ink)}
 @media (max-width: 550px) {
   .gallery-grid.launch-gallery-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+    gap: 30px;
   }
-  .launch-art-card .launch-art-image-button {
-    padding: 18px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .launch-art-card .launch-art-image-button { transition: none; }
 }

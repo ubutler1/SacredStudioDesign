@@ -38,10 +38,10 @@ if(grid){
   status.textContent=shown.length?shown.length+(shown.length===1?' painting':' paintings'):'No paintings match this selection.';
   shown.forEach((work,index)=>{
    const card=document.createElement('article');card.className='art-card launch-art-card';
-   const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View '+work.title+' larger');
+   const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View complete painting: '+work.title);
    const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading='lazy';photo.decoding='async';
    photo.addEventListener('error',()=>{const notice=document.createElement('span');notice.className='image-notice';notice.textContent='Artwork photograph temporarily unavailable.';photo.replaceWith(notice)},{once:true});
-   const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View larger ↗';open.append(photo,zoom);
+   const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork ↗';open.append(photo,zoom);
    open.addEventListener('click',()=>openImage(index,open));
    const meta=document.createElement('div');meta.className='art-meta';
    const text=document.createElement('div'),title=document.createElement('h2'),detail=document.createElement('p'),link=document.createElement('a');

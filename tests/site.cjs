@@ -34,9 +34,12 @@ assert.match(read('shop.html'),/No print or digital checkout is active/);
 
 const galleryCss=read('style.css');
 assert.match(galleryCss,/\.gallery-grid\.launch-gallery-grid\s*\{/,'gallery must have a dedicated grid rule');
-assert.match(galleryCss,/aspect-ratio:\s*3\s*\/\s*4/,'gallery display area should have a fixed 3:4 proportion');
-assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-fit:\s*contain/s,'paintings must remain fully visible in thumbnails');
-assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-position:\s*center center/s,'paintings must be centered in the frame');
-assert.match(galleryCss,/\.launch-art-card \.art-meta\s*\{[^}]*min-height:\s*105px/s,'gallery captions must align');
+assert.match(galleryCss,/aspect-ratio:\s*1\s*\/\s*1/,'all artwork thumbnails should use one square format');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-fit:\s*cover/s,'all thumbnail images should fill their cards');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-position:\s*center center/s,'thumbnail crop should be centered');
+assert.match(galleryCss,/\.launch-art-card \.art-meta\s*\{[^}]*min-height:\s*105px/s,'captions must align');
+assert.match(read('gallery.html'),/Select any painting to view its complete composition/,'the viewer must make the full artwork accessible');
+assert.match(script,/View full artwork/,'thumbnail action should disclose the full painting');
+assert.match(galleryCss,/\.launch-dialog-image img\{width:100%;height:100%;object-fit:contain\}/,'original images in viewer must never be cropped');
 
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');
