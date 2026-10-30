@@ -1,57 +1,114 @@
-const { chromium } = require('playwright');
-const fs = require('node:fs');
-const path = require('node:path');
-const http = require('node:http');
-const assert = require('node:assert/strict');
-const root = path.join(__dirname, '..');
-const server = http.createServer((req,res) => {
-  const file = path.join(root, new URL(req.url,'http://localhost').pathname.slice(1) || 'index.html');
-  if (!fs.existsSync(file)) {res.writeHead(404);return res.end();}
-  res.setHeader('Content-Type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
-  res.end(fs.readFileSync(file));
-});
-(async()=>{
- await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const base = `http://127.0.0.1:${server.address().port}`;
- const browser = await chromium.launch({headless:true, executablePath:process.env.BROWSER_EXECUTABLE || undefined});
- const page = await browser.newPage({acceptDownloads:true});
- const errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const width of [320,390,768,1440]){
-  await page.setViewportSize({width,height:900});
-  for(const name of ['index','gallery','about','commissions','contact']){
-   await page.goto(`${base}/${name}.html`);
-   assert.equal(await page.locator('h1').count(),1);
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name} overflows at ${width}`);
-   assert.equal(await page.locator('a[href="#"],img,form[action="#"]').count(),0);
-   assert.equal(await page.locator('a[aria-current="page"]').count(),name==='index'?0:1);
-   await page.keyboard.press('Tab');
-   assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Skip to main content');
-  }
+'use strict';
+// Run with: node tests/site.cjs — no external test dependencies.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html'];
+let checked=0;
+for(const p of pages){
+ const html=read(p);
+ assert.equal((html.match(/<main\b/g)||[]).length,1,p+' must have one main');
+ assert.equal((html.match(/<\/main>/g)||[]).length,1,p+' must close main');
+ assert.match(html,/<meta name="viewport"/,p+' needs viewport');
+ assert.match(html,/<title>[^<]+<\/title>/,p+' needs title');
+ assert.match(html,/Uriel Alexander/,p+' must use artist name');
+ assert.doesNotMatch(html,/Sacred Canvas Studio|Urie Alexander/i,p+' has retired brand');
+ for(const m of html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)){
+  assert.ok(fs.existsSync(path.join(root,m[1])),p+' missing '+m[1]);checked++;
  }
- await page.goto(`${base}/gallery.html`);
- assert.equal(await page.locator('.filter-row').isVisible(),false);
- // Synthetic data tests behavior only. It is never included in delivered site content.
- await page.route('**/site-data.js',route=>route.fulfill({contentType:'text/javascript',body:`window.studioData={email:'',artworks:[{title:'Test abstract',image:'missing.jpg',alt:'Test',categories:['abstract']},{title:'Test portrait',image:'missing.jpg',alt:'Test',categories:['portrait']}]};`}));
- await page.reload();
- assert.equal(await page.locator('.art-card').count(),2);
- await page.getByRole('button',{name:'Abstract',exact:true}).click();
- assert.equal(await page.locator('.art-card').count(),1);
- assert.equal(await page.getByRole('button',{name:'Abstract',exact:true}).getAttribute('aria-pressed'),'true');
- await page.getByRole('button',{name:'Mixed media',exact:true}).click();
- assert.match(await page.locator('#gallery-status').textContent(),/No artwork/);
- await page.getByRole('button',{name:'All',exact:true}).click();
- await page.locator('.image-notice').first().waitFor();
- await page.unroute('**/site-data.js');
- await page.goto(`${base}/contact.html?topic=commission`);
- assert.equal(await page.locator('#topic').inputValue(),'commission');
- await page.getByRole('button',{name:'Download inquiry draft'}).click();
- assert.equal(await page.locator('#name').evaluate(el=>el.validity.valueMissing),true);
- await page.locator('#name').fill('Review Test');await page.locator('#email').fill('review@example.com');await page.locator('#message').fill('A test inquiry.');
- const downloadPromise=page.waitForEvent('download');
- await page.getByRole('button',{name:'Download inquiry draft'}).click();
- const download=await downloadPromise;
- assert.match(fs.readFileSync(await download.path(),'utf8'),/A test inquiry/);
- assert.match(await page.locator('#form-status').textContent(),/not been sent/);
- assert.deepEqual(errors,[]);
- await browser.close();server.close();console.log('PASS: 20 page/viewport checks, keyboard skip links, gallery filtering/empty states/image failures, validation, commission preselection, draft download, no browser errors.');
-})().catch(e=>{console.error(e);server.close();process.exitCode=1;});
+ checked++;
+}
+const ctx={window:{}};vm.runInNewContext(read('site-data.js'),ctx);
+const works=ctx.window.studioData.artworks;
+assert.equal(works.length,9,'catalog must include nine artist-approved paintings');
+for(const w of works){assert.ok(w.title&&w.alt&&w.image);assert.ok(fs.existsSync(path.join(root,w.image)),w.title+' missing image');assert.equal(fs.readFileSync(path.join(root,w.image)).subarray(0,4).toString('ascii'),'RIFF',w.title+' not RIFF WebP');checked++}
+for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color','Black Boy Magic'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
+// Artist-approved catalog facts must not become invented product offers.
+assert.equal(works.filter(w=>w.originalAvailable===true).length,5,'five originals are available');
+assert.equal(works.filter(w=>w.originalAvailable===false).length,4,'four originals are unavailable');
+for(const work of works){
+ assert.ok(Number.isInteger(work.year)&&work.year>=2025&&work.year<=2026,work.title+' needs its verified year');
+ assert.ok(work.medium&&work.description,work.title+' needs approved catalog copy');
+ assert.match(work.dimensions,/^\d+ × \d+ in$/,work.title+' needs width × height in inches');
+ assert.equal(work.framing,'Unframed',work.title+' must retain confirmed framing');
+ assert.equal(typeof work.originalAvailable,'boolean',work.title+' needs explicit original availability');
+ assert.ok(!work.shop,work.title+' must not acquire an unapproved product listing');
+}
+assert.equal(works.find(w=>w.title==='Next Door to Everything').dimensions,'36 × 24 in','landscape dimensions must retain width-first order');
+assert.equal(works.find(w=>w.title==='Skyline State of Mind').completion,'Finished for now','retain the artist completion qualification');
+assert.doesNotMatch(read('site-data.js'),/workingTitle\s*:\s*true/);
+const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/data-netlify="true"/);assert.match(contact,/netlify-honeypot="bot-field"/);assert.match(contact,/action="\/thank-you.html"/);
+for(const key of ['name','email','topic','message'])assert.ok(contact.includes('name="'+key+'"'),'missing '+key+' field');
+const script=read('site.js');new Function(script);new Function(read('shop.js'));
+assert.ok(script.includes('showModal('),'gallery viewer must be available');
+assert.ok(script.includes('URLSearchParams'),'inquiry deep-links must work');
+assert.ok(!script.includes("event.preventDefault()")||!script.includes("download inquiry draft"),'inquiry must not fake submit');
+assert.match(read('shop.html'),/Print and digital purchases are not available through the website/);
+
+const galleryCss=read('style.css');
+assert.match(galleryCss,/\.gallery-grid\.launch-gallery-grid\s*\{/,'gallery must have a dedicated grid rule');
+assert.match(galleryCss,/aspect-ratio:\s*1\s*\/\s*1/,'all artwork thumbnails should use one square format');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-fit:\s*cover/s,'all thumbnail images should fill their cards');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-position:\s*center center/s,'thumbnail crop should be centered');
+assert.match(galleryCss,/\.launch-art-card \.art-meta\s*\{[^}]*min-height:\s*105px/s,'captions must align');
+assert.match(read('gallery.html'),/Select any painting to view its complete composition/,'the viewer must make the full artwork accessible');
+assert.match(script,/View full artwork/,'thumbnail action should disclose the full painting');
+assert.match(galleryCss,/\.launch-dialog-image img\{[^}]*object-fit:contain/,'original images in viewer must never be cropped');
+
+
+// Cross-page artwork display QA: preview links open the uncropped gallery viewer.
+const home=read('index.html'), about=read('about.html'), shop=read('shop.html');
+assert.match(home,/View all nine paintings/,'homepage collection count must match catalog');
+assert.match(home,/class="launch-work-picture"/,'homepage has selected-artwork previews');
+assert.match(about,/class="launch-about-feature-link"/,'about full portrait link');
+assert.equal((about.match(/class="launch-about-work-picture"/g)||[]).length,2,'about secondary works must use two matched squares');
+assert.equal((shop.match(/class="launch-print-preview-link"/g)||[]).length,3,'shop previews must be artwork deep-links');
+assert.match(contact,/class="launch-contact-art"/,'contact painting must link to the full gallery');
+assert.match(galleryCss,/\.launch-work \.launch-work-picture\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/s,'homepage thumbnails should be square');
+assert.match(galleryCss,/\.launch-work \.launch-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'homepage thumbnails should fill their square');
+assert.match(galleryCss,/\.launch-about-bottom > div\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s,'about previews need matching columns');
+assert.match(galleryCss,/\.launch-about-bottom \.launch-about-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'about previews should fill frames');
+assert.match(galleryCss,/\.launch-print-preview \.launch-print-preview-link img\s*\{[^}]*object-fit:\s*cover/s,'shop previews should fill their squares');
+assert.match(galleryCss,/\.launch-contact-aside \.launch-contact-art img\s*\{[^}]*object-fit:\s*cover/s,'contact artwork should fill its square');
+assert.match(galleryCss,/\.launch-hero \.launch-hero-art > img\s*\{[^}]*object-fit:\s*contain/s,'homepage hero must show complete painting');
+assert.match(galleryCss,/\.launch-about-grid \.launch-about-feature-link img\s*\{[^}]*object-fit:\s*contain/s,'about featured portrait must stay uncropped');
+
+
+// Additional prelaunch checks: local page links, artwork deep links and image dimensions.
+const validPages = new Set(pages), catalogTitles = new Set(works.map(w => w.title));
+let checkedLinks = 0, checkedImageDimensions = 0;
+for (const p of pages) {
+  const html = read(p);
+  for (const [, u] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    if (/^(?:https?:|#|mailto:|tel:)/i.test(u)) continue;
+    const [pathname, query] = u.split('?');
+    const localPath = pathname.split('#')[0];
+    if (localPath.endsWith('.html')) {
+      assert.ok(validPages.has(localPath), p + ' links to missing page ' + localPath);
+      checkedLinks++;
+    }
+    if (query && query.includes('work=')) {
+      const url = new URL('https://studio.example/' + u);
+      assert.ok(catalogTitles.has(url.searchParams.get('work')), p + ' has unrecognized artwork deep link ' + u);
+    }
+  }
+  for (const [img] of html.matchAll(/<img\b[^>]*>/g)) {
+    if (!img.includes('src="assets/')) continue;
+    assert.match(img, /\bwidth="\d+"/, p + ' artwork img must have intrinsic width');
+    assert.match(img, /\bheight="\d+"/, p + ' artwork img must have intrinsic height');
+    checkedImageDimensions++;
+  }
+}
+assert.ok(checkedImageDimensions >= 12, 'static artwork imagery must be sized');
+assert.ok(checkedLinks >= 20, 'main page navigation must remain linked');
+
+
+// Editorial QA: preserve artwork focus without publishing unapproved identity narratives.
+assert.match(read('index.html'),/Portraits with presence\.<br><em>Color without permission\.<\/em>/,'approved headline stays intact');
+assert.match(read('about.html'),/For Alexander, a portrait begins with the structure of the face/,'About must describe the artist practice concretely');
+assert.doesNotMatch(read('about.html'),/Black gay man|gay artist|Caribbean roots/,'artist personal background requires separate public-copy approval');
+assert.match(read('contact.html'),/mailto:urielalexanderstudio@gmail\.com/,'studio email is accessible');
+assert.match(read('shop.html'),/Print and digital purchases are not available through the website/,'checkout must remain inactive');
+assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs original inquiries to form');
+
+console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');

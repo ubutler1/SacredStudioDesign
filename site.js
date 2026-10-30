@@ -1,88 +1,103 @@
 'use strict';
-
-const data = window.studioData || { email: '', artworks: [] };
-const categories = ['abstract', 'portrait', 'mixed-media'];
-const filterWorks = (works, category) => works.filter(work => category === 'all' || work.categories.includes(category));
+const data = window.studioData || {email:'',artworks:[]};
+const works = Array.isArray(data.artworks) ? data.artworks.filter(work=>work && typeof work.title==='string' && typeof work.image==='string') : [];
 const grid = document.querySelector('#artwork-grid');
-if (grid) {
-  const works = data.artworks;
-  const filters = document.querySelector('.filter-row');
-  const status = document.querySelector('#gallery-status');
-  filters.hidden = works.length === 0;
-  const render = category => {
-    const shown = filterWorks(works, category);
-    grid.replaceChildren();
-    if (works.length) status.textContent = shown.length ? `${shown.length} artwork${shown.length === 1 ? '' : 's'} shown.` : 'No artwork in this category yet. Choose another category.';
-    for (const work of shown) {
-      const card = document.createElement('article');
-      card.className = 'art-card';
-      const image = document.createElement('img');
-      image.src = work.image;
-      image.alt = work.alt;
-      image.loading = 'lazy';
-      image.decoding = 'async';
-      image.className = 'artwork-photo';
-      image.addEventListener('error', () => {
-        const notice = document.createElement('p');
-        notice.className = 'image-notice';
-        notice.textContent = 'Photograph temporarily unavailable.';
-        image.replaceWith(notice);
-      }, { once: true });
-      const meta = document.createElement('div');
-      meta.className = 'art-meta';
-      const title = document.createElement('h2');
-      title.className = 'art-title';
-      title.textContent = work.title;
-      const details = document.createElement('p');
-      details.className = 'art-details';
-      details.textContent = [work.medium, work.dimensions, work.year].filter(Boolean).join(' · ');
-      meta.append(title, details);
-      card.append(image, meta);
-      grid.append(card);
-    }
-  };
-  filters.addEventListener('click', event => {
-    const button = event.target.closest('[data-filter]');
-    if (!button) return;
-    for (const item of filters.querySelectorAll('button')) {
-      const active = item === button;
-      item.setAttribute('aria-pressed', String(active));
-      item.classList.toggle('is-active', active);
-    }
-    render(button.dataset.filter);
+const dialog = document.getElementById('artwork-dialog');
+if(grid){
+ const filters = document.querySelector('.filter-row');
+ const status = document.querySelector('#gallery-status');
+ let shown = [...works],currentIndex = 0,lastFocus=null;
+ filters.hidden=works.length===0;
+ const img = document.getElementById('dialog-image');
+ const dialogTitle=document.getElementById('dialog-title');
+ const dialogLink=document.getElementById('dialog-inquire');
+ const dialogDetails=document.getElementById('dialog-details');
+ const dialogAvailability=document.getElementById('dialog-availability');
+ const dialogCondition=document.getElementById('dialog-condition');
+ const dialogDescription=document.getElementById('dialog-description');
+ const label = work => [work.year,work.medium,work.dimensions].filter(Boolean).join(' · ');
+ const availability = work => typeof work.originalAvailable==='boolean' ?
+  (work.originalAvailable ? 'Original available' : 'Original unavailable') : '';
+ const inquiry = work => 'contact.html?topic='+(work.originalAvailable===false?'general':'artwork')+'&work='+encodeURIComponent(work.title);
+ const inquiryLabel = work => work.originalAvailable===false ? 'Contact the studio ↗' : 'Inquire about this work ↗';
+ function selectImage(index){
+  if(!shown.length) return;
+  currentIndex=(index+shown.length)%shown.length;
+  const work=shown[currentIndex];
+  img.src=work.image;img.alt=work.alt||work.title+' by Uriel Alexander';
+  dialogTitle.textContent=work.title;dialogLink.href=inquiry(work);dialogLink.textContent=inquiryLabel(work);
+  dialogDetails.textContent=label(work);
+  dialogAvailability.textContent=[availability(work),work.framing].filter(Boolean).join(' · ');
+  dialogCondition.textContent=[work.completion,work.finish].filter(Boolean).join(' · ');
+  dialogCondition.hidden=!dialogCondition.textContent;
+  dialogDescription.textContent=work.description||'';dialogDescription.hidden=!work.description;
+ }
+ function openImage(index,trigger){
+  if(!dialog || typeof dialog.showModal!=='function')return;
+  lastFocus=trigger;selectImage(index);dialog.showModal();document.getElementById('dialog-close').focus();
+ }
+ document.getElementById('dialog-close')?.addEventListener('click',()=>dialog.close());
+ document.getElementById('dialog-next')?.addEventListener('click',()=>selectImage(currentIndex+1));
+ document.getElementById('dialog-prev')?.addEventListener('click',()=>selectImage(currentIndex-1));
+ dialog?.addEventListener('close',()=>{if(lastFocus?.isConnected)lastFocus.focus();lastFocus=null});
+ dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ dialog?.addEventListener('keydown',e=>{
+  if(e.key==='Tab'){
+   const first=document.getElementById('dialog-close'),last=document.getElementById('dialog-next');
+   const active=document.activeElement;
+   if(e.shiftKey&&(active===first||active===dialog)){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&(active===last||active===dialog)){e.preventDefault();first.focus()}
+  }
+  if(e.key==='ArrowRight'){e.preventDefault();selectImage(currentIndex+1)}
+  if(e.key==='ArrowLeft'){e.preventDefault();selectImage(currentIndex-1)}
+ });
+ function render(category){
+  shown=works.filter(w=>category==='all'||(Array.isArray(w.categories)&&w.categories.includes(category)));
+  grid.replaceChildren();
+  status.textContent=shown.length?shown.length+(shown.length===1?' painting':' paintings'):'No paintings match this selection.';
+  shown.forEach((work,index)=>{
+   const card=document.createElement('article');card.className='art-card launch-art-card';
+   const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View complete painting: '+work.title);
+   const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading='lazy';photo.decoding='async';
+   photo.addEventListener('error',()=>{const notice=document.createElement('span');notice.className='image-notice';notice.textContent='Artwork photograph temporarily unavailable.';photo.replaceWith(notice)},{once:true});
+   const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork ↗';open.append(photo,zoom);
+   open.addEventListener('click',()=>openImage(index,open));
+   const meta=document.createElement('div');meta.className='art-meta';
+   const text=document.createElement('div'),title=document.createElement('h2'),detail=document.createElement('p'),original=document.createElement('p'),link=document.createElement('a');
+   title.className='art-title';title.textContent=work.title;detail.className='art-details';
+   detail.textContent=label(work)||'Original artwork · Uriel Alexander';
+   original.className='art-details launch-art-availability';original.textContent=availability(work);original.hidden=!original.textContent;
+   text.append(title,detail,original);link.href=inquiry(work);link.className='launch-art-inquire';link.textContent=inquiryLabel(work);meta.append(text,link);card.append(open,meta);grid.append(card);
   });
-  render('all');
+ }
+ filters.addEventListener('click',e=>{
+  const button=e.target.closest('button[data-filter]');if(!button)return;
+  for(const b of filters.querySelectorAll('button[data-filter]')){const active=b===button;b.classList.toggle('is-active',active);b.setAttribute('aria-pressed',String(active))}
+  render(button.dataset.filter);
+ });
+ render('all');
+ const requested=new URLSearchParams(location.search).get('work');
+ const position=shown.findIndex(w=>w.title===requested);
+ if(position>=0){const btn=grid.querySelectorAll('.launch-art-image-button')[position];if(btn)openImage(position,btn)}
 }
 
+// Netlify processes HTML forms. Do not intercept the POST or pretend a message was sent.
 const form = document.querySelector('#inquiry-form');
 if (form) {
-  const button = document.querySelector('#draft-button');
-  const status = document.querySelector('#form-status');
-  button.disabled = false;
-  const requestedTopic = new URLSearchParams(location.search).get('topic');
-  if (['commission', 'artwork', 'collaboration', 'general'].includes(requestedTopic)) form.elements.topic.value = requestedTopic;
-  const email = typeof data.email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ? data.email : '';
-  if (email) {
-    const link = document.createElement('a');
-    link.href = `mailto:${email}`;
-    link.textContent = email;
-    document.querySelector('#contact-details').replaceChildren(link);
-    document.querySelector('#delivery-note').textContent = 'Download your inquiry draft, then send it to the studio email shown here. This site does not send or store messages.';
-  }
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-    const fields = new FormData(form);
-    const topic = form.elements.topic.selectedOptions[0].textContent;
-    const draft = `Inquiry for Urie Alexander\n${email ? `To: ${email}\n` : ''}From: ${fields.get('name')} <${fields.get('email')}>\nTopic: ${topic}\n\n${fields.get('message')}\n`;
-    const url = URL.createObjectURL(new Blob([draft], { type: 'text/plain;charset=utf-8' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'urie-alexander-inquiry.txt';
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    status.textContent = 'Draft download started. Your inquiry has not been sent.';
-  });
+  const params = new URLSearchParams(location.search);
+  const topic = params.get('topic');
+  if (['commission','artwork','prints','collaboration','general'].includes(topic)) form.elements.topic.value = topic;
+  const work = params.get('work');
+  const known = Array.isArray(data.artworks) && data.artworks.some(item => item.title === work);
+  if (work && known) form.elements.message.value = 'I am interested in “' + work + '”.\n\n';
+}
+
+// Prevent an unsightly broken-image icon before web photographs are uploaded.
+for (const image of document.querySelectorAll('.artwork-managed-image')) {
+  image.addEventListener('error', () => {
+    const notice = document.createElement('span');
+    notice.className = 'home-image-unavailable';
+    notice.textContent = 'Artwork image being prepared';
+    image.replaceWith(notice);
+  }, { once: true });
 }

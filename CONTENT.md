@@ -1,41 +1,32 @@
-# Confirmed content and remaining inputs
+# Studio voice and missing website content — October 29, 2026
 
-Confirmed by the owner: **Urie Alexander**, visual artist based in **the Bronx, New York**.
+## October 30: Studio logo approval
+The artist approved the supplied gold palette-and-brush logo with the Uriel Alexander / ART STUDIO wordmark for website and studio branding. The original transparent PNG is used in the header across all seven pages. A palette-only SVG display wrapper of that same PNG supplies the browser icon and footer accent; it is not a vector redraw. See `BRANDING.md` for master files and usage rules. The solid logo is retained unchanged as a white-background master. Supplied packaging, card, mug and shirt mockups are branding references, not active shop listings. Preserve the approved page design, headline, artworks and inquiry behavior. Public release and checkout remain separate approvals.
 
-No photographs, logos, or image assets exist in either repository commit audited on October 13, 2026. The earlier conversation contains no retrievable photographs or additional content. Do not substitute stock or generated artwork. All old image paths, Georgia contact details, unverified testimonials, repeated artwork metadata, availability assertions, payment plans, and shipping promises have been removed from the active pages. The original pages remain in Git history on main at `437a2c19e896b01a35f20869a18fe4a86af01a07`.
+## What to protect
+Artist: **Uriel Alexander**; studio: **Uriel Alexander Art Studio**; Instagram **@urielalexanderstudio**; business email **urielalexanderstudio@gmail.com**. The current working branch is `feature/print-and-digital-shop-2026` (draft PR #2). **Do not merge, publish, or change DNS without explicit artist authorization.**
 
-## Add confirmed artwork
+The artist wants writing that sounds like a person, not AI or corporate marketing. Use specifics over abstract claims, natural sentence rhythm, and restraint with slogans. His background informs the studio's creative sensibility; he specifically does **not** want the site centered on sexuality or identity labels. Do not publish personal identity information in the biography without distinct approval. Don't invent cultural motifs, personal stories, achievements, or an all-encompassing meaning for each painting.
 
-Place artist-supplied, publication-approved photographs in `assets/`. Add objects to `artworks` in `site-data.js`:
+Keep approved artwork titles, original image files, square gallery treatments, full-image viewer, homepage hero headline, and inquiry links. Hyperrealistic focal subjects and expressive backgrounds describe some work, not every painting. Don't invent metadata, dates, sizes, prices or sales status.
 
-```js
-{
-  title: 'Artist-confirmed title',
-  image: 'assets/artist-supplied-photo.jpg',
-  alt: 'Accurate visual description of the supplied photograph',
-  categories: ['abstract'], // abstract, portrait, mixed-media; artist-confirmed
-  medium: '',             // optional; leave blank unless confirmed
-  dimensions: '',        // optional; include units
-  year: ''               // optional; leave blank unless confirmed
-}
-```
+## Needed to complete the site
+1. **Collector information for nine works:** artist-confirmed year, medium/support, width × height in inches, unframed status and individual original availability are now recorded. The artist approved the labels, availability wording and nine visual descriptions on October 30. Prices and any price-on-request decision remain open.
+2. **Photograph of the artist or studio:** real, approved photograph and usage permissions for the About page.
+3. **Individual artwork notes:** nine approved visual descriptions are included in the gallery viewer. Additional stories, symbolism or statements of intent require artwork-specific artist confirmation.
+4. **First sale setup:** choose available originals, print candidates, proof prints, sizes, production/packaging costs, shipping rates, pricing, policies and secure checkout before activating products.
+5. **Commissions:** sizes/subjects you accept, scope/quote/deposit/approval process and delivery terms; no invented guarantees.
+6. **Credibility and practical details:** factual volunteering/exhibition/press activity when verified, privacy information for inquiries, and a business contact policy.
+7. **Technical launch:** verify domain and live HTTPS in browser, mobile and keyboard interactions, contact inquiry after production release, simple analytics and share-preview images.
+8. **Public file hygiene:** remove unused public PDF/ZIP/contact sheet/masters from deployed resources after review; deleting a Git file does not remove it from history.
+9. **Release control:** draft PR #2 is not production; publishing/merging requires explicit artist approval.
 
-The gallery shows only these entries. Category filters appear once artwork exists; empty categories receive an explicit message. Images show in full without cropping. A failed image displays an honest unavailable notice. Never infer artwork title or attribution from a stock filename.
+The studio is inquiry-ready in its review version; no shop listings, checkout, pricing, digital licenses or guaranteed fulfillment are active.
 
-## Contact and forms
+## October 30: Catalog copy approval
+The artist approved the nine-work label, availability and collector-description proposal in Website HQ & Launch. Five originals are available: He Started in Color, Skyline State of Mind, Next Door to Everything, He Lives in Color and Self Portrait. Guiding Hands, She Lives in Color, Say Less in Color and Black Boy Magic have unavailable originals; do not infer sale history or ownership. All nine works are unframed. Skyline State of Mind retains the exact qualification “Finished for now” and is unvarnished. Next Door to Everything measures 36 inches wide × 24 inches high.
 
-Set `email` in `site-data.js` only after the artist confirms the destination. The contact page will display it. The inquiry tool validates fields and downloads a text draft locally; it explicitly never sends or stores a message. Real online submission and newsletter signup remain blocked by the lack of a confirmed recipient/provider endpoint. The old newsletter collection form was removed to avoid collecting addresses without a destination. Do not claim successful delivery or subscription until a real service is integrated and tested.
+Available-original inquiries use the artwork topic. Unavailable-work links use general studio contact and retain the painting title. Approved descriptions report visible features without assigning artist intent or identity narratives. Print/download plans are separate from original availability, and no product has been activated. Public release, prices and checkout still require separate explicit authorization.
 
-## Review before merging
-
-- Supply authentic current artwork photographs with confirmed labels/categories.
-- Confirm contact email and preferred submission service if online delivery is desired.
-- Confirm any expanded biography, social links, commission terms, or testimonials before adding them.
-
-No deployment or publishing configuration was added. This is a review branch; main is preserved.
-
-## Validation
-
-Browser checks passed for all five pages at 320, 390, 768, and 1440 pixels: no horizontal overflow, correct page navigation, and keyboard skip links. Additional checks covered category filtering with synthetic test-only data, empty categories, missing photograph fallback, required form validation, commission topic selection, text draft download, and absence of browser script errors. No real artwork or submission service was available to test.
-
-To rerun, install Playwright locally (`npm install --no-save --package-lock=false playwright`) and its Chromium browser (`npx playwright install chromium`), then run `node tests/site.cjs`. Alternatively set `BROWSER_EXECUTABLE` to an installed Chromium-compatible browser. The test server listens only on localhost. Test fixtures do not modify site data or send messages.
+## October 29: Collector and gallery editorial standard
+The website must speak to collectors, curators and galleries, while remaining readable to an interested first time visitor. Write an artist biography in the third person. Use concise, precise descriptions of medium, technique, subject and intent. Prefer concrete observations to lifestyle language, first person chat, motivational slogans or promotional exaggeration. Avoid decorative em dashes and excessive hyphenated compounds in public copy. Use standard punctuation and natural syntax. Keep the artist's personal background private unless he explicitly approves public disclosure. Do not alter existing artwork names, image sizes, gallery treatments, verified factual claims or the confirmed inquiry flow. No sales claims without confirmed availability and terms.

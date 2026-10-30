@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Artwork, commissions, and collaborations">
-<title>Contact | Sacred Canvas Studio &amp; Design</title>
+<meta name="description" content="Contact Uriel Alexander Art Studio regarding original works, private commissions, print editions or exhibition opportunities.">
+<title>Contact | Uriel Alexander Art Studio</title>
+<link rel="icon" type="image/svg+xml" sizes="any" href="assets/studio-mark.svg">
 <link rel="stylesheet" href="style.css">
 <script src="site-data.js" defer>
 </script>
@@ -15,16 +16,16 @@
 <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
 <header id="nav-bar">
 <nav class="site-nav" aria-label="Primary navigation">
-<a class="navbar-brand" href="index.html">
-<span class="brand-name">Urie Alexander</span>
-<span class="brand-subtitle">Sacred Canvas Studio &amp; Design</span>
+<a class="navbar-brand studio-logo-link" href="index.html" aria-label="Uriel Alexander Art Studio home">
+<img class="studio-logo" src="assets/logo-horizontal-transparent.png" width="1417" height="454" alt="Uriel Alexander Art Studio" decoding="async">
 </a>
 <ul class="site-links">
 <li>
 <a class="nav-link"  href="gallery.html">Gallery</a>
 </li>
+<li><a class="nav-link" href="shop.html">Shop</a></li>
 <li>
-<a class="nav-link"  href="commissions.html">Commissions</a>
+<a class="nav-link" href="commissions.html">Commissions</a>
 </li>
 <li>
 <a class="nav-link"  href="about.html">About</a>
@@ -36,67 +37,29 @@
 </nav>
 </header>
 <main id="main" tabindex="-1">
-<section class="page-hero">
-<div class="page-hero-inner">
-<h1 class="page-title">Contact</h1>
-<p class="page-subtitle">Artwork, commissions, and collaborations with Urie Alexander.</p>
-</div>
-</section>
-<section class="page-section">
-<div class="two-col">
-<form class="contact-card" id="inquiry-form" aria-describedby="delivery-note">
-<h2>Prepare an inquiry</h2>
-<p id="delivery-note">Online message delivery is not available yet. Download a draft to keep for later. Nothing is sent or stored by this site.</p>
-<div class="field">
-<label for="name">Name</label>
-<input id="name" name="name" autocomplete="name" maxlength="150" required>
-</div>
-<div class="field">
-<label for="email">Email</label>
-<input id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
-</div>
-<div class="field">
-<label for="topic">Topic</label>
-<select id="topic" name="topic" required>
-<option value="">Select a topic</option>
-<option value="commission">Commission inquiry</option>
-<option value="artwork">Artwork inquiry</option>
-<option value="collaboration">Collaboration</option>
-<option value="general">General inquiry</option>
-</select>
-</div>
-<div class="field">
-<label for="message">Message</label>
-<textarea id="message" name="message" rows="6" maxlength="10000" required>
-</textarea>
-</div>
-<button class="cta-button" type="submit" id="draft-button" disabled>Download inquiry draft</button>
-<p id="form-status" role="status" aria-live="polite">
-</p>
-<noscript>
-<p>Draft downloads require JavaScript. Keep your inquiry in your preferred notes app until contact details are available.</p>
-</noscript>
-</form>
-<aside class="panel">
-<h2>Studio</h2>
-<p>Urie Alexander<br>Bronx, New York</p>
-<p id="contact-details">Direct contact details will be added when available.</p>
-<a class="secondary-link" href="commissions.html">Preparing a commission inquiry</a>
-</aside>
-</div>
-</section>
-</main>
+<section class="launch-page-intro"><p class="eyebrow">STUDIO / CONTACT</p><h1>Contact the <em>studio.</em></h1><p>For inquiries regarding original artwork, commissions, exhibitions and collaborations, please use the form below or email the studio directly.</p></section>
+<section class="page-section launch-contact-layout"><form class="contact-card launch-contact-form" id="inquiry-form" name="studio-inquiry" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="bot-field">
+<h2>Submit an inquiry</h2><p>Please include the artwork title if your inquiry concerns a particular painting. For commissions and projects, a brief description is helpful.</p>
+<input type="hidden" name="form-name" value="studio-inquiry"><p hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+<div class="launch-field-row"><div class="field"><label for="name">Name *</label><input id="name" name="name" autocomplete="name" maxlength="150" required></div><div class="field"><label for="email">Email *</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required></div></div>
+<div class="field"><label for="topic">What are you writing about? *</label><select id="topic" name="topic" required><option value="">Choose one</option><option value="artwork">An original painting</option><option value="commission">A commission</option><option value="prints">Fine art prints / editions</option><option value="collaboration">A collaboration or exhibition</option><option value="general">Something else / general conversation</option></select></div>
+<div class="field"><label for="message">Your message *</label><textarea id="message" name="message" rows="7" maxlength="10000" placeholder="Please provide details about the artwork or project." required></textarea></div>
+<p class="form-small-print">Your name, email, and message are used to respond to your inquiry. Please don't include payment details or sensitive personal information.</p><button class="cta-button" type="submit">Submit inquiry ↗</button></form>
+<aside class="launch-contact-aside"><p class="eyebrow">URIEL ALEXANDER ART STUDIO</p><h2>Direct contact</h2><p>Uriel Alexander Art Studio welcomes correspondence from collectors, curators, galleries and prospective collaborators.</p><p><strong>Based in</strong><br>The Bronx, New York</p><p><strong>Email</strong><br><a href="mailto:urielalexanderstudio@gmail.com">urielalexanderstudio@gmail.com</a></p><p><strong>On Instagram</strong><br><a href="https://www.instagram.com/urielalexanderstudio/" target="_blank" rel="noopener noreferrer">@urielalexanderstudio ↗</a></p><a class="launch-contact-art" href="gallery.html?work=Guiding%20Hands" aria-label="View complete painting: Guiding Hands"><img src="assets/guiding-hands.webp" width="1205" height="1600" alt="Guiding Hands painting by Uriel Alexander" loading="lazy" decoding="async"></a></aside>
+</section></main>
 <footer id="footer">
 <div class="footer-section">
 <div class="footer-content">
-<div>
-<strong>Urie Alexander</strong>
-<p>Visual artist · Bronx, New York</p>
+<div class="footer-studio-brand">
+<img class="footer-brand-mark" src="assets/studio-mark.svg" width="44" height="44" alt="" aria-hidden="true">
+<div><strong>Uriel Alexander</strong>
+<p>Visual artist · Bronx, New York</p></div>
 </div>
 <a href="contact.html">Contact &amp; inquiries</a>
 </div>
 <div class="footer-bottom">
-<p>Sacred Canvas Studio &amp; Design</p>
+<p><a class="footer-social-link" href="https://www.instagram.com/urielalexanderstudio/" target="_blank" rel="noopener noreferrer">Instagram @urielalexanderstudio</a></p>
+<p>Uriel Alexander Art Studio</p>
 </div>
 </div>
 </footer>

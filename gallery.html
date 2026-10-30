@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Artwork by Urie Alexander">
-<title>Gallery | Sacred Canvas Studio &amp; Design</title>
+<meta name="description" content="View nine original paintings by Uriel Alexander, encompassing portraiture, figurative abstraction and New York street scenes.">
+<title>Gallery | Uriel Alexander Art Studio</title>
+<link rel="icon" type="image/svg+xml" sizes="any" href="assets/studio-mark.svg">
 <link rel="stylesheet" href="style.css">
 <script src="site-data.js" defer>
 </script>
@@ -15,16 +16,16 @@
 <a class="visually-hidden-focusable" href="#main">Skip to main content</a>
 <header id="nav-bar">
 <nav class="site-nav" aria-label="Primary navigation">
-<a class="navbar-brand" href="index.html">
-<span class="brand-name">Urie Alexander</span>
-<span class="brand-subtitle">Sacred Canvas Studio &amp; Design</span>
+<a class="navbar-brand studio-logo-link" href="index.html" aria-label="Uriel Alexander Art Studio home">
+<img class="studio-logo" src="assets/logo-horizontal-transparent.png" width="1417" height="454" alt="Uriel Alexander Art Studio" decoding="async">
 </a>
 <ul class="site-links">
 <li>
 <a class="nav-link active" aria-current="page" href="gallery.html">Gallery</a>
 </li>
+<li><a class="nav-link" href="shop.html">Shop</a></li>
 <li>
-<a class="nav-link"  href="commissions.html">Commissions</a>
+<a class="nav-link" href="commissions.html">Commissions</a>
 </li>
 <li>
 <a class="nav-link"  href="about.html">About</a>
@@ -36,38 +37,26 @@
 </nav>
 </header>
 <main id="main" tabindex="-1">
-<section class="page-hero">
-<div class="page-hero-inner">
-<h1 class="page-title">Gallery</h1>
-<p class="page-subtitle">Artwork by Urie Alexander, a Bronx-based visual artist.</p>
-<div class="filter-row" role="group" aria-label="Gallery categories" hidden>
-<button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All</button>
-<button class="chip" type="button" data-filter="abstract" aria-pressed="false">Abstract</button>
-<button class="chip" type="button" data-filter="portrait" aria-pressed="false">Portrait</button>
-<button class="chip" type="button" data-filter="mixed-media" aria-pressed="false">Mixed media</button>
-</div>
-</div>
-</section>
-<section class="page-section" aria-label="Artwork collection">
-<p id="gallery-status" role="status" aria-live="polite">Artwork photographs are being prepared. Please check back for the collection.</p>
-<div class="gallery-grid" id="artwork-grid">
-</div>
-<noscript>
-<p>Enable JavaScript to browse the artwork collection and filter by category.</p>
-</noscript>
-</section>
-</main>
+<section class="launch-page-intro"><p class="eyebrow">THE COLLECTION / SELECTED WORKS</p><h1>In full <em>color.</em></h1><p>A selection of nine original paintings spanning portraiture, city scenes and expressive abstraction. Open an image to view the complete composition or inquire about a specific work.</p></section>
+<section class="page-section launch-gallery-section" aria-label="Original artwork collection">
+<div class="launch-gallery-toolbar"><div class="filter-row" role="group" aria-label="Gallery categories" hidden><button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All works</button><button class="chip" type="button" data-filter="figurative" aria-pressed="false">Figures &amp; portraits</button><button class="chip" type="button" data-filter="urban" aria-pressed="false">City &amp; place</button></div><p id="gallery-status" role="status" aria-live="polite">Loading the artwork…</p></div>
+<p class="gallery-display-note">Gallery previews use consistent square crops. Select any painting to view its complete composition.</p>
+<div class="gallery-grid launch-gallery-grid" id="artwork-grid"></div><noscript><p>Enable JavaScript to browse the full collection.</p></noscript></section>
+<section class="launch-gallery-cta"><p class="eyebrow">BEYOND THE FRAME</p><h2>Inquiries about <em>the collection.</em></h2><p>For information about an original painting, a commission or an exhibition proposal, please contact the studio.</p><a class="cta-button" href="contact.html?topic=artwork">Inquire about the work ↗</a></section>
+<dialog id="artwork-dialog" class="launch-art-dialog" aria-labelledby="dialog-title"><div class="launch-dialog-head"><span class="eyebrow">A CLOSER LOOK</span><button type="button" id="dialog-close" class="launch-dialog-close" aria-label="Close artwork viewer">Close ×</button></div><div class="launch-dialog-image"><img id="dialog-image" alt=""></div><div class="launch-dialog-caption"><div><h2 id="dialog-title"></h2><p id="dialog-details" class="art-details"></p><p id="dialog-availability" class="art-details"></p><p id="dialog-condition" class="art-details" hidden></p><a id="dialog-inquire" href="contact.html?topic=artwork">Inquire about this work ↗</a></div><div class="launch-dialog-paging"><button id="dialog-prev" type="button" aria-label="Previous painting">←</button><button id="dialog-next" type="button" aria-label="Next painting">→</button></div></div><p id="dialog-description" class="launch-art-description" hidden></p></dialog></main>
 <footer id="footer">
 <div class="footer-section">
 <div class="footer-content">
-<div>
-<strong>Urie Alexander</strong>
-<p>Visual artist · Bronx, New York</p>
+<div class="footer-studio-brand">
+<img class="footer-brand-mark" src="assets/studio-mark.svg" width="44" height="44" alt="" aria-hidden="true">
+<div><strong>Uriel Alexander</strong>
+<p>Visual artist · Bronx, New York</p></div>
 </div>
 <a href="contact.html">Contact &amp; inquiries</a>
 </div>
 <div class="footer-bottom">
-<p>Sacred Canvas Studio &amp; Design</p>
+<p><a class="footer-social-link" href="https://www.instagram.com/urielalexanderstudio/" target="_blank" rel="noopener noreferrer">Instagram @urielalexanderstudio</a></p>
+<p>Uriel Alexander Art Studio</p>
 </div>
 </div>
 </footer>
