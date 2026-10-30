@@ -30,7 +30,7 @@ const script=read('site.js');new Function(script);new Function(read('shop.js'));
 assert.ok(script.includes('showModal('),'gallery viewer must be available');
 assert.ok(script.includes('URLSearchParams'),'inquiry deep-links must work');
 assert.ok(!script.includes("event.preventDefault()")||!script.includes("download inquiry draft"),'inquiry must not fake submit');
-assert.match(read('shop.html'),/No print or digital checkout is active/);
+assert.match(read('shop.html'),/Print and digital purchases are not available through the website/);
 
 const galleryCss=read('style.css');
 assert.match(galleryCss,/\.gallery-grid\.launch-gallery-grid\s*\{/,'gallery must have a dedicated grid rule');
