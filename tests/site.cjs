@@ -42,4 +42,22 @@ assert.match(read('gallery.html'),/Select any painting to view its complete comp
 assert.match(script,/View full artwork/,'thumbnail action should disclose the full painting');
 assert.match(galleryCss,/\.launch-dialog-image img\{width:100%;height:100%;object-fit:contain\}/,'original images in viewer must never be cropped');
 
+
+// Cross-page artwork display QA: preview links open the uncropped gallery viewer.
+const home=read('index.html'), about=read('about.html'), shop=read('shop.html');
+assert.match(home,/View all nine paintings/,'homepage collection count must match catalog');
+assert.match(home,/class="launch-work-picture"/,'homepage has selected-artwork previews');
+assert.match(about,/class="launch-about-feature-link"/,'about full portrait link');
+assert.equal((about.match(/class="launch-about-work-picture"/g)||[]).length,2,'about secondary works must use two matched squares');
+assert.equal((shop.match(/class="launch-print-preview-link"/g)||[]).length,3,'shop previews must be artwork deep-links');
+assert.match(contact,/class="launch-contact-art"/,'contact painting must link to the full gallery');
+assert.match(galleryCss,/\.launch-work \.launch-work-picture\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/s,'homepage thumbnails should be square');
+assert.match(galleryCss,/\.launch-work \.launch-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'homepage thumbnails should fill their square');
+assert.match(galleryCss,/\.launch-about-bottom > div\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s,'about previews need matching columns');
+assert.match(galleryCss,/\.launch-about-bottom \.launch-about-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'about previews should fill frames');
+assert.match(galleryCss,/\.launch-print-preview \.launch-print-preview-link img\s*\{[^}]*object-fit:\s*cover/s,'shop previews should fill their squares');
+assert.match(galleryCss,/\.launch-contact-aside \.launch-contact-art img\s*\{[^}]*object-fit:\s*cover/s,'contact artwork should fill its square');
+assert.match(galleryCss,/\.launch-hero \.launch-hero-art > img\s*\{[^}]*object-fit:\s*contain/s,'homepage hero must show complete painting');
+assert.match(galleryCss,/\.launch-about-grid \.launch-about-feature-link img\s*\{[^}]*object-fit:\s*contain/s,'about featured portrait must stay uncropped');
+
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');

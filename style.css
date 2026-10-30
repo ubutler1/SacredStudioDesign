@@ -1457,3 +1457,209 @@ body{background:var(--paper);color:var(--ink)}
     gap: 30px;
   }
 }
+
+
+
+/* === Consistent artwork presentation across non-gallery pages ===
+   Cover = square preview tile. Contain = full featured painting.
+   The underlying artwork files are never changed. */
+
+/* Full, intentionally portrait-oriented featured painting on homepage. */
+.launch-hero .launch-hero-art {
+  width: min(100%, 540px);
+  justify-self: end;
+  align-self: center;
+}
+.launch-hero .launch-hero-art > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+  max-height: none;
+  object-fit: contain;
+  object-position: center center;
+  transform: none;
+}
+.launch-hero .launch-hero-art:hover > img { transform: none; }
+
+/* Homepage selected paintings match the gallery's square visual footprint. */
+.launch-work-grid { align-items: stretch; }
+.launch-work { display: flex; flex-direction: column; height: 100%; }
+.launch-work .launch-work-picture {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e7dfd5;
+}
+.launch-work .launch-work-picture img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: none;
+  transition: none;
+}
+.launch-work:hover .launch-work-picture img { transform: none; }
+.launch-work .launch-work-info {
+  min-height: 88px;
+  align-items: start;
+  padding-top: 17px;
+  flex: 1 0 auto;
+}
+
+/* About page: full original portrait above, matching square details below. */
+.launch-about-grid figure { width: 100%; max-width: 525px; }
+.launch-about-feature-link {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #e5dcd3;
+  overflow: hidden;
+}
+.launch-about-grid .launch-about-feature-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  object-fit: contain;
+  object-position: center center;
+}
+.launch-about-bottom > div {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(14px, 2.3vw, 26px);
+}
+.launch-about-bottom > div > a.launch-about-work {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: none;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+}
+.launch-about-work-picture {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #ded4ca;
+}
+.launch-about-bottom .launch-about-work-picture img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.launch-about-work-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0 15px;
+  border-bottom: 1px solid #c7b8a7;
+  font: 500 clamp(1.03rem, 1.6vw, 1.25rem)/1.3 Georgia, serif;
+}
+.launch-about-work-title span { color: var(--wine); }
+.launch-about-work:hover .launch-about-work-title,
+.launch-about-work:focus-visible .launch-about-work-title { border-color: var(--wine); }
+
+/* Shop: identical previews, linked to the complete gallery painting. */
+.launch-print-preview { align-items: stretch; }
+.launch-print-preview figure {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #eee5dc;
+}
+.launch-print-preview-link {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e7dfd5;
+}
+.launch-print-preview .launch-print-preview-link img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.launch-print-preview figcaption {
+  min-height: 65px;
+  display: grid;
+  align-items: center;
+  padding: 14px 12px;
+}
+
+/* Future verified shop products also use the same square preview system. */
+.shop-product-media {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e7dfd5;
+}
+.shop-product-media .shop-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* Contact page: no shrunken painting floating in a fixed-height container. */
+.launch-contact-aside .launch-contact-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-top: 26px;
+  overflow: hidden;
+  background: #e7dcd2;
+}
+.launch-contact-aside .launch-contact-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: center center;
+}
+@media (max-width: 840px) {
+  .launch-hero .launch-hero-art {
+    justify-self: center;
+    max-width: 520px;
+  }
+}
+@media (max-width: 600px) {
+  .launch-print-preview {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .launch-print-preview figure { max-width: 520px; }
+  .launch-print-preview figcaption {
+    min-height: 0;
+    font-size: 1.06rem;
+  }
+  .launch-about-bottom > div { gap: 12px; }
+  .launch-about-work-title { font-size: .95rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .launch-work .launch-work-picture img { transition: none; }
+}
