@@ -92,10 +92,10 @@ assert.ok(checkedLinks >= 20, 'main page navigation must remain linked');
 
 // Editorial QA: preserve artwork focus without publishing unapproved identity narratives.
 assert.match(read('index.html'),/Portraits with presence\.<br><em>Color without permission\.<\/em>/,'approved headline stays intact');
-assert.match(read('about.html'),/I love a strong portrait/,'About must speak specifically about painting');
+assert.match(read('about.html'),/For Alexander, a portrait begins with the structure of the face/,'About must describe the artist practice concretely');
 assert.doesNotMatch(read('about.html'),/Black gay man|gay artist|Caribbean roots/,'artist personal background requires separate public-copy approval');
 assert.match(read('contact.html'),/mailto:urielalexanderstudio@gmail\.com/,'studio email is accessible');
-assert.match(read('shop.html'),/No print or digital checkout is active yet/,'checkout must remain inactive');
+assert.match(read('shop.html'),/Print and digital purchases are not available through the website/,'checkout must remain inactive');
 assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs original inquiries to form');
 
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');

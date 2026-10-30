@@ -44,3 +44,9 @@
 - Added confirmed studio email to the Contact page; print checkout remains inactive and truthful.
 - See `CONTENT.md` for a concrete collector/production/launch information gap list.
 - The review branch remains separate from production.
+
+## October 29: Gallery standard editorial review
+- Replaced overly casual first person site copy with measured professional language intended for collectors, galleries and curators.
+- Kept the approved hero headline and all nine artwork names unchanged.
+- Preserved the existing structure, image placements, gallery behavior, Netlify form and truthful inactive checkout state.
+- Final artist approval of editorial copy remains required before publishing.

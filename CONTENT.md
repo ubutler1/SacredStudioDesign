@@ -19,3 +19,6 @@ Keep approved artwork titles, original image files, square gallery treatments, f
 9. **Release control:** draft PR #2 is not production; publishing/merging requires explicit artist approval.
 
 The studio is inquiry-ready in its review version; no shop listings, checkout, pricing, digital licenses or guaranteed fulfillment are active.
+
+## October 29: Collector and gallery editorial standard
+The website must speak to collectors, curators and galleries, while remaining readable to an interested first time visitor. Write an artist biography in the third person. Use concise, precise descriptions of medium, technique, subject and intent. Prefer concrete observations to lifestyle language, first person chat, motivational slogans or promotional exaggeration. Avoid decorative em dashes and excessive hyphenated compounds in public copy. Use standard punctuation and natural syntax. Keep the artist's personal background private unless he explicitly approves public disclosure. Do not alter existing artwork names, image sizes, gallery treatments, verified factual claims or the confirmed inquiry flow. No sales claims without confirmed availability and terms.
