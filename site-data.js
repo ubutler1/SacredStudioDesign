@@ -69,6 +69,14 @@ window.studioData = {
     "categories": [
       "figurative"
     ]
+  },
+  {
+    "title": "Black Boy Magic",
+    "image": "assets/black-boy-magic.webp",
+    "alt": "Colorful painted side-profile portrait with vibrant floral details.",
+    "categories": [
+      "figurative"
+    ]
   }
 ]
 };

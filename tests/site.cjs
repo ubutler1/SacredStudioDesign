@@ -20,9 +20,9 @@ for(const p of pages){
 }
 const ctx={window:{}};vm.runInNewContext(read('site-data.js'),ctx);
 const works=ctx.window.studioData.artworks;
-assert.equal(works.length,8,'catalog must include eight artist-approved paintings');
+assert.equal(works.length,9,'catalog must include nine artist-approved paintings');
 for(const w of works){assert.ok(w.title&&w.alt&&w.image);assert.ok(fs.existsSync(path.join(root,w.image)),w.title+' missing image');assert.equal(fs.readFileSync(path.join(root,w.image)).subarray(0,4).toString('ascii'),'RIFF',w.title+' not RIFF WebP');checked++}
-for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
+for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color','Black Boy Magic'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
 assert.doesNotMatch(read('site-data.js'),/workingTitle\s*:\s*true/);
 const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/data-netlify="true"/);assert.match(contact,/netlify-honeypot="bot-field"/);assert.match(contact,/action="\/thank-you.html"/);
 for(const key of ['name','email','topic','message'])assert.ok(contact.includes('name="'+key+'"'),'missing '+key+' field');

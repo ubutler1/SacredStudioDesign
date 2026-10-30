@@ -3,7 +3,7 @@
 
 ## New in this design pass
 - Artist artwork first: responsive exhibition-style homepage and featured paintings.
-- Eight artwork gallery cards with keyboard-accessible native dialog enlargement, next/previous navigation and per-painting inquiry links.
+- Nine artwork gallery cards with keyboard-accessible native dialog enlargement, next/previous navigation and per-painting inquiry links.
 - Artwork-linked inquiries automatically put the painting title into the message field.
 - Contact form now uses HTML Netlify Forms submission and a branded thank-you page instead of downloading a text draft. No public email address is required.
 - About, commissions, and prints pages have been updated to make the inquiry paths clearer.
