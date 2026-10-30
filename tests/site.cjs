@@ -31,4 +31,12 @@ assert.ok(script.includes('showModal('),'gallery viewer must be available');
 assert.ok(script.includes('URLSearchParams'),'inquiry deep-links must work');
 assert.ok(!script.includes("event.preventDefault()")||!script.includes("download inquiry draft"),'inquiry must not fake submit');
 assert.match(read('shop.html'),/No print or digital checkout is active/);
+
+const galleryCss=read('style.css');
+assert.match(galleryCss,/\.gallery-grid\.launch-gallery-grid\s*\{/,'gallery must have a dedicated grid rule');
+assert.match(galleryCss,/aspect-ratio:\s*3\s*\/\s*4/,'gallery display area should have a fixed 3:4 proportion');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-fit:\s*contain/s,'paintings must remain fully visible in thumbnails');
+assert.match(galleryCss,/\.launch-art-card \.launch-art-image-button img\.artwork-photo\s*\{[^}]*object-position:\s*center center/s,'paintings must be centered in the frame');
+assert.match(galleryCss,/\.launch-art-card \.art-meta\s*\{[^}]*min-height:\s*105px/s,'gallery captions must align');
+
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');

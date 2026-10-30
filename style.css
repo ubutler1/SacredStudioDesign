@@ -1340,3 +1340,104 @@ body{background:var(--paper);color:var(--ink)}
 .launch-print-preview figcaption{font-family:Georgia,serif;text-align:center;padding:14px;font-size:1.09rem}
 @media(max-width:850px){.launch-about-grid{grid-template-columns:1fr;padding-block:40px}.launch-about-grid figure img{max-height:600px}}
 @media(max-width:570px){.launch-commission-steps{grid-template-columns:1fr}.launch-about-bottom{padding-block:58px}.launch-about-bottom>div{gap:8px}.launch-print-preview{gap:7px}.launch-print-preview img{height:185px}.launch-print-preview figcaption{font-size:.77rem;padding:8px 4px}}
+
+
+/* ---------------------------------------------------------
+   Studio gallery / unified exhibition mat
+   Every thumbnail gets the same proportion and inset.
+   ALWAYS show the complete painting: no cropping or stretch.
+   --------------------------------------------------------- */
+.gallery-grid.launch-gallery-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(34px, 4vw, 54px) clamp(16px, 2vw, 28px);
+}
+.art-card.launch-art-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.launch-art-card .launch-art-image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  padding: clamp(15px, 1.8vw, 26px);
+  border: 1px solid #d4c8bb;
+  border-radius: 0;
+  background: #eee9e2;
+  box-shadow: inset 0 0 0 8px #faf8f4;
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+.launch-art-card .launch-art-image-button img.artwork-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  background: transparent;
+  transform: none !important;
+  transition: none;
+}
+.launch-art-card .launch-art-image-button:hover img.artwork-photo,
+.launch-art-card .launch-art-image-button:focus-visible img.artwork-photo {
+  transform: none !important;
+}
+.launch-art-card .launch-art-image-button:hover,
+.launch-art-card .launch-art-image-button:focus-visible {
+  border-color: #83675d;
+  background: #e9e2d9;
+}
+.launch-art-card .art-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 12px;
+  min-height: 105px;
+  flex: 1 0 auto;
+  padding: 18px 0 16px;
+  border-bottom: 1px solid #d4c8bb;
+}
+.launch-art-card .art-title {
+  margin: 0 0 5px;
+  font-size: clamp(1.1rem, 1.55vw, 1.34rem);
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+.launch-art-card .art-details {
+  line-height: 1.45;
+}
+.launch-art-card .launch-art-inquire {
+  align-self: start;
+  margin-top: 2px;
+}
+@media (max-width: 840px) {
+  .gallery-grid.launch-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 550px) {
+  .gallery-grid.launch-gallery-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .launch-art-card .launch-art-image-button {
+    padding: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .launch-art-card .launch-art-image-button { transition: none; }
+}
