@@ -111,4 +111,38 @@ assert.match(read('contact.html'),/mailto:urielalexanderstudio@gmail\.com/,'stud
 assert.match(read('shop.html'),/Print and digital purchases are not available through the website/,'checkout must remain inactive');
 assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs original inquiries to form');
 
+// Collector panels must preserve facts and omit unknown condition/support details.
+const detailsFor = vm.runInNewContext(script + '\n; detailsFor;', {
+ window: ctx.window,
+ document: {querySelector:()=>null,getElementById:()=>null,querySelectorAll:()=>[]}
+});
+const details = work => Object.fromEntries(detailsFor(work));
+for (const work of works) {
+ const rows=details(work);
+ assert.equal(rows.Year, work.year, work.title+' year');
+ assert.equal(rows.Medium, work.materials, work.title+' materials');
+ assert.ok(rows.Support && rows.Support.includes(work.support), work.title+' support');
+ assert.equal(rows.Dimensions, work.dimensions+' (width × height)', work.title+' dimension order');
+ assert.equal(rows.Framing, 'Unframed', work.title+' framing');
+ assert.equal(rows.Original, work.originalAvailable?'Available':'Unavailable', work.title+' availability');
+}
+const skyline=details(works.find(w=>w.title==='Skyline State of Mind'));
+assert.equal(skyline.Support,'Heavy-duty cotton canvas');
+assert.equal(skyline.Finish,'Unvarnished');
+assert.equal(skyline.Status,'Finished for now');
+const nextDoor=details(works.find(w=>w.title==='Next Door to Everything'));
+assert.equal(nextDoor.Dimensions,'36 × 24 in (width × height)');
+assert.ok(!('Finish' in nextDoor) && !('Status' in nextDoor),'unknown finish/status must not carry over');
+const blackBoyMagic=details(works.find(w=>w.title==='Black Boy Magic'));
+assert.equal(blackBoyMagic.Support,'Cotton canvas','do not assume a canvas depth');
+assert.equal(blackBoyMagic.Original,'Unavailable');
+assert.ok(!('Finish' in blackBoyMagic));
+const sparse=details({year:2026,medium:'Acrylic',originalAvailable:false});
+assert.deepEqual(Object.keys(sparse),['Year','Medium','Original'],'omit unknown fields');
+assert.equal(sparse.Medium,'Acrylic','retain medium fallback');
+assert.equal(sparse.Original,'Unavailable','false availability must not disappear');
+assert.match(read('gallery.html'),/<dl id="dialog-details"/,'collector facts use a semantic definition list');
+assert.match(read('gallery.html'),/About this work/,'approved story is clearly introduced');
+assert.match(script,/View full artwork & details/,'thumbnail cue exposes artwork details');
+
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');

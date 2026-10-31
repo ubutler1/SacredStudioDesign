@@ -40,10 +40,30 @@
 <section class="launch-page-intro"><p class="eyebrow">THE COLLECTION / SELECTED WORKS</p><h1>In full <em>color.</em></h1><p>A selection of nine original paintings spanning portraiture, city scenes and expressive abstraction. Open an image to view the complete composition or inquire about a specific work.</p></section>
 <section class="page-section launch-gallery-section" aria-label="Original artwork collection">
 <div class="launch-gallery-toolbar"><div class="filter-row" role="group" aria-label="Gallery categories" hidden><button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All works</button><button class="chip" type="button" data-filter="figurative" aria-pressed="false">Figures &amp; portraits</button><button class="chip" type="button" data-filter="urban" aria-pressed="false">City &amp; place</button></div><p id="gallery-status" role="status" aria-live="polite">Loading the artwork…</p></div>
-<p class="gallery-display-note">Gallery previews use consistent square crops. Select any painting to view its complete composition.</p>
+<p class="gallery-display-note">Gallery previews use consistent square crops. Select any painting to view its complete composition, read about the work and see its details.</p>
 <div class="gallery-grid launch-gallery-grid" id="artwork-grid"></div><noscript><p>Enable JavaScript to browse the full collection.</p></noscript></section>
 <section class="launch-gallery-cta"><p class="eyebrow">BEYOND THE FRAME</p><h2>Inquiries about <em>the collection.</em></h2><p>For information about an original painting, a commission or an exhibition proposal, please contact the studio.</p><a class="cta-button" href="contact.html?topic=artwork">Inquire about the work ↗</a></section>
-<dialog id="artwork-dialog" class="launch-art-dialog" aria-labelledby="dialog-title"><div class="launch-dialog-head"><span class="eyebrow">A CLOSER LOOK</span><button type="button" id="dialog-close" class="launch-dialog-close" aria-label="Close artwork viewer">Close ×</button></div><div class="launch-dialog-image"><img id="dialog-image" alt=""></div><div class="launch-dialog-caption"><div><h2 id="dialog-title"></h2><p id="dialog-details" class="art-details"></p><p id="dialog-availability" class="art-details"></p><p id="dialog-condition" class="art-details" hidden></p><a id="dialog-inquire" href="contact.html?topic=artwork">Inquire about this work ↗</a></div><div class="launch-dialog-paging"><button id="dialog-prev" type="button" aria-label="Previous painting">←</button><button id="dialog-next" type="button" aria-label="Next painting">→</button></div></div><p id="dialog-description" class="launch-art-description" hidden></p></dialog></main>
+<dialog id="artwork-dialog" class="launch-art-dialog launch-collector-dialog" aria-labelledby="dialog-title">
+<div class="launch-dialog-head"><span class="eyebrow">A CLOSER LOOK</span><button type="button" id="dialog-close" class="launch-dialog-close" aria-label="Close artwork viewer">Close ×</button></div>
+<div class="launch-collector-layout">
+<div class="launch-dialog-image"><img id="dialog-image" alt=""></div>
+<div class="launch-collector-copy">
+<div class="launch-dialog-caption"><h2 id="dialog-title"></h2></div>
+<section id="dialog-story" class="launch-work-story" aria-labelledby="dialog-story-heading">
+<h3 id="dialog-story-heading">About this work</h3>
+<p id="dialog-description" class="launch-art-description" hidden></p>
+</section>
+<section class="launch-work-specifications" aria-labelledby="dialog-details-heading">
+<h3 id="dialog-details-heading">Artwork details</h3>
+<dl id="dialog-details" class="launch-work-details"></dl>
+</section>
+<div class="launch-collector-actions">
+<a id="dialog-inquire" class="cta-button launch-collector-inquire" href="contact.html?topic=artwork">Inquire about this work ↗</a>
+<div class="launch-dialog-paging"><button id="dialog-prev" type="button" aria-label="Previous painting">←</button><button id="dialog-next" type="button" aria-label="Next painting">→</button></div>
+</div>
+</div>
+</div>
+</dialog></main>
 <footer id="footer">
 <div class="footer-section">
 <div class="footer-content">
