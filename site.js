@@ -2,6 +2,17 @@
 const data = window.studioData || {email:'',artworks:[]};
 const works = Array.isArray(data.artworks) ? data.artworks.filter(work=>work && typeof work.title==='string' && typeof work.image==='string') : [];
 const grid = document.querySelector('#artwork-grid');
+// Structured collector details use only artist-confirmed fields. Omit unknowns.
+const detailsFor = work => [
+ ['Year', work.year],
+ ['Medium', work.materials || work.medium],
+ ['Support', [work.support, work.canvasDepth].filter(Boolean).join(' · ')],
+ ['Dimensions', work.dimensions ? work.dimensions + ' (width × height)' : ''],
+ ['Framing', work.framing],
+ ['Finish', work.finish],
+ ['Status', work.completion],
+ ['Original', typeof work.originalAvailable === 'boolean' ? (work.originalAvailable ? 'Available' : 'Unavailable') : '']
+].filter(([, value]) => value !== undefined && value !== null && value !== '');
 const dialog = document.getElementById('artwork-dialog');
 if(grid){
  const filters = document.querySelector('.filter-row');
@@ -12,8 +23,6 @@ if(grid){
  const dialogTitle=document.getElementById('dialog-title');
  const dialogLink=document.getElementById('dialog-inquire');
  const dialogDetails=document.getElementById('dialog-details');
- const dialogAvailability=document.getElementById('dialog-availability');
- const dialogCondition=document.getElementById('dialog-condition');
  const dialogDescription=document.getElementById('dialog-description');
  const label = work => [work.year,work.medium,work.dimensions].filter(Boolean).join(' · ');
  const availability = work => typeof work.originalAvailable==='boolean' ?
@@ -26,11 +35,16 @@ if(grid){
   const work=shown[currentIndex];
   img.src=work.image;img.alt=work.alt||work.title+' by Uriel Alexander';
   dialogTitle.textContent=work.title;dialogLink.href=inquiry(work);dialogLink.textContent=inquiryLabel(work);
-  dialogDetails.textContent=label(work);
-  dialogAvailability.textContent=[availability(work),work.framing].filter(Boolean).join(' · ');
-  dialogCondition.textContent=[work.completion,work.finish].filter(Boolean).join(' · ');
-  dialogCondition.hidden=!dialogCondition.textContent;
+  dialogDetails.replaceChildren(...detailsFor(work).map(([name, detail]) => {
+   const row=document.createElement('div'),term=document.createElement('dt'),value=document.createElement('dd');
+   row.className='launch-work-detail';term.textContent=name;value.textContent=String(detail);
+   if(name==='Original')value.id='dialog-availability';
+   if(name==='Status')value.id='dialog-condition';
+   row.append(term,value);return row;
+  }));
   dialogDescription.textContent=work.description||'';dialogDescription.hidden=!work.description;
+  document.getElementById('dialog-story').hidden=!work.description;
+  dialog.scrollTop=0;
  }
  function openImage(index,trigger){
   if(!dialog || typeof dialog.showModal!=='function')return;
@@ -60,7 +74,7 @@ if(grid){
    const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View complete painting: '+work.title);
    const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading='lazy';photo.decoding='async';
    photo.addEventListener('error',()=>{const notice=document.createElement('span');notice.className='image-notice';notice.textContent='Artwork photograph temporarily unavailable.';photo.replaceWith(notice)},{once:true});
-   const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork ↗';open.append(photo,zoom);
+   const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork & details ↗';open.append(photo,zoom);
    open.addEventListener('click',()=>openImage(index,open));
    const meta=document.createElement('div');meta.className='art-meta';
    const text=document.createElement('div'),title=document.createElement('h2'),detail=document.createElement('p'),original=document.createElement('p'),link=document.createElement('a');
