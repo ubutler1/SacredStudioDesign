@@ -1704,3 +1704,28 @@ body{background:var(--paper);color:var(--ink)}
 @media (max-width: 550px) {
   .site-nav .studio-logo-link { width: 310px; }
 }
+
+/* Artist CV — About page; additive editorial styling only. */
+.launch-artist-cv{
+  max-width:1390px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,4vw,60px);
+  border-top:1px solid #d7cabd;
+}
+.launch-artist-cv-intro{max-width:830px;margin-bottom:36px}
+.launch-artist-cv-intro h2{
+  font-family:Georgia,serif;font-size:clamp(2.25rem,4vw,4rem);font-weight:400;
+  letter-spacing:-.04em;line-height:1.15;margin:12px 0 19px;
+}
+.launch-artist-cv-intro h2 em{color:var(--wine);font-weight:400}
+.launch-artist-cv-intro>p:last-child{color:#655a51;line-height:1.75;margin:0}
+.launch-artist-cv-record{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,44px)}
+.launch-artist-cv-record article{border-top:1px solid #b9a392;padding:21px 0 8px}
+.launch-cv-type{font-size:.7rem;font-weight:750;letter-spacing:.13em;color:var(--wine);margin:0 0 19px}
+.launch-cv-date{color:#78695c;font-size:.84rem;margin:0 0 5px}
+.launch-artist-cv-record h3{font-family:Georgia,serif;font-size:clamp(1.35rem,2vw,1.9rem);line-height:1.2;font-weight:400;margin:0 0 10px}
+.launch-artist-cv-record h3 em{font-weight:400}
+.launch-artist-cv-record article>p:not(.launch-cv-type):not(.launch-cv-date){line-height:1.65;color:#655a51;margin:0 0 8px}
+.launch-artist-cv-record .launch-cv-detail{font-size:.84rem}
+.launch-artist-cv-footer{display:flex;gap:22px;justify-content:space-between;align-items:center;margin-top:35px;padding-top:24px;border-top:1px solid #d7cabd}
+.launch-artist-cv-footer p{margin:0;color:#665b52;font-size:.9rem}
+@media(max-width:840px){.launch-artist-cv-record{grid-template-columns:1fr;gap:20px}}
+@media(max-width:550px){.launch-artist-cv-footer{align-items:flex-start;flex-direction:column;gap:14px}}
