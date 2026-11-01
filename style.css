@@ -1723,3 +1723,10 @@ body{background:var(--paper);color:var(--ink)}
 .studio-privacy-content p{font-size:1rem;line-height:1.8;max-width:76ch}
 .studio-privacy-content a{color:var(--wine);text-underline-offset:3px}
 .studio-privacy-content .studio-pinterest-choice{margin-top:0;border-top:0;padding-top:0}
+
+
+/* Studio social profiles: readable text links with wrapped, generous targets. */
+.studio-social-links{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 22px;min-width:0;margin:0;padding:0}
+.studio-social-links a{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.launch-contact-aside .studio-social-links{justify-content:flex-start;gap:4px 18px;margin-bottom:20px}
+.launch-contact-aside .studio-social-links a{color:var(--wine)}
