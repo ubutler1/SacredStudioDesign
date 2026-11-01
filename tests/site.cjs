@@ -3,7 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html'];
+const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html','privacy.html'];
 let checked=0;
 for(const p of pages){
  const html=read(p);

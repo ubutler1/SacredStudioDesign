@@ -1704,3 +1704,22 @@ body{background:var(--paper);color:var(--ink)}
 @media (max-width: 550px) {
   .site-nav .studio-logo-link { width: 310px; }
 }
+
+
+/* Optional Pinterest choice: inline footer content, with no overlay on artwork. */
+.studio-pinterest-choice{margin:22px auto 0;padding-top:20px;border-top:1px solid currentColor;max-width:var(--max);min-width:0}
+.studio-pinterest-choice[hidden]{display:none}
+.studio-pinterest-choice h2{font-family:inherit;font-size:1rem;line-height:1.4;margin:0 0 10px}
+.studio-pinterest-choice p{font-size:.88rem;line-height:1.65;max-width:76ch;margin:0 0 10px}
+.studio-pinterest-choice a,.studio-privacy-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.studio-pinterest-actions{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0 12px}
+.studio-pinterest-actions button{background:transparent;color:inherit;border:1px solid currentColor;border-radius:3px;padding:10px 16px;font:inherit;font-size:.88rem;min-height:44px;max-width:100%;white-space:normal}
+.studio-pinterest-actions button:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+.studio-pinterest-actions button:hover:not(:disabled){text-decoration:underline;text-underline-offset:3px}
+.studio-pinterest-status{font-size:.8rem!important}
+.studio-privacy-content{max-width:1000px}
+.studio-privacy-content section{margin:0 0 36px}
+.studio-privacy-content h2{font-family:Georgia,serif;font-weight:400;font-size:1.8rem;line-height:1.3;margin:0 0 16px}
+.studio-privacy-content p{font-size:1rem;line-height:1.8;max-width:76ch}
+.studio-privacy-content a{color:var(--wine);text-underline-offset:3px}
+.studio-privacy-content .studio-pinterest-choice{margin-top:0;border-top:0;padding-top:0}
