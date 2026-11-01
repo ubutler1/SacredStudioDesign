@@ -16,9 +16,9 @@ Prepared November 1, 2026 for a separate draft review. Tag ID: 2613622321548.
 
 ## Scope
 
-The existing main-page content, artwork titles, catalog, image assets, navigation, gallery behavior and Netlify form are unchanged. Existing-page markup additions are limited to a deferred script and footer Privacy link. New style rules are appended. Website access, DNS, checkout and account settings are unchanged.
+The Pinterest portion adds a shared deferred script, optional visitor choices, a Privacy page and its footer link. The combined review also includes the approved collector details, public CV and verified social links. Artwork images, titles, approved descriptions, primary navigation and Netlify form behavior are retained. The approved CSS base remains unchanged, with scoped feature styles added. Website access, DNS, checkout and account settings are unchanged.
 
-The collector-details and Artist CV PRs remain independent drafts. This branch starts from the production baseline; its preview does not include those drafts.
+This combined review now includes the reviewed collector-details from PR #3 and public Artist CV section from PR #4, alongside the Pinterest and social-link changes. Their original review branches remain separate records; no production merge or publication is performed by preparing this combined preview.
 
 ## Validation and release
 
