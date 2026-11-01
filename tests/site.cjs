@@ -111,4 +111,11 @@ assert.match(read('contact.html'),/mailto:urielalexanderstudio@gmail\.com/,'stud
 assert.match(read('shop.html'),/Print and digital purchases are not available through the website/,'checkout must remain inactive');
 assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs original inquiries to form');
 
+// About-page CV addition: show professional record without publishing private affiliations.
+assert.match(read('about.html'),/aria-labelledby="artist-cv-heading"/,'CV section should be labelled for accessibility');
+assert.match(read('about.html'),/Bronx River Art Center \(BRAC\)/,'public CV contains confirmed volunteer affiliation');
+assert.match(read('about.html'),/Bronx Council on the Arts/,'public CV contains confirmed artist registration');
+assert.doesNotMatch(read('about.html'),/Visual AIDS/,'private registration must not appear on About page');
+assert.match(read('style.css'),/\.launch-artist-cv-record\{display:grid/,'CV retains responsive editorial layout');
+
 console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');
