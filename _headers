@@ -8,12 +8,12 @@
 # Advertising endpoints are blocked on inquiry and privacy routes as a second
 # layer alongside the consent loader. Inline hosting UI remains compatible.
 /contact*
-  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self'
+  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self' https://app.netlify.com
   Cache-Control: no-store
 /thank-you*
-  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self'
+  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self' https://app.netlify.com
   Cache-Control: no-store
   X-Robots-Tag: noindex
 /privacy*
-  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self'
+  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-src 'self' https://app.netlify.com
   Cache-Control: no-store
