@@ -1826,3 +1826,7 @@ body{background:var(--paper);color:var(--ink)}
 .studio-social-links a{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
 .launch-contact-aside .studio-social-links{justify-content:flex-start;gap:4px 18px;margin-bottom:20px}
 .launch-contact-aside .studio-social-links a{color:var(--wine)}
+
+/* Keep privacy choices clear of the hosting badge, including at phone widths. */
+#footer .footer-section{padding-bottom:112px;padding-bottom:calc(112px + env(safe-area-inset-bottom, 0px))}
+.studio-privacy-link{display:inline-flex;align-items:center;min-height:44px}
