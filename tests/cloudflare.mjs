@@ -29,6 +29,7 @@ async function run(options = {}) {
   });
   assert.equal(response.headers.get('X-Content-Type-Options'),'nosniff');
   assert.equal(response.headers.get('X-Frame-Options'),'DENY');
+  assert.equal(response.headers.get('Strict-Transport-Security'),'max-age=31536000');
   const text = await response.text();
   if (method === 'POST') {
     assert.equal(response.headers.get('Cache-Control'),'no-store');
@@ -126,11 +127,12 @@ assert.match(netlify('privacy.html'),/Netlify hosts the website/);
 assert.match(cloudflare('contact.html'),/action="\/inquiry"/);
 assert.doesNotMatch(cloudflare('contact.html'),/data-netlify/);
 assert.match(cloudflare('contact.html'),/handled by Cloudflare, Netlify/);
-assert.match(cloudflare('privacy.html'),/Cloudflare hosts this copy/);
+assert.match(cloudflare('privacy.html'),/Cloudflare hosts the website/);
 assert.match(cloudflare('privacy.html'),/Netlify processes and stores the submissions/);
 assert.match(cloudflare('_headers'),/https:\/\/:worker\.:account\.workers\.dev\/\*/);
 assert.doesNotMatch(cloudflare('_headers'),/app.netlify.com/);
 assert.doesNotMatch(cloudflare('_headers'),/unsafe-inline/);
+assert.match(cloudflare('_headers'),/Strict-Transport-Security: max-age=31536000/);
 assert.ok(!fs.existsSync(path.join(root,'cloudflare-dist','_redirects')),
   'host redirects belong to zone rules; Workers static redirects reject absolute source URLs');
 for (const name of ['index.html','gallery.html','shop.html','about.html','commissions.html','thank-you.html','style.css','site-data.js','site.js','pinterest.js']) {
