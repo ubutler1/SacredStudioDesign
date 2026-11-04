@@ -148,6 +148,7 @@ const config = JSON.parse(fs.readFileSync(path.join(root,'wrangler.json'),'utf8'
 assert.equal(config.assets.directory,'./cloudflare-dist');
 assert.ok(config.assets.run_worker_first.includes('/inquiry'));
 assert.ok(config.assets.run_worker_first.includes('/thank-you'));
-assert.ok(!config.routes && !config.account_id,'no implicit domain cutover or guessed account');
+assert.deepEqual(config.routes,[{pattern:'urielalexanderstudio.com',custom_domain:true},{pattern:'www.urielalexanderstudio.com',custom_domain:true}],'only the two authorized studio hostnames may be published');
+assert.ok(!config.account_id,'the selected deployment account is not guessed or committed');
 assert.equal(config.observability.enabled,false);
 console.log('Passed '+cases+' inquiry-handler scenarios plus independent-build, provider-notice, output-exclusion and asset-preservation checks. No live submissions sent by this suite.');

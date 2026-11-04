@@ -1,4 +1,4 @@
-# Cloudflare migration preparation — November 4, 2026
+# Cloudflare hosting and domain transition — November 4, 2026
 
 The owner authorized finishing privacy/mobile, then search/link previews, then a tested Cloudflare copy **before** domain cutover. PR #6 and PR #7 are released. This migration branch does not change the domain, Netlify visibility, billing or checkout.
 
@@ -10,7 +10,7 @@ The Cloudflare form posts to `/inquiry` on its own origin. A Worker validates th
 
 The Worker handles failures without claiming success or echoing private fields. It does not automatically retry submissions. A provider HTTP acknowledgment is not proof of email delivery; an actual matching studio notification is a cutover requirement. Honeypot acceptance deliberately appears successful to bots without forwarding the message.
 
-`node scripts/build.cjs` remains the Netlify build. `node scripts/build-cloudflare.cjs` produces `cloudflare-dist` (28 selected files including header rules). `wrangler.json` uses that directory, the inquiry Worker and a rate limiter. Use Wrangler 4.36 or later. No domain routes or account ID are included, so initial deployment is to the selected owner's workers.dev account only. Ensure the rate-limit namespace 2026110401 is unused or intentionally dedicated in that account. The workers.dev host receives noindex headers; the canonical URLs stay on the existing studio domain. Configure the www-to-apex redirect as a Cloudflare zone Single Redirect rule, preserving path and query; Workers static _redirects does not support domain-level source URLs.
+`node scripts/build.cjs` remains the Netlify build. `node scripts/build-cloudflare.cjs` produces `cloudflare-dist` (28 selected files including header rules). `wrangler.json` uses that directory, the inquiry Worker and a rate limiter. Use Wrangler 4.36 or later. The owner has saved the assigned Cloudflare nameservers and Cloudflare has activated the zone. The configuration now explicitly connects urielalexanderstudio.com and www.urielalexanderstudio.com as Custom Domains. No account ID is committed; deployment uses the already selected owner account. Ensure the rate-limit namespace 2026110401 is unused or intentionally dedicated in that account. The workers.dev host receives noindex headers; the canonical URLs stay on the existing studio domain. Configure the www-to-apex redirect as a Cloudflare zone Single Redirect rule, preserving path and query; Workers static _redirects does not support domain-level source URLs.
 
 ## Release gates
 
@@ -23,13 +23,13 @@ The Worker handles failures without claiming success or echoing private fields. 
 
 ## Current evidence and limits
 
-The 41 local handler scenarios and independent-build checks passed both locally and in Cloudflare Builds. The Cloudflare test copy deployed successfully. A native inquiry from that copy reached confirmation and delivered its matching studio Gmail notification on November 4. Full gallery/mobile/metadata checks and the domain cutover remain separate gates. HTTPS-only transport headers are applied to static assets and Worker-generated responses to retain the existing site's HSTS protection.
+The 41 handler scenarios and independent-build checks passed locally and in earlier Cloudflare Builds. The deployed workers.dev copy passed eight-page, asset, gallery, phone, metadata, exclusion and real-inquiry checks. Native inquiries from both Netlify and Cloudflare appeared in verified Netlify submissions and delivered matching studio Gmail notifications. No spam defense was disabled.
 
-The earlier scripted Netlify privacy test was found in Netlify's spam submissions. A fresh native browser submission reached confirmation, appeared in verified submissions and delivered its exact matching notification to the studio Gmail inbox. The narrow Contact and confirmation-page checks also passed, including normal access to the footer Privacy link. No spam defense was disabled.
+PR #8 was merged after those copy gates passed, and Cloudflare production builds were saved to main. The owner then manually saved the two assigned Cloudflare nameservers at GoDaddy. The .com registry reports those assigned servers, Cloudflare reports the zone active, and its Universal certificate for the root and first-level subdomains is Active. Always Use HTTPS was enabled. DNS-only Netlify targets preserved the original site during the transition.
 
-The Cloudflare account is on the Free Workers plan. The Worker is named uriel-alexander-studio and its build is configured for feature/cloudflare-migration-20261104, with node tests/cloudflare.mjs as the build check and npx wrangler@4.157.0 deploy as the deployment command. The studio domain still points to Netlify. Local tests do not substitute for deployed review or the final custom-domain checks.
+The two explicit Custom Domains in wrangler.json make the authorized domain bindings part of future deployments. The test guards allow only these two studio hostnames and do not commit an account ID. The Worker logic, approved website assets and original Netlify build remain unchanged by the domain-configuration update.
 
-Cloudflare's protected pages use script-src self without the inline-script exception that the Netlify review tools needed. The existing Netlify output retains its reviewed policy and form blueprint. The Workers configuration was accepted by an official Wrangler 4.157.0 deployment dry run; no files were uploaded or deployed by that check.
+The first merged-main build failed; its detailed failure was not yet available when this domain configuration was prepared. Do not call the custom-domain migration complete until the deployment succeeds and actual final-domain checks confirm HTTPS, headers/indexability, www path/query redirects, artwork preservation, badge absence and a matching fresh inquiry notification. Keep the working Netlify backend and rollback site.
 
 Primary references:
 
