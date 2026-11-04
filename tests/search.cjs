@@ -1,0 +1,65 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {spawnSync} = require('node:child_process');
+const root = path.resolve(__dirname, '..');
+const build = spawnSync(process.execPath, [path.join(root, 'scripts/build.cjs')], {encoding:'utf8'});
+assert.equal(build.status, 0, build.stderr);
+const dist = path.join(root, 'dist');
+const origin = 'https://urielalexanderstudio.com';
+const pages = ['index','gallery','shop','commissions','about','contact','privacy','thank-you'];
+const canonical = name => origin + (name === 'index' ? '/' : '/' + name);
+const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
+const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+assert.deepEqual(new Set(urls), new Set(pages.filter(p => p !== 'thank-you').map(canonical)));
+assert.equal(urls.length, 7, 'sitemap has seven unique public pages');
+const robots = fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8');
+assert.match(robots, /Allow: \//);
+assert.ok(robots.includes('Sitemap: ' + origin + '/sitemap.xml'));
+assert.doesNotMatch(robots, /Disallow:\s*\/\s*$/m, 'do not block crawlers from observing noindex');
+const titles = new Set(), descriptions = new Set();
+for (const name of pages) {
+  const html = fs.readFileSync(path.join(dist, name + '.html'), 'utf8');
+  const head = html.split('</head>')[0];
+  const meta = key => [...head.matchAll(/<meta (?:property|name)="([^"]+)" content="([^"]*)">/g)].filter(m => m[1] === key).map(m => m[2]);
+  assert.equal((head.match(/rel="canonical"/g) || []).length, 1, name + ': one canonical');
+  assert.ok(head.includes('<link rel="canonical" href="' + canonical(name) + '">'));
+  assert.deepEqual(meta('og:url'), [canonical(name)], name + ': consistent share URL');
+  assert.deepEqual(meta('og:type'), ['website']);
+  assert.deepEqual(meta('og:image'), [origin + '/assets/studio-social-card-20261104.jpg']);
+  assert.deepEqual(meta('og:image:type'), ['image/jpeg']);
+  assert.deepEqual(meta('og:image:width'), ['1200']);
+  assert.deepEqual(meta('og:image:height'), ['630']);
+  assert.ok(meta('og:image:alt')[0].includes('complete painting'));
+  assert.deepEqual(meta('twitter:card'), ['summary_large_image']);
+  assert.deepEqual(meta('twitter:image'), meta('og:image'));
+  assert.deepEqual(meta('twitter:image:alt'), meta('og:image:alt'));
+  const title = head.match(/<title>(.*?)<\/title>/)[1];
+  assert.deepEqual(meta('og:title'), [title]);
+  assert.deepEqual(meta('twitter:title'), [title]);
+  assert.deepEqual(meta('og:description'), meta('description'));
+  assert.deepEqual(meta('twitter:description'), meta('description'));
+  assert.ok(!titles.has(title), 'unique page title'); titles.add(title);
+  assert.ok(!descriptions.has(meta('description')[0]), 'unique description'); descriptions.add(meta('description')[0]);
+  if (name === 'thank-you') assert.ok(meta('robots').some(v => v.includes('noindex')));
+  else assert.ok(!meta('robots').some(v => /noindex|none/.test(v)), name + ' is indexable');
+}
+const homepage = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+const data = JSON.parse(homepage.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+assert.equal(data['@context'], 'https://schema.org');
+assert.deepEqual(data['@graph'].map(x=>x['@type']), ['WebSite','Person']);
+assert.equal(data['@graph'][1].name, 'Uriel Alexander');
+assert.ok(!JSON.stringify(data).includes('offers'), 'no sales listing or checkout added');
+const jpg = fs.readFileSync(path.join(dist, 'assets/studio-social-card-20261104.jpg'));
+assert.equal(jpg.readUInt16BE(0), 0xffd8, 'real JPEG');
+let size;
+for (let p = 2; p < jpg.length - 8;) {
+  assert.equal(jpg[p], 0xff);
+  const marker = jpg[p+1], length = jpg.readUInt16BE(p+2);
+  if ([0xc0,0xc1,0xc2,0xc3].includes(marker)) { size = [jpg.readUInt16BE(p+7),jpg.readUInt16BE(p+5)]; break; }
+  p += 2 + length;
+}
+assert.deepEqual(size, [1200,630], 'share image dimensions agree with metadata');
+assert.ok(jpg.length < 500000, 'share image stays lightweight');
+console.log('Passed metadata, crawlability, sitemap, structured-data and share-image checks for eight pages.');

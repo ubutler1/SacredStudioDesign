@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#faf7f1"/>
+  <image xlink:href="../assets/logo-horizontal-transparent.png" x="56" y="50" width="610" height="196" preserveAspectRatio="xMidYMid meet"/>
+  <g font-family="DejaVu Serif, Georgia, serif" font-size="42" fill="#27211f">
+    <text x="56" y="325">Portraits with presence.</text>
+    <text x="56" y="385" fill="#7c424d">Color without permission.</text>
+  </g>
+  <g font-family="DejaVu Sans, Arial, sans-serif" fill="#62564e">
+    <text x="58" y="465" font-size="23">Original paintings · Bronx, New York</text>
+    <text x="58" y="518" font-size="22">urielalexanderstudio.com</text>
+  </g>
+  <path d="M58 555H155" stroke="#ad7c3d" stroke-width="3"/>
+  <rect x="773" y="30" width="395" height="559" fill="#e7dcd2"/>
+  <image xlink:href="../assets/city-figure-provisional.webp" x="793" y="50" width="355" height="519" preserveAspectRatio="xMidYMid meet"/>
+  <text x="793" y="612" font-family="DejaVu Sans, Arial, sans-serif" font-size="15" fill="#62564e">Skyline State of Mind · Uriel Alexander</text>
+</svg>
