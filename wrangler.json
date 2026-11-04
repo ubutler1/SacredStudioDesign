@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uriel-alexander-studio",
+  "main": "worker/contact.mjs",
+  "compatibility_date": "2026-11-04",
+  "workers_dev": true,
+  "build": {"command": "node scripts/build-cloudflare.cjs"},
+  "assets": {
+    "directory": "./cloudflare-dist",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "none",
+    "run_worker_first": ["/inquiry", "/thank-you", "/thank-you.html", "/thank-you/"]
+  },
+  "vars": {"FORM_RELAY_ENABLED": "true"},
+  "ratelimits": [{
+    "name": "INQUIRY_LIMITER",
+    "namespace_id": "2026110401",
+    "simple": {"limit": 5, "period": 60}
+  }],
+  "observability": {"enabled": false}
+}
