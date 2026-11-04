@@ -131,7 +131,8 @@ assert.match(cloudflare('privacy.html'),/Netlify processes and stores the submis
 assert.match(cloudflare('_headers'),/https:\/\/:worker\.:account\.workers\.dev\/\*/);
 assert.doesNotMatch(cloudflare('_headers'),/app.netlify.com/);
 assert.doesNotMatch(cloudflare('_headers'),/unsafe-inline/);
-assert.match(cloudflare('_redirects'),/https:\/\/www\.urielalexanderstudio\.com\/\*/);
+assert.ok(!fs.existsSync(path.join(root,'cloudflare-dist','_redirects')),
+  'host redirects belong to zone rules; Workers static redirects reject absolute source URLs');
 for (const name of ['index.html','gallery.html','shop.html','about.html','commissions.html','thank-you.html','style.css','site-data.js','site.js','pinterest.js']) {
   assert.equal(cloudflare(name),netlify(name),name+' unchanged between hosts');
 }

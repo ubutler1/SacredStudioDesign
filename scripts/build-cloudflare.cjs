@@ -26,5 +26,6 @@ rewrite('privacy.html', html => html
   .replace('Updated November 2, 2026.', 'Updated November 4, 2026.'));
 rewrite('_headers', text => text.replaceAll(' https://app.netlify.com', '').replaceAll("script-src 'self' 'unsafe-inline'", "script-src 'self'") +
   '\n# Keep the independent workers.dev copy out of search results.\nhttps://:worker.:account.workers.dev/*\n  X-Robots-Tag: noindex\n\nhttps://:version.:worker.:account.workers.dev/*\n  X-Robots-Tag: noindex\n');
-fs.writeFileSync(path.join(output, '_redirects'), 'https://www.urielalexanderstudio.com/* https://urielalexanderstudio.com/:splat 301\n');
+// Workers static _redirects only accepts path sources. The www host redirect
+// belongs to the Cloudflare zone's Single Redirect rules, verified at cutover.
 console.log('Built independent Cloudflare files with same-origin inquiry handling and an accurate provider notice. No DNS or hosting account changed.');
