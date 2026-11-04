@@ -33,6 +33,8 @@
     const location = window.location;
     const production = location.protocol === 'https:' &&
       ['urielalexanderstudio.com', 'www.urielalexanderstudio.com'].includes(location.hostname);
+    // Do not expose query or fragment values to the third-party tag.
+    if (location.search || location.hash) return false;
     const page = location.pathname.replace(/\/+$/, '').replace(/\.html$/, '') || '/index';
     return production && ['/index', '/gallery', '/shop', '/about', '/commissions'].includes(page);
   }

@@ -40,6 +40,8 @@ function browser(options = {}) {
     protocol: options.protocol || 'https:',
     hostname: options.hostname || 'urielalexanderstudio.com',
     pathname: options.pathname || '/',
+    search: options.search || '',
+    hash: options.hash || '',
     reloads: 0,
     reload() { this.reloads++; }
   };
@@ -189,6 +191,17 @@ test('privacy-page controls remain available for changing a saved decision', () 
   b.decline.click();
   assert.equal(b.values.get(key), 'denied');
   assert.equal(b.requests().length, 0);
+});
+test('query strings and fragments never reach the vendor, even with permission', () => {
+  for (const address of [{search:'?work=Skyline%20State%20of%20Mind'},
+    {search:'?email=example%40invalid.test'}, {search:'?utm_source=facebook'},
+    {hash:'#private-note'}]) {
+    const b = browser({choice:'granted', ...address});
+    assert.equal(b.requests().length, 0);
+    assert.equal(b.window.pintrk, undefined);
+    b.allow.click();
+    assert.equal(b.requests().length, 0);
+  }
 });
 test('every page has one deferred loader and an accessible privacy route', () => {
   for (const page of ['index','gallery','shop','about','commissions','contact','thank-you','privacy']) {
