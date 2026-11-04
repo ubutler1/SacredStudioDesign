@@ -23,7 +23,9 @@ The Worker handles failures without claiming success or echoing private fields. 
 
 ## Current evidence and limits
 
-The 41 local handler scenarios and independent-build checks mock outbound delivery and cannot prove a Cloudflare deployment or inbox receipt. The prior Netlify-hosted privacy test reached its thank-you page, but its notification is not yet verified. There is no Cloudflare deployment URL, account/zone verification or cutover yet. No local test result substitutes for the release gates above.
+The 41 local handler scenarios and independent-build checks mock outbound delivery and cannot prove a Cloudflare deployment or inbox receipt. The earlier scripted Netlify privacy test was found in Netlify's spam submissions. A fresh native browser submission reached confirmation, appeared in verified submissions and delivered its exact matching notification to the studio Gmail inbox on November 4. The narrow Contact and confirmation-page checks also passed, including normal access to the footer Privacy link. No spam defense was disabled.
+
+The Cloudflare account is on the Free Workers plan. The Worker is named uriel-alexander-studio and its build is configured for feature/cloudflare-migration-20261104, with node tests/cloudflare.mjs as the build check and npx wrangler@4.157.0 deploy as the deployment command. The studio domain still points to Netlify. The Cloudflare-hosted copy, relay delivery and domain cutover gates remain outstanding; local checks and the native Netlify test do not substitute for them.
 
 Cloudflare's protected pages use script-src self without the inline-script exception that the Netlify review tools needed. The existing Netlify output retains its reviewed policy and form blueprint. The Workers configuration was accepted by an official Wrangler 4.157.0 deployment dry run; no files were uploaded or deployed by that check.
 
