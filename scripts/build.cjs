@@ -9,7 +9,8 @@ const pages = ['index.html', 'gallery.html', 'shop.html', 'about.html',
   'commissions.html', 'contact.html', 'thank-you.html', 'privacy.html'];
 const context = {window: {}};
 vm.runInNewContext(fs.readFileSync(path.join(root, 'site-data.js'), 'utf8'), context);
-const files = new Set([...pages, 'style.css', 'site-data.js', 'site.js', 'shop.js', 'pinterest.js', '_headers']);
+const files = new Set([...pages, 'style.css', 'site-data.js', 'site.js', 'shop.js', 'pinterest.js', '_headers',
+  'robots.txt', 'sitemap.xml', 'assets/studio-social-card-20261104.jpg']);
 for (const page of pages) {
   const html = fs.readFileSync(path.join(root, page), 'utf8');
   for (const match of html.matchAll(/(?:src|href)="(assets\/[^"?#]+)"/g)) files.add(match[1]);
