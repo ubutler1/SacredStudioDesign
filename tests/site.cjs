@@ -114,7 +114,7 @@ assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs orig
 // Collector panels must preserve facts and omit unknown condition/support details.
 const detailsFor = vm.runInNewContext(script + '\n; detailsFor;', {
  window: ctx.window,
- document: {querySelector:()=>null,getElementById:()=>null,querySelectorAll:()=>[]}
+ document: {querySelector:()=>null,getElementById:()=>null,querySelectorAll:()=>[],addEventListener:()=>{}}
 });
 const details = work => Object.fromEntries(detailsFor(work));
 for (const work of works) {
