@@ -62,7 +62,7 @@
       links += 1;
     }
     if (!links) {
-      formats.append(node('p','shop-small-print','Edition ordering details are coming soon.'));
+      formats.append(node('p','shop-small-print','No ordering option is available. Any future release remains subject to confirmation.'));
     }
     info.append(formats);
     card.append(media, info);
@@ -70,7 +70,7 @@
   }
   root.replaceChildren(...collection.map(makeProduct));
   if (!collection.length) {
-    status.textContent = 'Artwork editions are being prepared. There are no active print or download listings yet.';
+    status.textContent = 'These works are under consideration only. No print or download release is scheduled, and there are no active listings.';
   } else {
     const ready = collection.reduce((n, w) =>
       n + Number(Boolean(linkUrl(w.shop.physicalPrintUrl))) +
