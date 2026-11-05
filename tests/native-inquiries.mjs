@@ -81,10 +81,25 @@ assert.equal(row.notification_attempts,5);await retryNotifications(r.env,row.nex
 r=await run();r.db.sqlite.prepare("UPDATE studio_inquiries SET notification_status='sending',notification_attempts=1,lease_until=200,next_attempt_at=0").run();
 let sends=0;r.env.INQUIRY_EMAIL={async send(){sends++;return {messageId:'lease-recovered'};}};
 await notifyInquiry(r.env,base['inquiry-id'],199);assert.equal(sends,0);await notifyInquiry(r.env,base['inquiry-id'],201);assert.equal(sends,1);cases+=2;
-r=await run({method:'GET',path:'/contact',assetBody:'<input name="inquiry-id" value="__STUDIO_INQUIRY_ID__">',assetHeaders:{ETag:'stale','Content-Length':'80'}});assert.doesNotMatch(r.text,/__STUDIO_INQUIRY_ID__/);assert.match(r.text,/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}/);assert.equal(r.response.headers.get('ETag'),null);assert.equal(r.response.headers.get('Cache-Control'),'no-store');
-r=await run({method:'GET',path:'/privacy'});assert.match(r.response.headers.get('Content-Security-Policy'),/connect-src 'self'/);assert.doesNotMatch(r.response.headers.get('Content-Security-Policy'),/unsafe-inline/);
+const formIds=new Set();
+for(const host of ['https://urielalexanderstudio.com','https://www.urielalexanderstudio.com',origin]){
+  for(const route of ['/contact','/contact.html','/contact/'])for(const method of ['GET','HEAD']){
+    r=await run({method,path:route,origin:host,assetBody:'<input name="inquiry-id" value="__STUDIO_INQUIRY_ID__">',assetHeaders:{ETag:'stale','Content-Length':'80'}});
+    assert.equal(r.response.headers.get('X-Robots-Tag'),host===origin?'noindex':null,host+route+' '+method+' search visibility');
+    assert.equal(r.response.headers.get('Cache-Control'),'no-store',host+route+' '+method+' must not be cached');
+    assert.match(r.response.headers.get('Content-Security-Policy'),/connect-src 'self'/);
+    if(method==='GET'){
+      assert.doesNotMatch(r.text,/__STUDIO_INQUIRY_ID__/);assert.equal(r.response.headers.get('ETag'),null);
+      const id=r.text.match(/value="([^"]+)"/)[1];assert.match(id,/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);formIds.add(id);
+    }
+  }
+}
+assert.equal(formIds.size,9,'every Contact page render has its own form ID');
+r=await run({method:'GET',path:'/privacy',origin:'https://urielalexanderstudio.com'});assert.equal(r.response.headers.get('X-Robots-Tag'),null);assert.match(r.response.headers.get('Content-Security-Policy'),/connect-src 'self'/);assert.doesNotMatch(r.response.headers.get('Content-Security-Policy'),/unsafe-inline/);
 r=await run({method:'GET',path:'/inquiries',assetStatus:404});assert.equal(r.response.status,404);assert.equal(r.db.sqlite.prepare('SELECT count(*) AS n FROM studio_inquiries').get().n,0);
-r=await run({method:'GET',path:'/thank-you',origin:'https://urielalexanderstudio.com'});assert.equal(r.response.headers.get('X-Robots-Tag'),'noindex');
+for(const route of ['/thank-you','/thank-you.html','/thank-you/'])for(const method of ['GET','HEAD']){
+  r=await run({method,path:route,origin:'https://urielalexanderstudio.com'});assert.equal(r.response.headers.get('X-Robots-Tag'),'noindex');
+}
 const build=spawnSync(process.execPath,[path.join(root,'scripts/build-cloudflare.cjs')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
 const hosted=name=>fs.readFileSync(path.join(root,'cloudflare-dist',name),'utf8');const original=name=>fs.readFileSync(path.join(root,'dist',name),'utf8');
 assert.match(original('contact.html'),/data-netlify="true"/);

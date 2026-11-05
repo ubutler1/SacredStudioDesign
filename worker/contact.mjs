@@ -5,7 +5,7 @@ const FIELDS = new Set(['form-name', 'bot-field', 'name', 'email', 'topic', 'mes
 const MAX_BODY = 131072;
 const BASE_CSP = "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests";
 
-function secure(response, request, noStore = false) {
+function secure(response, request, {noStore = false, noIndex = false} = {}) {
   const headers = new Headers(response.headers);
   headers.set('X-Content-Type-Options', 'nosniff');
   headers.set('X-Frame-Options', 'DENY');
@@ -16,18 +16,18 @@ function secure(response, request, noStore = false) {
   const protectedRoute = /^\/(?:contact|privacy|thank-you)(?:\.html|\/)?$/.test(url.pathname) || url.pathname === '/inquiry';
   headers.set('Content-Security-Policy', BASE_CSP + (protectedRoute ? "; script-src 'self'; connect-src 'self'; img-src 'self' data:; frame-src 'self'" : ''));
   if (noStore || protectedRoute) headers.set('Cache-Control', 'no-store');
-  if (url.hostname.endsWith('.workers.dev') || noStore || /^\/thank-you/.test(url.pathname)) headers.set('X-Robots-Tag', 'noindex');
+  if (url.hostname.endsWith('.workers.dev') || noIndex || /^\/thank-you/.test(url.pathname)) headers.set('X-Robots-Tag', 'noindex');
   return new Response(response.body, {status:response.status, statusText:response.statusText, headers});
 }
 
 function problem(request, status, message, extra = {}) {
   // Messages are fixed strings. Never reflect an inquiry, address or URL here.
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Studio inquiry | Uriel Alexander Art Studio</title><link rel="stylesheet" href="/style.css"></head><body><main class="launch-page-intro"><a href="/"><img src="/assets/logo-horizontal-transparent.png" width="360" height="115" alt="Uriel Alexander Art Studio"></a><h1>Studio inquiry</h1><p>${message}</p><p>Email <a href="mailto:${STUDIO_EMAIL}">${STUDIO_EMAIL}</a> for direct contact.</p><p><a href="/contact">Return to Contact</a> · <a href="/privacy">Privacy &amp; cookie choices</a></p></main></body></html>`;
-  return secure(new Response(html, {status, headers:{'Content-Type':'text/html; charset=utf-8', ...extra}}), request, true);
+  return secure(new Response(html, {status, headers:{'Content-Type':'text/html; charset=utf-8', ...extra}}), request, {noStore:true,noIndex:true});
 }
 
 function success(request) {
-  return secure(new Response(null, {status:303, headers:{Location:'/thank-you'}}), request, true);
+  return secure(new Response(null, {status:303, headers:{Location:'/thank-you'}}), request, {noStore:true,noIndex:true});
 }
 
 async function readLimitedBody(request) {
@@ -60,7 +60,7 @@ export async function handleRequest(request, env, context = {}) {
       const html = (await asset.text()).replace('__STUDIO_INQUIRY_ID__',crypto.randomUUID());
       const headers = new Headers(asset.headers);
       for (const name of ['Content-Length','Content-Encoding','ETag']) headers.delete(name);
-      return secure(new Response(html,{status:200,headers}),request,true);
+      return secure(new Response(html,{status:200,headers}),request,{noStore:true});
     }
     return secure(asset, request);
   }
