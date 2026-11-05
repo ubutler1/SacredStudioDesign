@@ -1830,3 +1830,66 @@ body{background:var(--paper);color:var(--ink)}
 /* Keep privacy choices clear of the hosting badge, including at phone widths. */
 #footer .footer-section{padding-bottom:112px;padding-bottom:calc(112px + env(safe-area-inset-bottom, 0px))}
 .studio-privacy-link{display:inline-flex;align-items:center;min-height:44px}
+/* Artwork stays clean on screen. These reduce casual copying; public image
+   files and screenshots remain accessible. Printing omits the artwork pixels. */
+img[data-studio-artwork] {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.studio-artwork-notice {
+  position: fixed;
+  z-index: 10001;
+  inset: auto 20px max(110px, env(safe-area-inset-bottom)) auto;
+  width: min(370px, calc(100vw - 40px));
+  padding: 16px 20px;
+  border: 1px solid #9b8272;
+  background: #faf7f0;
+  color: #392c29;
+  box-shadow: 0 6px 24px #0002;
+  font: 400 .9rem/1.5 sans-serif;
+  pointer-events: none;
+}
+.studio-artwork-notice:empty { display: none; }
+.studio-static-work summary { cursor: pointer; }
+.studio-static-full { position: relative; }
+.studio-static-full img { display: block; width: 100%; height: auto; object-fit: contain; }
+@media print {
+  img[data-studio-artwork] { visibility: hidden !important; }
+  :is(.studio-artwork-surface, .launch-hero-art, .launch-work-picture,
+      .launch-about-feature-link, .launch-about-work-picture,
+      .launch-print-preview-link, .launch-contact-art):has(> img[data-studio-artwork]) {
+    position: relative;
+    background: none !important;
+    box-shadow: none !important;
+  }
+  :is(.studio-artwork-surface, .launch-hero-art, .launch-work-picture,
+      .launch-about-feature-link, .launch-about-work-picture,
+      .launch-print-preview-link, .launch-contact-art):has(> img[data-studio-artwork])::after {
+    content: "Artwork © Uriel Alexander\A Image omitted from printing\A urielalexanderstudio.com";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    padding: 12px;
+    white-space: pre-line;
+    text-align: center;
+    color: #222;
+    font: 500 11pt/1.6 sans-serif;
+    border: 1px solid #888;
+    z-index: 2;
+  }
+  .studio-artwork-notice, .launch-art-zoom, .launch-dialog-paging,
+  .launch-dialog-close, .studio-cookie-banner, .studio-cookie-controls { display: none !important; }
+  .launch-art-dialog[open] {
+    position: static;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    overflow: visible;
+  }
+  body:has(.launch-art-dialog[open]) main > :not(.launch-art-dialog) { display: none; }
+  .launch-art-dialog[open]::backdrop { background: none; }
+}

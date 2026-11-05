@@ -14,6 +14,52 @@ const detailsFor = work => [
  ['Original', typeof work.originalAvailable === 'boolean' ? (work.originalAvailable ? 'Available' : 'Unavailable') : '']
 ].filter(([, value]) => value !== undefined && value !== null && value !== '');
 const dialog = document.getElementById('artwork-dialog');
+// These are copying deterrents, not access control. A public image and screenshots
+// remain retrievable. Do not disable navigation, text copying or browser shortcuts.
+const artSelector = '[data-studio-artwork]';
+const artSurfaceSelector = '.studio-artwork-surface';
+function protectArtwork(image) {
+ image.setAttribute('data-studio-artwork', '');
+ image.draggable = false;
+ image.parentElement?.classList.add('studio-artwork-surface');
+}
+for (const image of document.querySelectorAll('img')) {
+ if (works.some(work => image.getAttribute('src') === work.image)) protectArtwork(image);
+}
+function isArtworkTarget(target) {
+ return target instanceof Element && Boolean(target.closest(artSelector + ',' + artSurfaceSelector));
+}
+let artworkNotice;
+function explainImageRights() {
+ if (!artworkNotice) {
+  artworkNotice = document.createElement('p');
+  artworkNotice.className = 'studio-artwork-notice';
+  artworkNotice.setAttribute('role', 'status');
+ }
+ const container = dialog?.open ? dialog : document.body;
+ if (artworkNotice.parentElement !== container) container.append(artworkNotice);
+ artworkNotice.textContent = 'Artwork © Uriel Alexander. Please contact the studio for image permission.';
+}
+document.addEventListener('contextmenu', event => {
+ if (!isArtworkTarget(event.target)) return;
+ event.preventDefault(); explainImageRights();
+});
+document.addEventListener('dragstart', event => {
+ if (isArtworkTarget(event.target)) { event.preventDefault(); explainImageRights(); }
+});
+document.addEventListener('copy', event => {
+ if (event.target instanceof Element && event.target.closest('input,textarea,[contenteditable]:not([contenteditable="false"])')) return;
+ const selection = window.getSelection();
+ const includesArtwork = selection && Array.from({length:selection.rangeCount}, (_, i) => selection.getRangeAt(i))
+  .some(range => Array.from(document.querySelectorAll(artSelector)).some(image => range.intersectsNode(image)));
+ if (!isArtworkTarget(event.target) && !includesArtwork) return;
+ // Preserve selected text, omitting embedded images from ordinary clipboard HTML.
+ event.clipboardData?.setData('text/plain', selection?.toString() || 'Artwork © Uriel Alexander');
+ event.preventDefault(); explainImageRights();
+});
+document.addEventListener('pointerdown', event => {
+ if (artworkNotice && !isArtworkTarget(event.target)) artworkNotice.textContent = '';
+});
 if(grid){
  const filters = document.querySelector('.filter-row');
  const status = document.querySelector('#gallery-status');
@@ -34,6 +80,7 @@ if(grid){
   currentIndex=(index+shown.length)%shown.length;
   const work=shown[currentIndex];
   img.src=work.image;img.alt=work.alt||work.title+' by Uriel Alexander';
+  protectArtwork(img);
   dialogTitle.textContent=work.title;dialogLink.href=inquiry(work);dialogLink.textContent=inquiryLabel(work);
   dialogDetails.replaceChildren(...detailsFor(work).map(([name, detail]) => {
    const row=document.createElement('div'),term=document.createElement('dt'),value=document.createElement('dd');
@@ -73,6 +120,7 @@ if(grid){
    const card=document.createElement('article');card.className='art-card launch-art-card';
    const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View complete painting: '+work.title);
    const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading='lazy';photo.decoding='async';
+   photo.setAttribute('data-studio-artwork','');photo.draggable=false;open.classList.add('studio-artwork-surface');
    photo.addEventListener('error',()=>{const notice=document.createElement('span');notice.className='image-notice';notice.textContent='Artwork photograph temporarily unavailable.';photo.replaceWith(notice)},{once:true});
    const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork & details ↗';open.append(photo,zoom);
    open.addEventListener('click',()=>openImage(index,open));
