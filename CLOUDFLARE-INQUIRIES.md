@@ -30,6 +30,8 @@ Read a particular message by its exact inquiry ID in the private Console. Review
 
 The preview Worker uses `wrangler.preview.json`: a separate Worker name and database, a separate limiter namespace, no studio-domain routes and no automatic retry schedule. Its notifications use only the same verified studio Gmail. Run `node tests/cloudflare.mjs` before deployment. Do not switch the production backend until the real preview stores an inquiry, delivers its matching studio notification and passes a recovery test in the test database.
 
+The preview Worker is `uriel-studio-inquiries-preview`. Its Cloudflare Builds production branch is `feature/cloudflare-native-inquiries-20261104`, build command is `node tests/cloudflare.mjs`, and deploy command is `npx wrangler@4.157.0 deploy --config wrangler.preview.json`. This branch selection applies only to the separate preview Worker; the public studio Worker continues to follow `main`.
+
 The production configuration retains only the authorized root/www domains. Its reviewed main build is the release source. The Cloudflare output exposes only selected public assets; Worker source, configuration, SQL, tests and operation notes stay outside the published directory. The separate Netlify build preserves the old form blueprint for historical fallback while new Cloudflare inquiries have no Netlify runtime dependency.
 
 ## Website rollback and inquiry recovery
