@@ -1,10 +1,7 @@
-// Cloudflare serves the studio's own static files. Only inquiries are relayed
-// to the existing Netlify Forms installation; no browser cookies are forwarded.
-const NETLIFY_ENDPOINT = 'https://urielalexanderartstudio.netlify.app/thank-you';
-const STUDIO_EMAIL = 'urielalexanderstudio@gmail.com';
+import {saveInquiry, notifyInquiry, retryNotifications, STUDIO_EMAIL} from './inquiries.mjs';
 const FORM_ROUTES = new Set(['/inquiry', '/thank-you', '/thank-you.html', '/thank-you/']);
 const TOPICS = new Set(['artwork', 'commission', 'prints', 'collaboration', 'general']);
-const FIELDS = new Set(['form-name', 'bot-field', 'name', 'email', 'topic', 'message']);
+const FIELDS = new Set(['form-name', 'bot-field', 'name', 'email', 'topic', 'message', 'inquiry-id']);
 const MAX_BODY = 131072;
 const BASE_CSP = "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests";
 
@@ -55,10 +52,17 @@ async function readLimitedBody(request) {
   return new TextDecoder('utf-8', {fatal:true}).decode(bytes);
 }
 
-export async function handleRequest(request, env, send = fetch) {
+export async function handleRequest(request, env, context = {}) {
   const url = new URL(request.url);
   if (request.method === 'GET' || request.method === 'HEAD') {
-    return secure(await env.ASSETS.fetch(request), request);
+    const asset = await env.ASSETS.fetch(request);
+    if (request.method==='GET' && /^\/contact(?:\.html|\/)?$/.test(url.pathname) && asset.status===200) {
+      const html = (await asset.text()).replace('__STUDIO_INQUIRY_ID__',crypto.randomUUID());
+      const headers = new Headers(asset.headers);
+      for (const name of ['Content-Length','Content-Encoding','ETag']) headers.delete(name);
+      return secure(new Response(html,{status:200,headers}),request,true);
+    }
+    return secure(asset, request);
   }
   if (request.method !== 'POST' || !FORM_ROUTES.has(url.pathname)) {
     return problem(request, 405, 'This address does not accept that request.', {Allow:FORM_ROUTES.has(url.pathname) ? 'GET, HEAD, POST' : 'GET, HEAD'});
@@ -73,7 +77,7 @@ export async function handleRequest(request, env, send = fetch) {
   if (request.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase() !== 'application/x-www-form-urlencoded') {
     return problem(request, 415, 'Please use the studio Contact form to send an inquiry.');
   }
-  if (env.FORM_RELAY_ENABLED !== 'true' || !env.INQUIRY_LIMITER?.limit) {
+  if (env.INQUIRIES_ENABLED !== 'true' || !env.INQUIRY_LIMITER?.limit || !env.INQUIRIES_DB?.prepare || !env.INQUIRY_EMAIL?.send) {
     return problem(request, 503, 'The inquiry form is temporarily unavailable. Please email the studio directly.');
   }
   const ip = request.headers.get('CF-Connecting-IP');
@@ -107,23 +111,22 @@ export async function handleRequest(request, env, send = fetch) {
       !TOPICS.has(topic) || !message || message.length > 10000 || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(message)) {
     return problem(request, 400, 'Please complete all required fields with a valid email address. Keep the message within 10,000 characters.');
   }
-  const body = new URLSearchParams({'form-name':'studio-inquiry','bot-field':'',name,email,topic,message}).toString();
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), 10000);
-  try {
-    const upstream = await send(NETLIFY_ENDPOINT, {method:'POST', redirect:'manual',
-      headers:{'Content-Type':'application/x-www-form-urlencoded','Accept':'text/html'}, body, signal:controller.signal});
-    let accepted = upstream.status >= 200 && upstream.status < 300;
-    if ([302,303].includes(upstream.status)) {
-      const target = new URL(upstream.headers.get('Location') || '/', NETLIFY_ENDPOINT);
-      accepted = target.origin === new URL(NETLIFY_ENDPOINT).origin && /^\/thank-you(?:\.html|\/)?$/.test(target.pathname) && !target.search;
-    }
-    await upstream.body?.cancel();
-    if (!accepted) return problem(request, 502, 'We could not confirm your inquiry. Please email the studio directly.');
-    return success(request);
-  } catch {
-    return problem(request, 502, 'We could not confirm your inquiry. Please email the studio directly.');
-  } finally { clearTimeout(timer); }
+  const suppliedId = data.get('inquiry-id');
+  if (suppliedId && !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(suppliedId)) {
+    return problem(request,400,'Please open a fresh Contact page and send your inquiry there.');
+  }
+  const id = suppliedId || crypto.randomUUID();
+  let saved;
+  try { saved = await saveInquiry(env.INQUIRIES_DB,{name,email,topic,message},id); }
+  catch { return problem(request,503,'Your inquiry could not be saved. Please email the studio directly.'); }
+  if (saved.conflict) return problem(request,409,'This form has already been used. Open a fresh Contact page to send a different inquiry.');
+  const delivery = notifyInquiry(env,saved.id).catch(()=>false);
+  if (context.waitUntil) context.waitUntil(delivery);
+  else await delivery;
+  return success(request);
 }
 
-export default {fetch(request, env) { return handleRequest(request, env); }};
+export default {
+  fetch(request,env,context) { return handleRequest(request,env,context); },
+  scheduled(event,env,context) { context.waitUntil(retryNotifications(env).catch(()=>{})); }
+};

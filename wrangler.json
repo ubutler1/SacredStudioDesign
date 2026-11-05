@@ -16,11 +16,14 @@
       "/inquiry",
       "/thank-you",
       "/thank-you.html",
-      "/thank-you/"
+      "/thank-you/",
+      "/contact",
+      "/contact.html",
+      "/contact/"
     ]
   },
   "vars": {
-    "FORM_RELAY_ENABLED": "true"
+    "INQUIRIES_ENABLED": "true"
   },
   "ratelimits": [
     {
@@ -44,5 +47,24 @@
       "pattern": "www.urielalexanderstudio.com",
       "custom_domain": true
     }
-  ]
+  ],
+  "send_email": [
+    {
+      "name": "INQUIRY_EMAIL",
+      "destination_address": "urielalexanderstudio@gmail.com"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "INQUIRIES_DB",
+      "database_name": "uriel-studio-inquiries",
+      "database_id": "04a10c92-5e4c-46f8-86a5-8eb4dd2f24c2",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "*/10 * * * *"
+    ]
+  }
 }
