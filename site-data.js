@@ -1,6 +1,7 @@
 // Uriel Alexander Art Studio — artist-approved artwork titles and authentic photographs.
 // Images must be uploaded into assets/ to render. Keep print-resolution masters private.
 // Catalog labels, original availability and descriptions approved by the artist, October 30, 2026.
+// Original offers limited by the artist to Skyline State of Mind and Next Door to Everything, November 8, 2026.
 // No prices, print/download listings or checkout links are authorized.
 window.studioData = {
   email: 'urielalexanderstudio@gmail.com',
@@ -21,7 +22,7 @@ window.studioData = {
     "finish": "Gloss medium glaze",
     "dimensions": "30 × 40 in",
     "framing": "Unframed",
-    "originalAvailable": true,
+    "originalAvailable": false,
     "description": "A tilted head and upward gaze anchor this portrait, with warm coral and ochre tones set against a pale blue and violet ground. Fine linear marks and layered surface textures extend across the figure and surrounding space."
   },
   {
@@ -126,7 +127,7 @@ window.studioData = {
     "canvasDepth": "Standard depth",
     "dimensions": "30 × 40 in",
     "framing": "Unframed",
-    "originalAvailable": true,
+    "originalAvailable": false,
     "description": "Bright green eyebrows and blue eyes direct attention to an upturned face. Small circles, floral motifs, dotted patterns and loose colored marks surround and cross the figure, setting detailed features within an active painted ground."
   },
   {
@@ -144,7 +145,7 @@ window.studioData = {
     "finish": "Gamvar Gloss",
     "dimensions": "30 × 40 in",
     "framing": "Unframed",
-    "originalAvailable": true,
+    "originalAvailable": false,
     "description": "Pale eyes and dark facial contours hold the focus of this closely framed portrait. Rust, ochre and muted turquoise extend across the face and surrounding ground, interrupted by fine horizontal marks and scattered red accents."
   },
   {
