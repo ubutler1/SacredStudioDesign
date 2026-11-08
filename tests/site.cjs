@@ -24,8 +24,8 @@ assert.equal(works.length,9,'catalog must include nine artist-approved paintings
 for(const w of works){assert.ok(w.title&&w.alt&&w.image);assert.ok(fs.existsSync(path.join(root,w.image)),w.title+' missing image');assert.equal(fs.readFileSync(path.join(root,w.image)).subarray(0,4).toString('ascii'),'RIFF',w.title+' not RIFF WebP');checked++}
 for(const name of ['Skyline State of Mind','Next Door to Everything','Say Less in Color','Black Boy Magic'])assert.ok(works.some(w=>w.title===name),'missing confirmed title '+name);
 // Artist-approved catalog facts must not become invented product offers.
-assert.equal(works.filter(w=>w.originalAvailable===true).length,5,'five originals are available');
-assert.equal(works.filter(w=>w.originalAvailable===false).length,4,'four originals are unavailable');
+assert.deepEqual(Array.from(works.filter(w=>w.originalAvailable===true),w=>w.title),['Skyline State of Mind','Next Door to Everything'],'only the two artist-selected originals are offered');
+assert.equal(works.filter(w=>w.originalAvailable===false).length,7,'seven originals are not offered');
 for(const work of works){
  assert.ok(Number.isInteger(work.year)&&work.year>=2025&&work.year<=2026,work.title+' needs its verified year');
  assert.ok(work.medium&&work.description,work.title+' needs approved catalog copy');
