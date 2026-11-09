@@ -61,9 +61,10 @@ document.addEventListener('pointerdown', event => {
  if (artworkNotice && !isArtworkTarget(event.target)) artworkNotice.textContent = '';
 });
 if(grid){
+ const galleryWorks = [...works].sort((a,b)=>Number(b.originalAvailable===true)-Number(a.originalAvailable===true));
  const filters = document.querySelector('.filter-row');
  const status = document.querySelector('#gallery-status');
- let shown = [...works],currentIndex = 0,lastFocus=null;
+ let shown = [...galleryWorks],currentIndex = 0,lastFocus=null;
  filters.hidden=works.length===0;
  const img = document.getElementById('dialog-image');
  const dialogTitle=document.getElementById('dialog-title');
@@ -72,7 +73,7 @@ if(grid){
  const dialogDescription=document.getElementById('dialog-description');
  const label = work => [work.year,work.medium,work.dimensions].filter(Boolean).join(' · ');
  const availability = work => typeof work.originalAvailable==='boolean' ?
-  (work.originalAvailable ? 'Original available' : 'Original unavailable') : '';
+  (work.originalAvailable ? 'Original inquiries welcome' : 'Original unavailable') : '';
  const inquiry = work => 'contact.html?topic='+(work.originalAvailable===false?'general':'artwork')+'&work='+encodeURIComponent(work.title);
  const inquiryLabel = work => work.originalAvailable===false ? 'Contact the studio ↗' : 'Inquire about this work ↗';
  function selectImage(index){
@@ -113,13 +114,14 @@ if(grid){
   if(e.key==='ArrowLeft'){e.preventDefault();selectImage(currentIndex-1)}
  });
  function render(category){
-  shown=works.filter(w=>category==='all'||(Array.isArray(w.categories)&&w.categories.includes(category)));
+  shown=galleryWorks.filter(w=>category==='all'||(category==='originals' ? w.originalAvailable===true : Array.isArray(w.categories)&&w.categories.includes(category)));
   grid.replaceChildren();
   status.textContent=shown.length?shown.length+(shown.length===1?' painting':' paintings'):'No paintings match this selection.';
   shown.forEach((work,index)=>{
    const card=document.createElement('article');card.className='art-card launch-art-card';
+   if(work.originalAvailable===true)card.setAttribute('data-original-inquiry','');
    const open=document.createElement('button');open.type='button';open.className='launch-art-image-button';open.setAttribute('aria-label','View complete painting: '+work.title);
-   const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading='lazy';photo.decoding='async';
+   const photo=document.createElement('img');photo.className='artwork-photo';photo.src=work.image;photo.alt=work.alt||work.title+' by Uriel Alexander';photo.loading=index<2?'eager':'lazy';photo.decoding='async';
    photo.setAttribute('data-studio-artwork','');photo.draggable=false;open.classList.add('studio-artwork-surface');
    photo.addEventListener('error',()=>{const notice=document.createElement('span');notice.className='image-notice';notice.textContent='Artwork photograph temporarily unavailable.';photo.replaceWith(notice)},{once:true});
    const zoom=document.createElement('span');zoom.className='launch-art-zoom';zoom.textContent='View full artwork & details ↗';open.append(photo,zoom);

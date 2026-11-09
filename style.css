@@ -1893,3 +1893,91 @@ img[data-studio-artwork] {
   body:has(.launch-art-dialog[open]) main > :not(.launch-art-dialog) { display: none; }
   .launch-art-dialog[open]::backdrop { background: none; }
 }
+
+
+/* Gallery and Shop clarity: keep artwork ahead of secondary information. */
+.studio-clarity-intro {
+  padding: clamp(26px, 3vw, 42px) clamp(20px, 4vw, 60px) 24px;
+}
+.studio-clarity-intro > .eyebrow { margin-bottom: 10px; }
+.studio-clarity-intro h1 {
+  font-size: clamp(2.6rem, 4.5vw, 4.4rem);
+  letter-spacing: -.05em;
+  margin-bottom: 14px;
+}
+.studio-clarity-intro > p:not(.eyebrow) { max-width: 72ch; font-size: 1rem; line-height: 1.6; }
+.studio-clarity-intro > p.studio-inquiry-note {
+  margin-top: 16px;
+  padding-left: 12px;
+  border-left: 2px solid var(--wine);
+  color: var(--wine);
+  font-size: .88rem;
+}
+.studio-gallery-page .launch-gallery-section {
+  max-width: 1400px;
+  padding: 24px clamp(20px, 4vw, 60px) 42px;
+}
+.studio-gallery-page .launch-gallery-toolbar { margin-bottom: 20px; }
+.studio-gallery-page #gallery-status { margin: 0; }
+.studio-gallery-notes { margin-top: 28px; }
+.studio-gallery-notes .gallery-display-note { margin: 0 0 8px; }
+.launch-art-card[data-original-inquiry] .launch-art-availability,
+.studio-original-status {
+  color: var(--wine);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .025em;
+}
+.studio-originals-section, .studio-collecting-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px clamp(20px, 4vw, 60px) 42px;
+}
+.studio-originals-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.studio-original-card { min-width: 0; }
+.studio-original-image {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e7dfd5;
+}
+.studio-original-image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.studio-original-copy { padding: 18px 0 22px; border-bottom: 1px solid #d4c8bb; }
+.studio-original-copy .studio-original-status { margin: 0 0 7px; }
+.studio-original-copy h2, .studio-collecting-options h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  line-height: 1.25;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  margin: 0 0 10px;
+}
+.studio-original-copy .art-details { color: #655b52; font-size: .88rem; line-height: 1.6; margin-bottom: 18px; }
+.studio-original-copy .cta-button { display: inline-flex; align-items: center; }
+.studio-collecting-section { padding-top: 0; }
+.studio-collecting-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.studio-collecting-options article { padding: 24px 0; border-top: 1px solid #d4c8bb; min-width: 0; }
+.studio-collecting-options p { color: #655b52; line-height: 1.65; margin: 0 0 14px; }
+.studio-collecting-options .secondary-link { font-size: .9rem; }
+.studio-collecting-note { color: #655b52; font-size: .8rem; line-height: 1.6; margin: 16px 0 0; }
+@media (max-width: 600px) {
+  .studio-originals-grid, .studio-collecting-options { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .studio-original-copy .cta-button { width: 100%; justify-content: center; }
+  .studio-collecting-options { gap: 0; }
+}
+
+
+/* Keep the smallest phone filters compact without clipping their labels. */
+@media (max-width: 360px) {
+  .studio-gallery-page .launch-gallery-toolbar .filter-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .studio-gallery-page .launch-gallery-toolbar .chip {
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 8px;
+    white-space: normal;
+    line-height: 1.35;
+  }
+}

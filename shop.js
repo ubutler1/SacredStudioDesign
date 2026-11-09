@@ -70,7 +70,7 @@
   }
   root.replaceChildren(...collection.map(makeProduct));
   if (!collection.length) {
-    status.textContent = 'These works are under consideration only. No print or download release is scheduled, and there are no active listings.';
+    status.textContent = 'Prints and digital editions remain under consideration. No release date has been announced, and no print or download orders are open.';
   } else {
     const ready = collection.reduce((n, w) =>
       n + Number(Boolean(linkUrl(w.shop.physicalPrintUrl))) +
