@@ -43,7 +43,7 @@ const script=read('site.js');new Function(script);new Function(read('shop.js'));
 assert.ok(script.includes('showModal('),'gallery viewer must be available');
 assert.ok(script.includes('URLSearchParams'),'inquiry deep-links must work');
 assert.ok(!script.includes("event.preventDefault()")||!script.includes("download inquiry draft"),'inquiry must not fake submit');
-assert.match(read('shop.html'),/Print and digital purchases are not available through the website/);
+assert.match(read('shop.html'),/Payments, deposits and confirmed commission starts are not open/);
 
 const galleryCss=read('style.css');
 assert.match(galleryCss,/\.gallery-grid\.launch-gallery-grid\s*\{/,'gallery must have a dedicated grid rule');
@@ -62,7 +62,7 @@ assert.match(home,/View all nine paintings/,'homepage collection count must matc
 assert.match(home,/class="launch-work-picture"/,'homepage has selected-artwork previews');
 assert.match(about,/class="launch-about-feature-link"/,'about full portrait link');
 assert.equal((about.match(/class="launch-about-work-picture"/g)||[]).length,2,'about secondary works must use two matched squares');
-assert.equal((shop.match(/class="launch-print-preview-link"/g)||[]).length,3,'shop previews must be artwork deep-links');
+assert.equal((shop.match(/class="studio-original-image"/g)||[]).length,2,'shop shows the two inquiry originals with artwork deep-links');
 assert.match(contact,/class="launch-contact-art"/,'contact painting must link to the full gallery');
 assert.match(galleryCss,/\.launch-work \.launch-work-picture\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/s,'homepage thumbnails should be square');
 assert.match(galleryCss,/\.launch-work \.launch-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'homepage thumbnails should fill their square');
@@ -88,7 +88,7 @@ for (const p of pages) {
       checkedLinks++;
     }
     if (query && query.includes('work=')) {
-      const url = new URL('https://studio.example/' + u);
+      const url = new URL('https://studio.example/' + u.replaceAll('&amp;', '&'));
       assert.ok(catalogTitles.has(url.searchParams.get('work')), p + ' has unrecognized artwork deep link ' + u);
     }
   }
@@ -108,7 +108,7 @@ assert.match(read('index.html'),/Portraits with presence\.<br><em>Color without 
 assert.match(read('about.html'),/For Alexander, a portrait begins with the structure of the face/,'About must describe the artist practice concretely');
 assert.doesNotMatch(read('about.html'),/Black gay man|gay artist|Caribbean roots/,'artist personal background requires separate public-copy approval');
 assert.match(read('contact.html'),/mailto:urielalexanderstudio@gmail\.com/,'studio email is accessible');
-assert.match(read('shop.html'),/Print and digital purchases are not available through the website/,'checkout must remain inactive');
+assert.match(read('shop.html'),/Payments, deposits and confirmed commission starts are not open/,'checkout must remain inactive');
 assert.match(read('shop.html'),/contact\.html\?topic=artwork/,'shop directs original inquiries to form');
 
 // Collector panels must preserve facts and omit unknown condition/support details.
