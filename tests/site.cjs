@@ -62,7 +62,7 @@ assert.match(home,/View all nine paintings/,'homepage collection count must matc
 assert.match(home,/class="launch-work-picture"/,'homepage has selected-artwork previews');
 assert.match(about,/class="launch-about-feature-link"/,'about full portrait link');
 assert.equal((about.match(/class="launch-about-work-picture"/g)||[]).length,2,'about secondary works must use two matched squares');
-assert.equal((shop.match(/class="studio-original-image"/g)||[]).length,2,'shop shows the two inquiry originals with artwork deep-links');
+assert.equal((shop.match(/class="studio-original-image studio-artwork-surface"/g)||[]).length,2,'shop shows two protected original previews with artwork deep-links');
 assert.match(contact,/class="launch-contact-art"/,'contact painting must link to the full gallery');
 assert.match(galleryCss,/\.launch-work \.launch-work-picture\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/s,'homepage thumbnails should be square');
 assert.match(galleryCss,/\.launch-work \.launch-work-picture img\s*\{[^}]*object-fit:\s*cover/s,'homepage thumbnails should fill their square');
