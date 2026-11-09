@@ -100,6 +100,38 @@ r=await run({method:'GET',path:'/inquiries',assetStatus:404});assert.equal(r.res
 for(const route of ['/thank-you','/thank-you.html','/thank-you/'])for(const method of ['GET','HEAD']){
   r=await run({method,path:route,origin:'https://urielalexanderstudio.com'});assert.equal(r.response.headers.get('X-Robots-Tag'),'noindex');
 }
+// Updates are a separate explicit opt-in; ordinary inquiries never subscribe.
+const updateBase={'form-name':'studio-updates','bot-field':'',email:STUDIO_EMAIL,'updates-consent':'yes','inquiry-id':'98765432-1234-4123-8123-123456789012'};
+const updateBody=fields=>new URLSearchParams({...updateBase,...fields}).toString();
+r=await run({body:updateBody({})});
+assert.equal(r.response.status,303);assert.equal(r.response.headers.get('Location'),'/updates-confirmed');
+row=r.db.sqlite.prepare('SELECT * FROM studio_inquiries').get();
+assert.equal(row.topic,'studio-updates');assert.match(row.message,/Explicit studio-updates opt-in, consent version 2026-11-09/);
+assert.match(row.message,/Unsubscribe by replying/);assert.equal(r.emails.length,1);assert.equal(r.emails[0].to,STUDIO_EMAIL);
+assert.equal(r.db.sqlite.prepare('SELECT count(*) AS n FROM studio_inquiries').get().n,1);
+for(const body of [
+  updateBody({'updates-consent':'no'}),
+  new URLSearchParams(Object.fromEntries(Object.entries(updateBase).filter(([k])=>k!=='updates-consent'))).toString(),
+  updateBody({email:'bad-address'}),updateBody({topic:'general'}),updateBody({message:'no consent'}),
+  updateBody({})+'&updates-consent=yes'
+]){
+  r=await run({body});assert.equal(r.response.status,400);assert.equal(r.emails.length,0);
+  assert.equal(r.db.sqlite.prepare('SELECT count(*) AS n FROM studio_inquiries').get().n,0);
+}
+const updatesDB=database();await run({db:updatesDB,body:updateBody({})});
+r=await run({db:updatesDB,body:updateBody({})});assert.equal(r.response.status,303);assert.equal(r.emails.length,0);
+assert.equal(updatesDB.sqlite.prepare('SELECT count(*) AS n FROM studio_inquiries').get().n,1);
+r=await run({body:updateBody({}),mailThrows:true});assert.equal(r.response.status,303);
+assert.equal(r.db.sqlite.prepare('SELECT notification_status FROM studio_inquiries').get().notification_status,'failed');
+for(const route of ['/studio-updates','/studio-updates.html','/studio-updates/']){
+  r=await run({method:'GET',path:route,origin:'https://urielalexanderstudio.com',assetBody:'<input value="__STUDIO_INQUIRY_ID__">'});
+  assert.doesNotMatch(r.text,/__STUDIO_INQUIRY_ID__/);assert.equal(r.response.headers.get('Cache-Control'),'no-store');
+  assert.match(r.response.headers.get('Content-Security-Policy'),/connect-src 'self'/);assert.equal(r.response.headers.get('X-Robots-Tag'),null);
+}
+for(const route of ['/updates-confirmed','/updates-confirmed.html','/updates-confirmed/']){
+  r=await run({method:'GET',path:route,origin:'https://urielalexanderstudio.com'});
+  assert.equal(r.response.headers.get('Cache-Control'),'no-store');assert.equal(r.response.headers.get('X-Robots-Tag'),'noindex');
+}
 const build=spawnSync(process.execPath,[path.join(root,'scripts/build-cloudflare.cjs')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
 const hosted=name=>fs.readFileSync(path.join(root,'cloudflare-dist',name),'utf8');const original=name=>fs.readFileSync(path.join(root,'dist',name),'utf8');
 assert.match(original('contact.html'),/data-netlify="true"/);

@@ -19,7 +19,13 @@
       "/thank-you/",
       "/contact",
       "/contact.html",
-      "/contact/"
+      "/contact/",
+      "/studio-updates",
+      "/studio-updates.html",
+      "/studio-updates/",
+      "/updates-confirmed",
+      "/updates-confirmed.html",
+      "/updates-confirmed/"
     ]
   },
   "vars": {

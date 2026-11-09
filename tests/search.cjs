@@ -8,12 +8,16 @@ const build = spawnSync(process.execPath, [path.join(root, 'scripts/build.cjs')]
 assert.equal(build.status, 0, build.stderr);
 const dist = path.join(root, 'dist');
 const origin = 'https://urielalexanderstudio.com';
-const pages = ['index','gallery','shop','commissions','about','contact','privacy','thank-you'];
+const pages = ['index','gallery','shop','commissions','about','contact','privacy','thank-you','studio-updates','updates-confirmed'];
+const vm = require('node:vm');
+const catalog = {window:{}};
+vm.runInNewContext(fs.readFileSync(path.join(root,'site-data.js'),'utf8'),catalog);
+const workUrls = catalog.window.studioData.artworks.map(work => origin + '/artwork/' + require('../scripts/artwork-pages.cjs').slug(work));
 const canonical = name => origin + (name === 'index' ? '/' : '/' + name);
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-assert.deepEqual(new Set(urls), new Set(pages.filter(p => p !== 'thank-you').map(canonical)));
-assert.equal(urls.length, 7, 'sitemap has seven unique public pages');
+assert.deepEqual(new Set(urls), new Set([...pages.filter(p => !['thank-you','updates-confirmed'].includes(p)).map(canonical),...workUrls]));
+assert.equal(urls.length, 17, 'sitemap includes eight public pages and nine artwork pages');
 const robots = fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8');
 assert.match(robots, /Allow: \//);
 assert.ok(robots.includes('Sitemap: ' + origin + '/sitemap.xml'));
@@ -42,7 +46,7 @@ for (const name of pages) {
   assert.deepEqual(meta('twitter:description'), meta('description'));
   assert.ok(!titles.has(title), 'unique page title'); titles.add(title);
   assert.ok(!descriptions.has(meta('description')[0]), 'unique description'); descriptions.add(meta('description')[0]);
-  if (name === 'thank-you') assert.ok(meta('robots').some(v => v.includes('noindex')));
+  if (['thank-you','updates-confirmed'].includes(name)) assert.ok(meta('robots').some(v => v.includes('noindex')));
   else assert.ok(!meta('robots').some(v => /noindex|none/.test(v)), name + ' is indexable');
 }
 const homepage = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
@@ -62,4 +66,4 @@ for (let p = 2; p < jpg.length - 8;) {
 }
 assert.deepEqual(size, [1200,630], 'share image dimensions agree with metadata');
 assert.ok(jpg.length < 500000, 'share image stays lightweight');
-console.log('Passed metadata, crawlability, sitemap, structured-data and share-image checks for eight pages.');
+console.log('Passed metadata, crawlability, sitemap, structured-data and share-image checks for ten root pages and seventeen public URLs.');

@@ -3,7 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html','privacy.html'];
+const pages=['index.html','gallery.html','shop.html','about.html','commissions.html','contact.html','thank-you.html','privacy.html','studio-updates.html','updates-confirmed.html'];
 let checked=0;
 for(const p of pages){
  const html=read(p);
@@ -75,7 +75,7 @@ assert.match(galleryCss,/\.launch-about-grid \.launch-about-feature-link img\s*\
 
 
 // Additional prelaunch checks: local page links, artwork deep links and image dimensions.
-const validPages = new Set(pages), catalogTitles = new Set(works.map(w => w.title));
+const validPages = new Set([...pages,...works.map(require('../scripts/artwork-pages.cjs').page)]), catalogTitles = new Set(works.map(w => w.title));
 let checkedLinks = 0, checkedImageDimensions = 0;
 for (const p of pages) {
   const html = read(p);

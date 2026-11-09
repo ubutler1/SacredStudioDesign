@@ -67,7 +67,7 @@
   const copy = document.createElement('p');
   copy.textContent = 'Allow Pinterest to measure website visits and use information for personalized advertising. Your choice is optional.';
   const details = document.createElement('a');
-  details.href = 'privacy.html#pinterest';
+  details.href = window.location.pathname.startsWith('/artwork/') ? '../privacy.html#pinterest' : 'privacy.html#pinterest';
   details.textContent = 'Privacy details';
   const actions = document.createElement('div');
   actions.className = 'studio-pinterest-actions';

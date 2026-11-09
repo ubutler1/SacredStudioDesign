@@ -2,6 +2,8 @@ import {saveInquiry, notifyInquiry, retryNotifications, STUDIO_EMAIL} from './in
 const FORM_ROUTES = new Set(['/inquiry', '/thank-you', '/thank-you.html', '/thank-you/']);
 const TOPICS = new Set(['artwork', 'commission', 'prints', 'collaboration', 'general']);
 const FIELDS = new Set(['form-name', 'bot-field', 'name', 'email', 'topic', 'message', 'inquiry-id']);
+const UPDATE_FIELDS = new Set(['form-name', 'bot-field', 'email', 'updates-consent', 'inquiry-id']);
+const UPDATE_CONSENT = 'I would like occasional emails from Uriel Alexander Art Studio about new paintings, future print releases and exhibitions.';
 const MAX_BODY = 131072;
 const BASE_CSP = "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests";
 
@@ -13,10 +15,10 @@ function secure(response, request, {noStore = false, noIndex = false} = {}) {
   headers.set('Referrer-Policy', 'same-origin');
   headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
   const url = new URL(request.url);
-  const protectedRoute = /^\/(?:contact|privacy|thank-you)(?:\.html|\/)?$/.test(url.pathname) || url.pathname === '/inquiry';
+  const protectedRoute = /^\/(?:contact|privacy|thank-you|studio-updates|updates-confirmed)(?:\.html|\/)?$/.test(url.pathname) || url.pathname === '/inquiry';
   headers.set('Content-Security-Policy', BASE_CSP + (protectedRoute ? "; script-src 'self'; connect-src 'self'; img-src 'self' data:; frame-src 'self'" : ''));
   if (noStore || protectedRoute) headers.set('Cache-Control', 'no-store');
-  if (url.hostname.endsWith('.workers.dev') || noIndex || /^\/thank-you/.test(url.pathname)) headers.set('X-Robots-Tag', 'noindex');
+  if (url.hostname.endsWith('.workers.dev') || noIndex || /^\/(?:thank-you|updates-confirmed)/.test(url.pathname)) headers.set('X-Robots-Tag', 'noindex');
   return new Response(response.body, {status:response.status, statusText:response.statusText, headers});
 }
 
@@ -26,8 +28,8 @@ function problem(request, status, message, extra = {}) {
   return secure(new Response(html, {status, headers:{'Content-Type':'text/html; charset=utf-8', ...extra}}), request, {noStore:true,noIndex:true});
 }
 
-function success(request) {
-  return secure(new Response(null, {status:303, headers:{Location:'/thank-you'}}), request, {noStore:true,noIndex:true});
+function success(request, updates = false) {
+  return secure(new Response(null, {status:303, headers:{Location:updates ? '/updates-confirmed' : '/thank-you'}}), request, {noStore:true,noIndex:true});
 }
 
 async function readLimitedBody(request) {
@@ -56,7 +58,7 @@ export async function handleRequest(request, env, context = {}) {
   const url = new URL(request.url);
   if (request.method === 'GET' || request.method === 'HEAD') {
     const asset = await env.ASSETS.fetch(request);
-    if (request.method==='GET' && /^\/contact(?:\.html|\/)?$/.test(url.pathname) && asset.status===200) {
+    if (request.method==='GET' && /^\/(?:contact|studio-updates)(?:\.html|\/)?$/.test(url.pathname) && asset.status===200) {
       const html = (await asset.text()).replace('__STUDIO_INQUIRY_ID__',crypto.randomUUID());
       const headers = new Headers(asset.headers);
       for (const name of ['Content-Length','Content-Encoding','ETag']) headers.delete(name);
@@ -95,20 +97,25 @@ export async function handleRequest(request, env, context = {}) {
   let data;
   try { data = new URLSearchParams(await readLimitedBody(request)); }
   catch (error) { return problem(request, error instanceof RangeError ? 413 : 400, 'The inquiry could not be read. Please use the Contact form or email the studio.'); }
+  const updates = data.get('form-name') === 'studio-updates';
+  const allowed = updates ? UPDATE_FIELDS : FIELDS;
   for (const name of data.keys()) {
-    if (!FIELDS.has(name) || data.getAll(name).length !== 1) return problem(request, 400, 'Please submit your inquiry from the Contact form.');
+    if (!allowed.has(name) || data.getAll(name).length !== 1) return problem(request, 400, 'Please submit your request from the studio form.');
   }
-  if (data.get('form-name') !== 'studio-inquiry' || !data.has('bot-field')) {
+  if ((!updates && data.get('form-name') !== 'studio-inquiry') || !data.has('bot-field')) {
     return problem(request, 400, 'Please submit your inquiry from the Contact form.');
   }
-  if (data.get('bot-field')) return success(request);
-  const name = data.get('name')?.trim() || '';
+  if (data.get('bot-field')) return success(request, updates);
+  if (updates && data.get('updates-consent') !== 'yes') {
+    return problem(request,400,'Please choose whether you would like studio updates before signing up.');
+  }
+  const name = updates ? 'Studio updates subscriber' : data.get('name')?.trim() || '';
   const email = data.get('email')?.trim() || '';
-  const topic = data.get('topic') || '';
-  const message = data.get('message')?.trim() || '';
+  const topic = updates ? 'studio-updates' : data.get('topic') || '';
+  const message = updates ? 'Explicit studio-updates opt-in, consent version 2026-11-09: ' + UPDATE_CONSENT + ' Unsubscribe by replying to a studio email or emailing the studio.' : data.get('message')?.trim() || '';
   if (!name || name.length > 150 || /[\x00-\x1f\x7f]/.test(name) ||
       !email || email.length > 254 || /[\x00-\x1f\x7f-\x9f]/.test(email) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ||
-      !TOPICS.has(topic) || !message || message.length > 10000 || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(message)) {
+      (!updates && !TOPICS.has(topic)) || !message || message.length > 10000 || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(message)) {
     return problem(request, 400, 'Please complete all required fields with a valid email address. Keep the message within 10,000 characters.');
   }
   const suppliedId = data.get('inquiry-id');
@@ -123,7 +130,7 @@ export async function handleRequest(request, env, context = {}) {
   const delivery = notifyInquiry(env,saved.id).catch(()=>false);
   if (context.waitUntil) context.waitUntil(delivery);
   else await delivery;
-  return success(request);
+  return success(request, updates);
 }
 
 export default {
