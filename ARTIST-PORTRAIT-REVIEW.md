@@ -15,7 +15,11 @@ The artist supplied IMG_1624.jpeg and requested a polished version and website p
 
 ## Validation and release
 
-Run the existing static, search, artwork, privacy, Pinterest and native Cloudflare checks, then inspect the isolated review Worker on desktop and phone widths. Confirm the frame shows the complete painting and both hands, and that the caption link opens the correct artwork page.
+Passed the existing static, search, artwork, privacy, Pinterest and native Cloudflare checks: 62 page/asset/record checks, 268 public-output checks, 15 Pinterest checks, 96 inquiry scenarios, nine artwork pages and 459 local resource links. `git diff --check` passes. The source upload and website JPEG share SHA-256 `3d27933c09e600488e8a929ac247b97ebdc575ee9b676617ae1bbd51e3c18b49`.
+
+The isolated Cloudflare review deployed source `f498e16ff438b1b99e2d45b48efb34613424afe1` successfully as version `552eb8b3` (build `b25f4983-afb5-4317-a94c-030d53791a97`). Desktop and 390 px / 320 px phone checks show the entire painting and both hands without horizontal overflow (content widths 1513 / 375 / 305 px). The caption opens the correct artwork page. Saved desktop and phone evidence accompanies the conversation; the preview tab remains available at https://uriel-studio-inquiries-preview.ubutler6.workers.dev/about.
+
+This validation note does not enter the public build. Draft PR #17 holds the photo addition and review record.
 
 Publication is a separate step after the artist reviews the addition. No gallery catalog data, approved artwork image, payment setting, contact handler, database, domain route or production hosting configuration is changed.
 
