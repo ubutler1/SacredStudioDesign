@@ -2052,3 +2052,8 @@ img[data-studio-artwork] {
   .studio-work-navigation { display: grid; grid-template-columns: minmax(0,1fr); gap: 5px; }
   .studio-work-photographs { grid-template-columns: minmax(0,1fr); }
 }
+
+/* The collecting sequence uses the existing three-column editorial rhythm. */
+.studio-collecting-process > h2 { font-family: Georgia,serif; font-size: clamp(2rem,3.5vw,3.5rem); font-weight: 400; letter-spacing: -.04em; margin: 14px 0 26px; }
+.studio-collecting-process > h2 em { color: var(--wine); font-weight: 400; }
+.studio-commission-journey { max-width: 78ch; color: #655b52; line-height: 1.75; margin-top: 26px; }

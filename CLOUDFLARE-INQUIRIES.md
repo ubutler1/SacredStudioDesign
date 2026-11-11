@@ -32,7 +32,7 @@ The preview Worker uses `wrangler.preview.json`: a separate Worker name and data
 
 The preview Worker is `uriel-studio-inquiries-preview`. Set its Cloudflare Builds production branch to the review branch being tested; the build command is `node tests/cloudflare.mjs`, and the deploy command is `npx wrangler@4.157.0 deploy --config wrangler.preview.json`. Confirm the saved branch before triggering the build. This branch selection applies only to the separate preview Worker; the public studio Worker continues to follow `main`.
 
-The production configuration retains only the authorized root/www domains. Its reviewed main build is the release source. The Cloudflare output exposes only selected public assets; Worker source, configuration, SQL, tests and operation notes stay outside the published directory. The separate Netlify build preserves the old form blueprint for historical fallback while new Cloudflare inquiries have no Netlify runtime dependency.
+The production configuration retains only the authorized root/www domains. Its reviewed main build is the release source. The Cloudflare output exposes only selected public assets; Worker source, configuration, SQL, tests and operation notes stay outside the published directory. Contact, Privacy and security-header source files now describe the native Cloudflare implementation directly. Both public-output build directories use that same blueprint; no provider rewrite is hidden in the Cloudflare packaging step. Earlier Netlify deployments remain historical artifacts, not the current source configuration.
 
 ## Website rollback and inquiry recovery
 
@@ -40,7 +40,7 @@ Cloudflare **Workers & Pages → uriel-alexander-studio → Deployments** can re
 
 Cloudflare D1 Time Travel provides seven days of recovery on the current Free plan. Obtain a bookmark before a recovery operation and retain the returned undo bookmark. Restore tests belong in `uriel-studio-inquiries-test`, using synthetic records. A real production restore can overwrite newer inquiries, so first preserve the current private data and coordinate it as a separate owner action. Do not test destructive recovery on the live inquiry database.
 
-Keep source and schema in GitHub. A website rollback can temporarily restore the older Netlify relay if necessary; preserve all D1 inquiries and handle pending notifications when returning to the native backend. No cleanup should delete the original Netlify project or historical customer correspondence without a separate retention decision.
+Keep source and schema in GitHub. Earlier reviewed deployments remain separate rollback references; preserve all D1 inquiries and handle pending notifications if the website version changes. No cleanup should delete the original Netlify project or historical customer correspondence without a separate retention decision.
 
 Primary references:
 

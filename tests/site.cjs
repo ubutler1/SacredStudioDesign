@@ -37,7 +37,7 @@ for(const work of works){
 assert.equal(works.find(w=>w.title==='Next Door to Everything').dimensions,'36 × 24 in','landscape dimensions must retain width-first order');
 assert.equal(works.find(w=>w.title==='Skyline State of Mind').completion,'Finished for now','retain the artist completion qualification');
 assert.doesNotMatch(read('site-data.js'),/workingTitle\s*:\s*true/);
-const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/data-netlify="true"/);assert.match(contact,/netlify-honeypot="bot-field"/);assert.match(contact,/action="\/thank-you.html"/);
+const contact=read('contact.html');assert.match(contact,/name="studio-inquiry"/);assert.match(contact,/method="POST"/);assert.match(contact,/action="\/inquiry"/);assert.match(contact,/name="inquiry-id"/);assert.match(contact,/name="bot-field"/);assert.doesNotMatch(contact,/data-netlify|netlify-honeypot/);
 for(const key of ['name','email','topic','message'])assert.ok(contact.includes('name="'+key+'"'),'missing '+key+' field');
 const script=read('site.js');new Function(script);new Function(read('shop.js'));
 assert.ok(script.includes('showModal('),'gallery viewer must be available');
@@ -152,4 +152,4 @@ assert.match(read('about.html'),/Bronx Council on the Arts/,'public CV contains 
 assert.doesNotMatch(read('about.html'),/Visual AIDS/,'private registration must not appear on About page');
 assert.match(read('style.css'),/\.launch-artist-cv-record\{display:grid/,'CV retains responsive editorial layout');
 
-console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and Netlify form markup.');console.log('Note: Netlify form delivery and browser interactions still require testing on deployed preview.');
+console.log('Passed studio launch static checks: '+checked+' pages/assets/records, artist branding, viewer and native inquiry form markup.');console.log('Note: live email delivery is separate from local and browser checks.');

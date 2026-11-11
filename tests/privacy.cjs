@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '..');
 const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'studio-public-build-'));
 let checks = 0;
 try {
-  fs.cpSync(root, fixture, {recursive:true, filter: p => !p.split(path.sep).includes('dist')});
+  fs.cpSync(root, fixture, {recursive:true, filter: p => !p.split(path.sep).some(part=>['dist','cloudflare-dist','.git'].includes(part))});
   fs.writeFileSync(path.join(fixture, 'assets', 'private-example.txt'), 'Synthetic private file; must never be published.');
   fs.writeFileSync(path.join(fixture, 'internal-example.csv'), 'Synthetic private file; must never be published.');
   const build = spawnSync(process.execPath, [path.join(fixture, 'scripts', 'build.cjs')], {encoding:'utf8'});
@@ -41,17 +41,17 @@ try {
     const r=rule(pathname);
     assert.match(r,/connect-src 'self'/,pathname+' blocks external connections');
     assert.match(r,/img-src 'self' data:/,pathname+' blocks third-party beacons');
-    assert.match(r,/script-src 'self' 'unsafe-inline'/,pathname+' blocks external advertising scripts');
+    assert.match(r,/script-src 'self';/,pathname+' blocks external advertising scripts');
     assert.match(r,/Cache-Control: no-store/,pathname+' avoids browser cache storage'); checks++;
   }
   assert.match(rule('/gallery'),/form-action 'self'/);
   assert.match(rule('/gallery'),/frame-ancestors 'none'/);
   assert.match(rule('/gallery'),/Referrer-Policy: same-origin/);
   const contact=fs.readFileSync(path.join(dist,'contact.html'),'utf8');
-  assert.match(contact,/method="POST" action="\/thank-you.html"/);
+  assert.match(contact,/method="POST" action="\/inquiry"/);
   assert.match(contact,/aria-describedby="inquiry-privacy"/);
   assert.doesNotMatch(contact,/<input[^>]*type="(?:file|password)"/);
-  assert.match(fs.readFileSync(path.join(dist,'privacy.html'),'utf8'),/Netlify Web Analytics/);
+  assert.match(fs.readFileSync(path.join(dist,'privacy.html'),'utf8'),/Cloudflare hosts the website/);
   assert.match(fs.readFileSync(path.join(dist,'privacy.html'),'utf8'),/Google Gmail/);
   console.log('Passed '+checks+' public-output, image-preservation, navigation and protected-route checks.');
 } finally { fs.rmSync(fixture,{recursive:true,force:true}); }

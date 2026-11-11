@@ -1,10 +1,13 @@
-# Collector experience review — November 9, 2026
+# Collector experience review — November 11, 2026
 
 ## Authorization and release state
 
 The artist accepted the recommendations from the current market comparison and requested implementation. This is an isolated review from production `d12af4906508eae078ad81af16e06a8e93f212fd`, tree `64733947306f8e99c70f92fb35a66a5c3a6735f2`. The current request authorizes preparing and testing these improvements. Publication to the studio domain remains a separate decision under the project instructions.
 
 ## Implemented for review
+
+- The November 11 audit follow-up directs the homepage's original-artwork action to the two available originals, adds a clear three-step collecting process and explains the commission journey after an inquiry. The published original selection and inactive payment/booking status remain intact.
+- Contact, Privacy and security-header source files now use the native Cloudflare implementation directly. The build copies the same public blueprint without a hidden Netlify-to-Cloudflare rewrite. Earlier Netlify records and deployments remain historical; runtime routes, storage schema and notification recipients are unchanged.
 
 - A scoped phone layout shows the complete featured painting immediately after the approved headline. The original desktop composition, headline and authentic artwork files remain.
 - Nine build-generated artwork pages have stable URLs, work-specific titles/descriptions, genuine original-image social metadata, exact catalog facts, related-work navigation and work-specific inquiries. The Gallery retains its square previews, filters and full uncropped viewer; each card and viewer also link to the artwork page.

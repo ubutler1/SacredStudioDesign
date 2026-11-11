@@ -134,7 +134,7 @@ for(const route of ['/updates-confirmed','/updates-confirmed.html','/updates-con
 }
 const build=spawnSync(process.execPath,[path.join(root,'scripts/build-cloudflare.cjs')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
 const hosted=name=>fs.readFileSync(path.join(root,'cloudflare-dist',name),'utf8');const original=name=>fs.readFileSync(path.join(root,'dist',name),'utf8');
-assert.match(original('contact.html'),/data-netlify="true"/);
+assert.match(original('contact.html'),/action="\/inquiry"/);assert.doesNotMatch(original('contact.html'),/data-netlify/);
 assert.match(hosted('contact.html'),/action="\/inquiry"/);assert.match(hosted('contact.html'),/name="inquiry-id"/);assert.doesNotMatch(hosted('contact.html'),/data-netlify|handled by Cloudflare, Netlify/);
 assert.match(hosted('privacy.html'),/private studio database/);assert.match(hosted('privacy.html'),/Earlier inquiries may remain in Netlify/);assert.doesNotMatch(hosted('privacy.html'),/Netlify continues to process inquiry/);
 for(const name of ['index.html','gallery.html','shop.html','about.html','commissions.html','thank-you.html','style.css','site-data.js','site.js','pinterest.js'])assert.equal(hosted(name),original(name),name+' preserved');

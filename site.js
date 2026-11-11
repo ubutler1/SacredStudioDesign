@@ -149,7 +149,7 @@ if(grid){
  if(position>=0){const btn=grid.querySelectorAll('.launch-art-image-button')[position];if(btn)openImage(position,btn)}
 }
 
-// Netlify processes HTML forms. Do not intercept the POST or pretend a message was sent.
+// The native Cloudflare handler processes HTML forms. Do not intercept the POST or fake a successful submission.
 const form = document.querySelector('#inquiry-form');
 if (form) {
   const params = new URLSearchParams(location.search);
