@@ -1,6 +1,7 @@
 'use strict';
 const data = window.studioData || {email:'',artworks:[]};
 const works = Array.isArray(data.artworks) ? data.artworks.filter(work=>work && typeof work.title==='string' && typeof work.image==='string') : [];
+const artworkPage = work => 'artwork/' + work.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '.html';
 const grid = document.querySelector('#artwork-grid');
 // Structured collector details use only artist-confirmed fields. Omit unknowns.
 const detailsFor = work => [
@@ -83,6 +84,8 @@ if(grid){
   img.src=work.image;img.alt=work.alt||work.title+' by Uriel Alexander';
   protectArtwork(img);
   dialogTitle.textContent=work.title;dialogLink.href=inquiry(work);dialogLink.textContent=inquiryLabel(work);
+  const pageLink = document.getElementById('dialog-artwork-page');
+  if (pageLink) pageLink.href = artworkPage(work);
   dialogDetails.replaceChildren(...detailsFor(work).map(([name, detail]) => {
    const row=document.createElement('div'),term=document.createElement('dt'),value=document.createElement('dd');
    row.className='launch-work-detail';term.textContent=name;value.textContent=String(detail);
@@ -131,7 +134,8 @@ if(grid){
    title.className='art-title';title.textContent=work.title;detail.className='art-details';
    detail.textContent=label(work)||'Original artwork · Uriel Alexander';
    original.className='art-details launch-art-availability';original.textContent=availability(work);original.hidden=!original.textContent;
-   text.append(title,detail,original);link.href=inquiry(work);link.className='launch-art-inquire';link.textContent=inquiryLabel(work);meta.append(text,link);card.append(open,meta);grid.append(card);
+   const pageLink=document.createElement('a');pageLink.href=artworkPage(work);pageLink.className='studio-artwork-page-link';pageLink.textContent='Artwork page ↗';
+   text.append(title,detail,original);link.href=inquiry(work);link.className='launch-art-inquire';link.textContent=inquiryLabel(work);meta.append(text,pageLink,link);card.append(open,meta);grid.append(card);
   });
  }
  filters.addEventListener('click',e=>{
@@ -145,7 +149,7 @@ if(grid){
  if(position>=0){const btn=grid.querySelectorAll('.launch-art-image-button')[position];if(btn)openImage(position,btn)}
 }
 
-// Netlify processes HTML forms. Do not intercept the POST or pretend a message was sent.
+// The native Cloudflare handler processes HTML forms. Do not intercept the POST or fake a successful submission.
 const form = document.querySelector('#inquiry-form');
 if (form) {
   const params = new URLSearchParams(location.search);

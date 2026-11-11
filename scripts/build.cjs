@@ -4,10 +4,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const renderGallery = require('./render-gallery.cjs');
+const artworkPages = require('./artwork-pages.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'dist');
 const pages = ['index.html', 'gallery.html', 'shop.html', 'about.html',
-  'commissions.html', 'contact.html', 'thank-you.html', 'privacy.html'];
+  'commissions.html', 'contact.html', 'thank-you.html', 'privacy.html',
+  'studio-updates.html', 'updates-confirmed.html'];
 const context = {window: {}};
 vm.runInNewContext(fs.readFileSync(path.join(root, 'site-data.js'), 'utf8'), context);
 const files = new Set([...pages, 'style.css', 'site-data.js', 'site.js', 'shop.js', 'pinterest.js', '_headers',
@@ -16,7 +18,10 @@ for (const page of pages) {
   const html = fs.readFileSync(path.join(root, page), 'utf8');
   for (const match of html.matchAll(/(?:src|href)="(assets\/[^"?#]+)"/g)) files.add(match[1]);
 }
-for (const work of context.window.studioData.artworks) files.add(work.image);
+for (const work of context.window.studioData.artworks) {
+  files.add(work.image);
+  for (const view of work.views || []) files.add(view.image);
+}
 for (const name of files) {
   if (typeof name !== 'string' || !/^[a-zA-Z0-9_./-]+$/.test(name) ||
       name.split('/').includes('..') || path.isAbsolute(name)) throw new Error('Invalid public file path');
@@ -43,6 +48,12 @@ fs.writeFileSync(galleryPath, gallery.replace(gallerySlot,
 // Rights information describes the artwork, without inventing photography credits
 // or granting a reproduction license. Never rewrite the approved image files.
 const works = context.window.studioData.artworks;
+const shell = fs.readFileSync(path.join(root, 'about.html'), 'utf8');
+artworkPages.build(output, works, {
+  header: shell.match(/<header\b[\s\S]*?<\/header>/)[0],
+  footer: shell.match(/<footer\b[\s\S]*?<\/footer>/)[0]
+});
+pages.push(...works.map(artworkPages.page));
 for (const page of pages) {
   const target = path.join(output, page);
   let html = fs.readFileSync(target, 'utf8');
@@ -67,4 +78,4 @@ for (const page of pages) {
   html = html.replace('</head>', '<script type="application/ld+json">' + json + '</script>\n</head>');
   fs.writeFileSync(target, html);
 }
-console.log('Built ' + files.size + ' public files in dist; repository notes, tests, dependencies and review packages are excluded.');
+console.log('Built ' + (files.size + works.length) + ' public files in dist; repository notes, tests, dependencies and review packages are excluded.');
