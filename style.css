@@ -1521,7 +1521,48 @@ body{background:var(--paper);color:var(--ink)}
   flex: 1 0 auto;
 }
 
-/* About page: full original portrait above, matching square details below. */
+/* The real artist photograph is framed independently of the artwork images. */
+.launch-artist-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+}
+.launch-artist-intro h1 { font-size: clamp(3.4rem, 6vw, 5.6rem); }
+.launch-artist-intro-copy > .eyebrow { margin: 0 0 22px; }
+.launch-artist-intro-copy > p:not(.eyebrow) {
+  font-size: 1.09rem;
+  line-height: 1.7;
+  color: #655a51;
+  max-width: 70ch;
+  margin: 0;
+}
+.launch-artist-portrait { width: 100%; max-width: 540px; margin: 0; justify-self: end; }
+.launch-artist-portrait-frame {
+  display: block;
+  aspect-ratio: 8 / 7;
+  overflow: hidden;
+  background: #e5dcd3;
+}
+.launch-artist-portrait-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+.launch-artist-portrait figcaption { font-size: .78rem; line-height: 1.6; color: #726257; padding-top: 12px; }
+.launch-artist-portrait figcaption a { color: inherit; text-underline-offset: 3px; }
+.launch-artist-portrait figcaption a:hover { color: var(--wine); }
+@media (max-width: 850px) {
+  .launch-artist-intro { grid-template-columns: 1fr; }
+  .launch-artist-portrait { justify-self: start; }
+}
+@media (max-width: 550px) {
+  .launch-artist-intro h1 { font-size: clamp(3rem, 13vw, 5rem); }
+}
+
+/* About page: full painted self-portrait and matching square details below. */
 .launch-about-grid figure { width: 100%; max-width: 525px; }
 .launch-about-feature-link {
   display: block;
