@@ -125,6 +125,7 @@ for (const work of works) {
  assert.equal(rows.Dimensions, work.dimensions+' (width × height)', work.title+' dimension order');
  assert.equal(rows.Framing, 'Unframed', work.title+' framing');
  assert.equal(rows.Original, work.originalAvailable?'Available':'Unavailable', work.title+' availability');
+ assert.equal(rows.Price,work.originalAvailable?'$950 USD · unframed; delivery and applicable tax additional':undefined,work.title+' approved price in viewer');
 }
 const skyline=details(works.find(w=>w.title==='Skyline State of Mind'));
 assert.equal(skyline.Support,'Heavy-duty cotton canvas');

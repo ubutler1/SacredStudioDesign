@@ -7,6 +7,8 @@ const escape = value => String(value).replace(/[&<>"']/g, character =>
 const slug = work => work.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const page = work => 'artwork/' + slug(work) + '.html';
 const origin = 'https://urielalexanderstudio.com';
+const originalPrice = work => work.originalAvailable === true && Number.isFinite(work.priceUSD)
+  ? '$' + work.priceUSD.toLocaleString('en-US') + ' USD' : '';
 const sizes = {
   'assets/he-started-in-color.webp':[1184,1600],
   'assets/guiding-hands.webp':[1205,1600],
@@ -88,7 +90,7 @@ ${assetPrefix(shell.header)}
 <figure class="studio-work-primary"><div class="studio-artwork-surface"><img data-studio-artwork draggable="false" src="../${escape(work.image)}" width="${width}" height="${height}" alt="${escape(work.alt)}" fetchpriority="high" decoding="async"></div><figcaption>Complete painting · ${escape(work.dimensions)} · ${escape(work.framing)}</figcaption><a class="secondary-link" href="../gallery.html?work=${query}">Open enlarged viewer ↗</a></figure>
 <div class="studio-work-copy"><p class="eyebrow">URIEL ALEXANDER / ORIGINAL PAINTING</p><h1 id="work-title">${title}</h1><p class="studio-work-description">${description}</p>
 <dl class="studio-work-facts">${details(work).map(([key,value])=>`<div><dt>${escape(key)}</dt><dd>${escape(value)}</dd></div>`).join('')}</dl>
-${work.originalAvailable ? '<p class="studio-price-request">Price on request</p><p class="studio-work-note">Original inquiries are welcome. Availability, condition and acquisition details are confirmed individually. Payments and deposits are not open.</p>' : '<p class="studio-work-note">This original is not currently offered. Contact the studio to discuss the work or a related commission inquiry.</p>'}
+${work.originalAvailable ? `<p class="studio-price-request">${escape(originalPrice(work))}</p><p class="studio-work-note">Unframed. Basic protective packing included; delivery and applicable tax additional. <a href="../shop.html#buying-original">Buying an original: packing, delivery &amp; returns.</a></p><p class="studio-work-note">Inquiries welcome. Availability and condition are confirmed individually. Payments and deposits are not open.</p>` : '<p class="studio-work-note">This original is not currently offered. Contact the studio to discuss the work or a related commission inquiry.</p>'}
 <a class="cta-button" href="${inquire}">${work.originalAvailable ? 'Inquire about this original' : 'Contact the studio'} ↗</a>
 <p class="studio-response-note">The studio aims to reply within two business days.</p>
 <p class="studio-work-rights">Artwork © Uriel Alexander. <a href="../contact.html?topic=artwork&amp;work=${query}">Request image permission.</a></p></div>
