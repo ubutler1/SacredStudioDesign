@@ -3,6 +3,8 @@ const data = window.studioData || {email:'',artworks:[]};
 const works = Array.isArray(data.artworks) ? data.artworks.filter(work=>work && typeof work.title==='string' && typeof work.image==='string') : [];
 const artworkPage = work => 'artwork/' + work.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '.html';
 const grid = document.querySelector('#artwork-grid');
+const originalPrice = work => work.originalAvailable === true && Number.isFinite(work.priceUSD)
+ ? '$' + work.priceUSD.toLocaleString('en-US') + ' USD' : '';
 // Structured collector details use only artist-confirmed fields. Omit unknowns.
 const detailsFor = work => [
  ['Year', work.year],
@@ -12,7 +14,8 @@ const detailsFor = work => [
  ['Framing', work.framing],
  ['Finish', work.finish],
  ['Status', work.completion],
- ['Original', typeof work.originalAvailable === 'boolean' ? (work.originalAvailable ? 'Available' : 'Unavailable') : '']
+ ['Original', typeof work.originalAvailable === 'boolean' ? (work.originalAvailable ? 'Available' : 'Unavailable') : ''],
+ ['Price', originalPrice(work) ? originalPrice(work) + ' · unframed; delivery and applicable tax additional' : '']
 ].filter(([, value]) => value !== undefined && value !== null && value !== '');
 const dialog = document.getElementById('artwork-dialog');
 // These are copying deterrents, not access control. A public image and screenshots

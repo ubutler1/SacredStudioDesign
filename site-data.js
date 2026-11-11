@@ -2,7 +2,8 @@
 // Images must be uploaded into assets/ to render. Keep print-resolution masters private.
 // Catalog labels, original availability and descriptions approved by the artist, October 30, 2026.
 // Original offers limited by the artist to Skyline State of Mind and Next Door to Everything, November 8, 2026.
-// No prices, print/download listings or checkout links are authorized.
+// The artist approved publishing both original prices at $950 USD, November 11, 2026.
+// Print/download listings and checkout remain closed.
 window.studioData = {
   email: 'urielalexanderstudio@gmail.com',
   instagram: 'https://www.instagram.com/urielalexanderstudio/',
@@ -62,6 +63,7 @@ window.studioData = {
   },
   {
     "title": "Skyline State of Mind",
+    "priceUSD": 950,
     "image": "assets/city-figure-provisional.webp",
     "alt": "Painted figure looking upward on a street surrounded by buildings and a distant tower.",
     "categories": [
@@ -81,6 +83,7 @@ window.studioData = {
   },
   {
     "title": "Next Door to Everything",
+    "priceUSD": 950,
     "image": "assets/bronx-dispensary-provisional.webp",
     "alt": "Bronx street painting showing a cannabis dispensary beside a poultry storefront, cars and overhead wires in pink and blue.",
     "categories": [

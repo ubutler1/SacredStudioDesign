@@ -23,8 +23,17 @@ for(const work of works){
   assert.ok(!json.offers && !html.includes('Add to cart'),'no sale is activated');
   assert.ok(html.includes('src="../'+work.image+'"'));assert.ok(html.includes(work.dimensions+' (width × height)'));
   assert.ok(html.includes('content="https://urielalexanderstudio.com/'+work.image+'"'),'own genuine share image');
-  assert.match(html,/data-studio-artwork draggable="false"/);assert.equal(html.includes('Price on request'),work.originalAvailable);
+  assert.match(html,/data-studio-artwork draggable="false"/);
+  assert.equal(html.includes('<p class="studio-price-request">$950 USD</p>'),work.originalAvailable,'only the two approved originals have public prices');
+  assert.equal(html.includes('href="../shop.html#buying-original"'),work.originalAvailable,'original pages link to the buyer terms');
+  assert.ok(!html.includes('Price on request'),'published price replaces the old request label');
   assert.deepEqual(fs.readFileSync(path.join(root,work.image)),fs.readFileSync(path.join(dist,work.image)));
+}
+const collect=fs.readFileSync(path.join(dist,'shop.html'),'utf8');
+for(const work of works.filter(work=>work.originalAvailable)){
+  const card=collect.split('<article class="studio-original-card"').find(part=>part.includes('>'+work.title+'</h2>'))?.split('</article>')[0];
+  assert.ok(card,'Collect includes '+work.title);
+  assert.ok(card.includes('$'+work.priceUSD+' USD'),'Collect price matches the approved catalog');
 }
 const updates=fs.readFileSync(path.join(dist,'studio-updates.html'),'utf8');
 assert.match(updates,/method="POST" action="\/inquiry"/);assert.match(updates,/name="updates-consent" type="checkbox" value="yes" required/);
