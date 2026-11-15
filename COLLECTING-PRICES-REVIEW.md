@@ -1,5 +1,13 @@
 # Collecting prices and buyer terms
 
+## Current working gallery retail floor · November 14, 2026
+
+The artist clarified further: "i want the min gallery price". Use $900 USD each for Skyline State of Mind and Next Door to Everything as a working retail floor, calculated from the earlier $450 direct-sale target treated as the artist's desired share before costs and an assumed 50% gallery commission: $450 / (1 - 0.50) = $900. This is an explicit planning assumption, not a universal gallery minimum, a verified profit margin, an agreed gallery commission or a guarantee of representation. Actual costs and any gallery terms still need consideration.
+
+Collect cards, the price FAQ, search/social descriptions, individual pages and enlarged-viewer prices use $900 USD each. Delivery and applicable tax are additional. Commission starting prices, future print plans, all genuine artwork files, availability, buyer terms and inquiry-only/payment-closed status remain intact. The November 16 $450 automation remains paused. The intervening $950 restoration below is historical.
+
+## Earlier restoration after clarification
+
 ## Gallery-pricing clarification · November 14, 2026
 
 After the $450 release, the artist clarified: "i thought we changing the price to one that galleries would approach". Restore the previously approved $950 USD asking price for Skyline State of Mind and Next Door to Everything. The $450 direct-sale plan below is superseded by this correction; its scheduled November 16 update is paused.

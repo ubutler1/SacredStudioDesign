@@ -24,7 +24,7 @@ for(const work of works){
   assert.ok(html.includes('src="../'+work.image+'"'));assert.ok(html.includes(work.dimensions+' (width × height)'));
   assert.ok(html.includes('content="https://urielalexanderstudio.com/'+work.image+'"'),'own genuine share image');
   assert.match(html,/data-studio-artwork draggable="false"/);
-  assert.equal(html.includes('<p class="studio-price-request">$950 USD</p>'),work.originalAvailable,'only the two approved originals have public prices');
+  assert.equal(html.includes('<p class="studio-price-request">$900 USD</p>'),work.originalAvailable,'only the two approved originals have public prices');
   assert.equal(html.includes('href="../shop.html#buying-original"'),work.originalAvailable,'original pages link to the buyer terms');
   assert.ok(!html.includes('Price on request'),'published price replaces the old request label');
   assert.deepEqual(fs.readFileSync(path.join(root,work.image)),fs.readFileSync(path.join(dist,work.image)));
