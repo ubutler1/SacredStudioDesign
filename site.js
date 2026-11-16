@@ -1,5 +1,14 @@
 'use strict';
 const data = window.studioData || {email:'',artworks:[]};
+// Anchor jumps and keyboard focus must clear the navigation, including when it
+// wraps on a small screen or grows with larger text.
+const navigation = document.getElementById('nav-bar');
+if (navigation) {
+ const measureNavigation = () => document.documentElement.style.setProperty(
+  '--studio-header-height', Math.ceil(navigation.getBoundingClientRect().height) + 'px');
+ measureNavigation();
+ if (typeof ResizeObserver === 'function') new ResizeObserver(measureNavigation).observe(navigation);
+}
 const works = Array.isArray(data.artworks) ? data.artworks.filter(work=>work && typeof work.title==='string' && typeof work.image==='string') : [];
 const artworkPage = work => 'artwork/' + work.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') + '.html';
 const grid = document.querySelector('#artwork-grid');

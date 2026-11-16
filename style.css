@@ -2099,8 +2099,22 @@ img[data-studio-artwork] {
 .studio-collecting-process > h2 em { color: var(--wine); font-weight: 400; }
 .studio-commission-journey { max-width: 78ch; color: #655b52; line-height: 1.75; margin-top: 26px; }
 
-/* Keep buyer terms visible below the sticky navigation after an anchor jump. */
-#buying-original { scroll-margin-top: 10rem; }
-@media (max-width: 360px) {
-  #buying-original { scroll-margin-top: 13rem; }
+/* Leave room for the measured header on every anchor and focus scroll. */
+html {
+  scroll-padding-top: calc(var(--studio-header-height, 13rem) + 1rem);
+  scrollbar-gutter: stable;
+}
+/* A modal artwork view must not scroll the gallery behind its backdrop. */
+@media screen {
+  html:has(.launch-art-dialog[open]) { overflow: hidden; }
+}
+/* Keep inquiry fields readable and collector actions easy to tap. */
+.launch-contact-form .field input,
+.launch-contact-form .field select,
+.launch-contact-form .field textarea { font-size: 1rem; }
+.launch-art-card .launch-art-inquire,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
